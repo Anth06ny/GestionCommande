@@ -10,7 +10,6 @@ public class MyDaoGenerator {
         Schema schema2 = new Schema(3, "greendao");
         Entity produit = schema2.addEntity("Produit");
         produit.addIdProperty().autoincrement();
-        ;
         produit.addStringProperty("nom");
         produit.addFloatProperty("prix");
         produit.addIntProperty("lot");
@@ -22,7 +21,13 @@ public class MyDaoGenerator {
         categorie.addIdProperty().autoincrement();
         categorie.addStringProperty("nom");
         categorie.addStringProperty("couleur");
-
         new DaoGenerator().generateAll(schema3, args[0]);
+
+        Schema schema4 = new Schema(3, "greendao");
+        Entity consomme = schema4.addEntity("Consomme");
+        consomme.addIdProperty().autoincrement();
+        consomme.addDateProperty("date");
+        consomme.addIntProperty("quantite");
+        new DaoGenerator().generateAll(schema4, args[0]);
     }
 }
