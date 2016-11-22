@@ -24,7 +24,7 @@ public class MyDaoGenerator {
         produit.addIntProperty("cosommation");
         new DaoGenerator().generateAll(schema2, args[0]);
 
-        Schema schema3 = new Schema(2, "greendao");
+        Schema schema3 = new Schema(3, "greendao");
         Entity categorie = schema3.addEntity("Categorie");
         categorie.addIdProperty().autoincrement();
         categorie.addStringProperty("nom");
