@@ -7,17 +7,10 @@ import de.greenrobot.daogenerator.Schema;
 public class MyDaoGenerator {
 
     public static void main(String args[]) throws Exception {
-        Schema schema = new Schema(3, "greendao");
-        Entity box = schema.addEntity("Box");
-        box.addIdProperty().autoincrement();
-        box.addStringProperty("name");
-        box.addIntProperty("slots");
-        box.addStringProperty("description");
-        new DaoGenerator().generateAll(schema, args[0]);
-
         Schema schema2 = new Schema(3, "greendao");
         Entity produit = schema2.addEntity("Produit");
-        produit.addIdProperty().autoincrement();;
+        produit.addIdProperty().autoincrement();
+        ;
         produit.addStringProperty("nom");
         produit.addFloatProperty("prix");
         produit.addIntProperty("lot");
