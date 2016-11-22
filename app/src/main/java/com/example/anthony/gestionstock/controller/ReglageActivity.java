@@ -18,6 +18,7 @@ import com.example.anthony.gestionstock.R;
 public class ReglageActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
