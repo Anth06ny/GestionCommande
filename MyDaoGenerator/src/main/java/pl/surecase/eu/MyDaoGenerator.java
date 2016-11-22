@@ -14,5 +14,14 @@ public class MyDaoGenerator {
         box.addIntProperty("slots");
         box.addStringProperty("description");
         new DaoGenerator().generateAll(schema, args[0]);
+
+        Schema schema2 = new Schema(3, "greendao");
+        Entity produit = schema2.addEntity("Produit");
+        produit.addIdProperty();
+        produit.addStringProperty("nom");
+        produit.addFloatProperty("prix");
+        produit.addIntProperty("lot");
+        produit.addIntProperty("cosommation");
+        new DaoGenerator().generateAll(schema2, args[0]);
     }
 }
