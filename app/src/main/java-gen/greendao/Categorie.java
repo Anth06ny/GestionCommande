@@ -8,7 +8,7 @@ public class Categorie {
 
     private Long id;
     private String nom;
-    private Float couleur;
+    private String couleur;
 
     public Categorie() {
     }
@@ -17,7 +17,7 @@ public class Categorie {
         this.id = id;
     }
 
-    public Categorie(Long id, String nom, Float couleur) {
+    public Categorie(Long id, String nom, String couleur) {
         this.id = id;
         this.nom = nom;
         this.couleur = couleur;
@@ -39,11 +39,11 @@ public class Categorie {
         this.nom = nom;
     }
 
-    public Float getCouleur() {
+    public String getCouleur() {
         return couleur;
     }
 
-    public void setCouleur(Float couleur) {
+    public void setCouleur(String couleur) {
         this.couleur = couleur;
     }
 

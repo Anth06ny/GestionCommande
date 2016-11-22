@@ -9,7 +9,7 @@ public class MyDaoGenerator {
     public static void main(String args[]) throws Exception {
         Schema schema = new Schema(3, "greendao");
         Entity box = schema.addEntity("Box");
-        box.addIdProperty();
+        box.addIdProperty().autoincrement();
         box.addStringProperty("name");
         box.addIntProperty("slots");
         box.addStringProperty("description");
@@ -17,7 +17,7 @@ public class MyDaoGenerator {
 
         Schema schema2 = new Schema(3, "greendao");
         Entity produit = schema2.addEntity("Produit");
-        produit.addIdProperty();
+        produit.addIdProperty().autoincrement();;
         produit.addStringProperty("nom");
         produit.addFloatProperty("prix");
         produit.addIntProperty("lot");
@@ -26,9 +26,9 @@ public class MyDaoGenerator {
 
         Schema schema3 = new Schema(2, "greendao");
         Entity categorie = schema3.addEntity("Categorie");
-        categorie.addIdProperty();
+        categorie.addIdProperty().autoincrement();
         categorie.addStringProperty("nom");
-        categorie.addFloatProperty("couleur");
+        categorie.addStringProperty("couleur");
 
         new DaoGenerator().generateAll(schema3, args[0]);
     }

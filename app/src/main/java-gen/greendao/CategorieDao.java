@@ -25,7 +25,7 @@ public class CategorieDao extends AbstractDao<Categorie, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Nom = new Property(1, String.class, "nom", false, "NOM");
-        public final static Property Couleur = new Property(2, Float.class, "couleur", false, "COULEUR");
+        public final static Property Couleur = new Property(2, String.class, "couleur", false, "COULEUR");
     };
 
 
@@ -41,9 +41,9 @@ public class CategorieDao extends AbstractDao<Categorie, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'CATEGORIE' (" + //
-                "'_id' INTEGER PRIMARY KEY ," + // 0: id
+                "'_id' INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "'NOM' TEXT," + // 1: nom
-                "'COULEUR' REAL);"); // 2: couleur
+                "'COULEUR' TEXT);"); // 2: couleur
     }
 
     /** Drops the underlying database table. */
@@ -67,9 +67,9 @@ public class CategorieDao extends AbstractDao<Categorie, Long> {
             stmt.bindString(2, nom);
         }
  
-        Float couleur = entity.getCouleur();
+        String couleur = entity.getCouleur();
         if (couleur != null) {
-            stmt.bindDouble(3, couleur);
+            stmt.bindString(3, couleur);
         }
     }
 
@@ -85,7 +85,7 @@ public class CategorieDao extends AbstractDao<Categorie, Long> {
         Categorie entity = new Categorie( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // nom
-            cursor.isNull(offset + 2) ? null : cursor.getFloat(offset + 2) // couleur
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // couleur
         );
         return entity;
     }
@@ -95,7 +95,7 @@ public class CategorieDao extends AbstractDao<Categorie, Long> {
     public void readEntity(Cursor cursor, Categorie entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setNom(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setCouleur(cursor.isNull(offset + 2) ? null : cursor.getFloat(offset + 2));
+        entity.setCouleur(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
      }
     
     /** @inheritdoc */

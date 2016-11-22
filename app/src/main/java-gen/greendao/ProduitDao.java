@@ -43,7 +43,7 @@ public class ProduitDao extends AbstractDao<Produit, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'PRODUIT' (" + //
-                "'_id' INTEGER PRIMARY KEY ," + // 0: id
+                "'_id' INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "'NOM' TEXT," + // 1: nom
                 "'PRIX' REAL," + // 2: prix
                 "'LOT' INTEGER," + // 3: lot
