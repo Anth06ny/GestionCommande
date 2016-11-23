@@ -13,26 +13,11 @@
         >
 
         <LinearLayout
-            android:id="@+id/layoutProduit"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Produits"/>
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/layoutCategorie"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView2"
@@ -40,6 +25,60 @@
                 android:layout_height="wrap_content"
                 android:text="Catégorie"/>
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutProduit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Produits"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:text="Libellé"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:text="Tarif"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:text="Prix"/>
+
+                <Button
+                    android:id="@+id/btn_addProduit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Ajouter un produit"/>
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_produit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </FrameLayout>
