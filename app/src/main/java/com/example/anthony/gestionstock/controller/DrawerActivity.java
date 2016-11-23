@@ -136,7 +136,7 @@ public class DrawerActivity extends AppCompatActivity
 
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment, "test").commit();
 
         // Highlight the selected item has been done by NavigationView
         item.setChecked(true);

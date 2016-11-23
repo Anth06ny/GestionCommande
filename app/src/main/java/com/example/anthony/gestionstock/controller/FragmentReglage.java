@@ -1,9 +1,9 @@
 package com.example.anthony.gestionstock.controller;
 
-import android.app.DialogFragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,7 +87,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener {
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Add Categorie", Toast.LENGTH_SHORT).show();
                 DialogFragment newFragment = new DialogCategorie();
-                newFragment.show(getFragmentManager(), "categorie");
+                newFragment.show(getFragmentManager(), "test");
             }
         });
 
