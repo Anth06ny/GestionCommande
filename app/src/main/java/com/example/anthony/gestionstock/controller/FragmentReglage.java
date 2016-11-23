@@ -28,6 +28,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener {
     private static final String ARG_PARAM2 = "param2";
     private Button btnAddCategorie;
     private Button btnAddProduit;
+    private static final String tag = "fragment";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -87,7 +88,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener {
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Add Categorie", Toast.LENGTH_SHORT).show();
                 DialogFragment newFragment = new DialogCategorie();
-                newFragment.show(getFragmentManager(), "test");
+                newFragment.show(getFragmentManager(), tag);
             }
         });
 
@@ -97,6 +98,8 @@ public class FragmentReglage extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Add Produit", Toast.LENGTH_SHORT).show();
+                DialogFragment newFragment = new DialogProduit();
+                newFragment.show(getFragmentManager(), tag);
             }
         });
     }
