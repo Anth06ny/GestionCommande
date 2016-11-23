@@ -1,10 +1,12 @@
 package com.example.anthony.gestionstock.controller;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,12 +14,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.anthony.gestionstock.R;
 
-public class ReglageActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-
+public class DrawerActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, FragmentReglage.OnFragmentInteractionListener, FragmentStock.OnFragmentInteractionListener {
+    private DrawerLayout mDrawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +28,24 @@ public class ReglageActivity extends AppCompatActivity
         setContentView(R.layout.activity_reglage);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // A modifier ///////////////////////////////////////////////////////////////////////////////
+        Fragment fragment = null;
+        Class fragmentClass;
+        fragmentClass = FragmentReglage.class;
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        }
+        catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        ////////////////////////////////////////////////////////////////////////////////////////////
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -82,13 +103,17 @@ public class ReglageActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         int id = item.getItemId();
+        Fragment fragment = null;
+        Class fragmentClass = null;
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            fragmentClass = FragmentReglage.class;
         }
         else if (id == R.id.nav_gallery) {
-
+            fragmentClass = FragmentStock.class;
         }
         else if (id == R.id.nav_slideshow) {
 
@@ -102,9 +127,29 @@ public class ReglageActivity extends AppCompatActivity
         else if (id == R.id.nav_send) {
 
         }
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        // Insert the fragment by replacing any existing fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+        // Highlight the selected item has been done by NavigationView
+        item.setChecked(true);
+        // Set action bar title
+        setTitle(item.getTitle());
+        // Close the navigation drawer
+        mDrawer.closeDrawers();
+
         return true;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
