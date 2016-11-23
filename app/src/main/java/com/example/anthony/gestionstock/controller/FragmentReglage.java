@@ -1,5 +1,6 @@
 package com.example.anthony.gestionstock.controller;
 
+import android.app.DialogFragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
 
@@ -18,11 +21,13 @@ import com.example.anthony.gestionstock.R;
  * Use the {@link FragmentReglage#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentReglage extends Fragment {
+public class FragmentReglage extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private Button btnAddCategorie;
+    private Button btnAddProduit;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -65,7 +70,35 @@ public class FragmentReglage extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reglage, container, false);
+        View v = inflater.inflate(R.layout.fragment_reglage, container, false);
+
+        // Recupere la vue pour ce fragment
+        initUI(v);
+
+        return v;
+    }
+
+    // initUI permet de recupere les elements graphique et faire des operations sur ces elements
+    private void initUI(View v) {
+
+        btnAddCategorie = (Button) v.findViewById(R.id.btn_addCategorie);
+        btnAddCategorie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Add Categorie", Toast.LENGTH_SHORT).show();
+                DialogFragment newFragment = new DialogCategorie();
+                newFragment.show(getFragmentManager(), "categorie");
+            }
+        });
+
+        btnAddProduit = (Button) v.findViewById(R.id.btn_addProduit);
+        btnAddProduit.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Add Produit", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -106,5 +139,10 @@ public class FragmentReglage extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }
