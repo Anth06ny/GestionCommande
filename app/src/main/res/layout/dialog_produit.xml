@@ -10,7 +10,7 @@
         android:text="Nom :"/>
 
     <EditText
-        android:id="@+id/nomCategorie"
+        android:id="@+id/editNomProduit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
@@ -22,7 +22,7 @@
         android:text="Catégorie :"/>
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/editCategorieProduit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
@@ -33,7 +33,7 @@
         android:text="Prix :"/>
 
     <EditText
-        android:id="@+id/prix"
+        android:id="@+id/editPrixProduit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
@@ -45,7 +45,7 @@
         android:text="Lot :"/>
 
     <EditText
-        android:id="@+id/lot"
+        android:id="@+id/editLotProduit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="number"

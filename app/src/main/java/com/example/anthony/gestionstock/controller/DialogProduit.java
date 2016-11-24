@@ -6,7 +6,10 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 
 import com.example.anthony.gestionstock.R;
 
@@ -15,15 +18,30 @@ import com.example.anthony.gestionstock.R;
  */
 
 public class DialogProduit extends DialogFragment {
+
+    private EditText editNom;
+    private EditText editCategorie;
+    private EditText editPrix;
+    private EditText editLot;
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.dialog_produit, null))
+        final LayoutInflater inflater = getActivity().getLayoutInflater();
+        final View alertDialogView = inflater.inflate(R.layout.dialog_produit, null);
+
+        builder.setView(alertDialogView)
                 .setPositiveButton("Envoyer", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
+                        editNom = (EditText) alertDialogView.findViewById(R.id.editNomProduit);
+                        Log.v("Nom ", editNom.getText().toString());
+                        editCategorie = (EditText) alertDialogView.findViewById(R.id.editCategorieProduit);
+                        Log.v("Categorie ", editCategorie.getText().toString());
+                        editPrix = (EditText) alertDialogView.findViewById(R.id.editPrixProduit);
+                        Log.v("Prix ", editPrix.getText().toString());
+                        editLot = (EditText) alertDialogView.findViewById(R.id.editLotProduit);
+                        Log.v("Lot ", editLot.getText().toString());
                     }
                 })
                 .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
