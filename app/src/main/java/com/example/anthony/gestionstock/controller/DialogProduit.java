@@ -31,9 +31,13 @@ public class DialogProduit extends DialogFragment {
         final LayoutInflater inflater = getActivity().getLayoutInflater();
         final View alertDialogView = inflater.inflate(R.layout.dialog_produit, null);
 
+        //On build la dialog box avec la vue personaliser + l'ajout des boutons positifs et négatif
         builder.setView(alertDialogView)
                 .setPositiveButton("Envoyer", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        //Ensemble des taches a realiser quand l'utilisateur cliq sur envoyer
+
+                        //On recupere les elements graphique et leur valeur
                         editNom = (EditText) alertDialogView.findViewById(R.id.editNomProduit);
                         Log.v("Nom ", editNom.getText().toString());
                         editCategorie = (EditText) alertDialogView.findViewById(R.id.editCategorieProduit);

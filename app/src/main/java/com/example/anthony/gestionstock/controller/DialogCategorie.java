@@ -32,28 +32,38 @@ public class DialogCategorie extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View alertDialogView = inflater.inflate(R.layout.dialog_categorie, null);
 
+        //On build la dialog box avec la vue personaliser + l'ajout des boutons positifs et négatif
         builder.setView(alertDialogView)
                 .setPositiveButton("Envoyer", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        //Ensemble des taches a realiser quand l'utilisateur cliq sur envoyer
 
                     }
                 })
                 .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        //Ensemble des taches a realiser quand l'utilisateur cliq sur annuler
+
                     }
                 });
+
+        //Recuperation des elements graphique de la dialog box
         box = (TextView) alertDialogView.findViewById(R.id.boxCouleur);
         btnChoisirCouleur = (Button) alertDialogView.findViewById(R.id.btnChoisirCouleur);
         btnChoisirCouleur.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                //Au cliq du bouton on ouvre une nouvelle dialog box qui affiche le color picker
                 final ColorChooserDialog dialog = new ColorChooserDialog(getContext());
                 dialog.setTitle("Titre");
                 dialog.setColorListener(new ColorListener() {
                     @Override
                     public void OnColorClick(View v, int color) {
-                        dialog.cancel();
+                        //Lorsque l'utilisateur selectionne une couleur on recupere la valeur int de la couleur choisie
                         couleurChoisi = color;
+                        //On display la couleur choisie sur la dialog box precedente
                         box.setBackgroundColor(couleurChoisi);
+                        //On termine le picker color et on retourne sur la dialog box precedente
+                        dialog.cancel();
                     }
                 });
                 dialog.show();
