@@ -6,14 +6,18 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.anthony.gestionstock.R;
 import com.turkialkhateeb.materialcolorpicker.ColorChooserDialog;
 import com.turkialkhateeb.materialcolorpicker.ColorListener;
+
+import greendao.Categorie;
 
 /**
  * Created by Allan on 23/11/2016.
@@ -24,6 +28,9 @@ public class DialogCategorie extends DialogFragment {
     private Button btnChoisirCouleur;
     private int couleurChoisi;
     private TextView box;
+    private Categorie categorieTest = new Categorie();
+    private EditText edit_nomCategorie;
+    private TextView edit_couleurCategorie;
 
     @NonNull
     @Override
@@ -37,13 +44,21 @@ public class DialogCategorie extends DialogFragment {
                 .setPositiveButton("Envoyer", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //Ensemble des taches a realiser quand l'utilisateur cliq sur envoyer
-
+                        //Recupère ce qui est contenu dans le champ apres saisi de l'utilisateur
+                        edit_nomCategorie = (EditText) alertDialogView.findViewById(R.id.nomCategorie);
+                        edit_couleurCategorie = (TextView) alertDialogView.findViewById(R.id.boxCouleur);
+                        //TO DO: Gérer les Exceptions en cas d'input VIDE
+                        //On passe les données recupèrer dans l'objet Catégorie
+                        categorieTest.setNom(edit_nomCategorie.getText().toString());
+                        categorieTest.setCouleur(String.valueOf(couleurChoisi));
+                        //TO DO : insertion des données en BDD
+                        Log.v("TestNom", categorieTest.getNom());
+                        Log.v("TestColor", categorieTest.getCouleur());
                     }
                 })
                 .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //Ensemble des taches a realiser quand l'utilisateur cliq sur annuler
-
                     }
                 });
 
