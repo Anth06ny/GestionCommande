@@ -13,8 +13,6 @@ import com.example.anthony.gestionstock.R;
 
 import java.util.ArrayList;
 
-import greendao.Categorie;
-
 /**
  * Created by Axel legué on 23/11/2016.
  */

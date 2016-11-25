@@ -52,6 +52,8 @@ public class DialogCategorie extends DialogFragment {
                         categorieTest.setNom(edit_nomCategorie.getText().toString());
                         categorieTest.setCouleur(String.valueOf(couleurChoisi));
                         //TO DO : insertion des données en BDD
+
+
                         Log.v("TestNom", categorieTest.getNom());
                         Log.v("TestColor", categorieTest.getCouleur());
                     }

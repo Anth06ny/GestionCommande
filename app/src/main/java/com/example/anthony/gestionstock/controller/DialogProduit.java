@@ -13,8 +13,6 @@ import android.widget.EditText;
 
 import com.example.anthony.gestionstock.R;
 
-import greendao.Produit;
-
 /**
  * Created by Allan on 23/11/2016.
  */
