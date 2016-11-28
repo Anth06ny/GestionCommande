@@ -62,11 +62,8 @@ public class DialogCategorie extends DialogFragment {
                         categorieTest.setCouleur(String.valueOf(couleurChoisi));
                         //TO DO : insertion des données en BDD
                         Categorie catTest = new Categorie(null, categorieTest.getNom(), categorieTest.getCouleur(), null);// Class object, Id est auto incrémenté
-                        Log.v("cattest", catTest.getCouleur());
                         categorieBddManager.SaveToSQLCategorie(categorieDao, catTest);
                         categorieBddManager.generateResultCategories(categorieDao);
-                        Log.v("TestNom", categorieTest.getNom());
-                        Log.v("TestColor", categorieTest.getCouleur());
                     }
                 })
                 .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
