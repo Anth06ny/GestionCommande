@@ -61,5 +61,6 @@ public class CategorieBddManager {
         categorieDao.insert(categorie);
     }
 
+
     // --------------------------------- ''' END SQL QUERY ''' -----------------------------------//
 }

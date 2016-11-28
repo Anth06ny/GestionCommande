@@ -27,6 +27,8 @@ public class DialogProduit extends DialogFragment {
     private EditText editLot;
     private Produit produit;
 
+
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
