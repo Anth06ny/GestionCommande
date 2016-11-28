@@ -50,7 +50,7 @@ public class CategorieBddManager {
 
     // --------------------------------------- '''' END DB Setup Function '''' --------------------- --- //
 
-    // ------------------------------------ '' SQL QUERY Fnctions ''' -------------------------------- //
+    // ------------------------------------ '' SQL QUERY Functions ''' -------------------------------- //
 
     public List<Categorie> getFromSQLCategories(CategorieDao categorieDao) {
         List<Categorie> categories = categorieDao.queryBuilder().orderDesc(CategorieDao.Properties.Id).build().list();

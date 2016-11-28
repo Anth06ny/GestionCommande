@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:text="Catégorie :"/>
 
-    <EditText
+    <Spinner
         android:id="@+id/editCategorieProduit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
