@@ -28,4 +28,8 @@ public class CategorieBddManager {
         DaoSession masterSession = master.newSession();
         return masterSession.getCategorieDao();
     }
+
+    public void SaveToSQL (Categorie categorie){
+
+    }
 }
