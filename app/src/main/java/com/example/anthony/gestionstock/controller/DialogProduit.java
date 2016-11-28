@@ -43,6 +43,7 @@ public class DialogProduit extends DialogFragment {
     private Produit produit;
     private List<Categorie> listCategories;
     private SpinnerAdapter spinnerTest;
+    private String test;
 
     @NonNull
     @Override
@@ -63,6 +64,7 @@ public class DialogProduit extends DialogFragment {
 
         // instancie l'adapteur pour la liste déroulante
         spinnerTest = new vue.SpinnerAdapter(this.getActivity(), listCategories);
+
         //On build la dialog box avec la vue personaliser + l'ajout des boutons positifs et négatif
         builder.setView(alertDialogView)
                 .setPositiveButton("Envoyer", new DialogInterface.OnClickListener() {
@@ -73,6 +75,9 @@ public class DialogProduit extends DialogFragment {
                         editNom = (EditText) alertDialogView.findViewById(R.id.editNomProduit);
                         editPrix = (EditText) alertDialogView.findViewById(R.id.editPrixProduit);
                         editLot = (EditText) alertDialogView.findViewById(R.id.editLotProduit);
+
+                        //----------------------------- A FINIR ------------------------------------//
+
                         //TO DO: Gérer les Exceptions en cas d'input VIDE
                         //On passe les données recupèrer dans l'objet Catégorie
                         produit = new Produit();
