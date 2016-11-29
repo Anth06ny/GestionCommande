@@ -28,7 +28,7 @@ public class DialogCategorie extends DialogFragment {
     private Button btnChoisirCouleur;
     private int couleurChoisi;
     private TextView box;
-    private Categorie categorie = new Categorie();
+    private Categorie categorie;
     private EditText edit_nomCategorie;
 
     @NonNull
@@ -48,6 +48,7 @@ public class DialogCategorie extends DialogFragment {
                         //TO DO: Gérer les Exceptions en cas d'input VIDE
 
                         //On passe les données recupèrer dans l'objet Catégorie
+                        categorie = new Categorie();
                         categorie.setNom(edit_nomCategorie.getText().toString());
                         categorie.setCouleur(String.valueOf(couleurChoisi));
                         // Class object, Id est auto incrémenté

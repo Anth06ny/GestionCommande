@@ -110,6 +110,20 @@ public class AccueilFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        testEnum(ProductAffichageEnum.Accueil);
+    }
 
+    public void testEnum(ProductAffichageEnum choixAffichage) {
+        switch (choixAffichage) {
+
+            case Note:
+                break;
+            case Accueil:
+                break;
+            case Reglage:
+                break;
+            case Bilan:
+                break;
+        }
     }
 }
