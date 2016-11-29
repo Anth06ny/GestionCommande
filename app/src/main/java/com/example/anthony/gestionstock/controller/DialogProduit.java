@@ -91,6 +91,8 @@ public class DialogProduit extends DialogFragment {
                         produitBddManager.saveToSQLPproduit(produitDao, insProduit);
                         produitBddManager.generateResultProduit(produitDao);
                         Log.v("TAG3", nomCategorie);
+                        String test3 = categorieBddManager.getIdCategorie(categorieDao, nomCategorie);
+                        Log.v("TAG4", test3);
                     }
                 })
                 .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
@@ -106,6 +108,7 @@ public class DialogProduit extends DialogFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 nomCategorie = String.valueOf(spinnerTest.getItem(position));
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 

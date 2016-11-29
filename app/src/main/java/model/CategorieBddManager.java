@@ -61,6 +61,10 @@ public class CategorieBddManager {
         categorieDao.insert(categorie);
     }
 
+    public String getIdCategorie(CategorieDao categorieDao, String categorie) {
+        List<Categorie> categories = categorieDao.queryBuilder().where(CategorieDao.Properties.Nom.eq(categorie)).list();
+        return String.valueOf(categories.get(0).getId());
+    }
 
     // --------------------------------- ''' END SQL QUERY ''' -----------------------------------//
 }

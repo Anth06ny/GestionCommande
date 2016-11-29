@@ -60,5 +60,10 @@ public class ProduitBddManager {
     public void saveToSQLPproduit(ProduitDao produitDao, Produit produit) {
         produitDao.insert(produit);
     }
+
+    public String getIdProduit(ProduitDao produitDao, Produit produit) {
+        List<Produit> produit2 = produitDao.queryBuilder().where(ProduitDao.Properties.Nom.eq(produit.getNom())).list();
+        return String.valueOf(produit2.get(0).getId());
+    }
     // --------------------------------- ''' END SQL QUERY ''' -----------------------------------//
 }
