@@ -6,8 +6,10 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -43,7 +45,7 @@ public class DialogProduit extends DialogFragment {
     private Produit produit;
     private List<Categorie> listCategories;
     private SpinnerAdapter spinnerTest;
-    private String test;
+    private String nomCategorie;
 
     @NonNull
     @Override
@@ -88,6 +90,7 @@ public class DialogProduit extends DialogFragment {
                         Produit insProduit = new Produit(null, produit.getNom(), produit.getPrix(), produit.getLot(), null, null);
                         produitBddManager.saveToSQLPproduit(produitDao, insProduit);
                         produitBddManager.generateResultProduit(produitDao);
+                        Log.v("TAG3", nomCategorie);
                     }
                 })
                 .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
@@ -98,6 +101,17 @@ public class DialogProduit extends DialogFragment {
         //recupère l'élément graphique de l'adapteur et le switch entre celui du layout du dialogue.
         editCategorie = (Spinner) alertDialogView.findViewById(R.id.editCategorieProduit);
         editCategorie.setAdapter(spinnerTest);
+        editCategorie.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                nomCategorie = String.valueOf(spinnerTest.getItem(position));
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         return builder.create();
     }
 }
