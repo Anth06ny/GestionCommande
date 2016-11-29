@@ -8,20 +8,20 @@ import de.greenrobot.daogenerator.Schema;
 public class MyDaoGenerator {
 
     public static void main(String args[]) throws Exception {
-        Schema schema = new Schema(1, "greendao");
+
+        Schema schema = new Schema(2, "greendao");
         Entity produit = schema.addEntity("Produit");
         produit.addIdProperty().autoincrement();
         produit.addStringProperty("nom");
         produit.addFloatProperty("prix");
         produit.addIntProperty("lot");
-        produit.addIntProperty("cosommation");
-
+        produit.addIntProperty("consommation");
+        produit.setHasKeepSections(true);
 
         Entity categorie = schema.addEntity("Categorie");
         categorie.addIdProperty().autoincrement();
         categorie.addStringProperty("nom");
         categorie.addStringProperty("couleur");
-
 
         Entity consomme = schema.addEntity("Consomme");
         consomme.addIdProperty().autoincrement();
@@ -29,11 +29,12 @@ public class MyDaoGenerator {
         consomme.addIntProperty("quantite");
 
         //Création des clés étrangère et ajout de leur contenu
+        Property categorieID = produit.addLongProperty("CategorieID").notNull().getProperty();
+        produit.addToOne(categorie, categorieID);
+
         Property produitID = categorie.addLongProperty("produitID").getProperty();
         categorie.addToMany(produit, produitID);
 
-        Property categorieID = produit.addLongProperty("CategorieID").getProperty();
-        produit.addToOne(categorie, categorieID);
         new DaoGenerator().generateAll(schema, args[0]);
     }
 }

@@ -20,9 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import greendao.Categorie;
-import greendao.CategorieDao;
 import greendao.Produit;
-import greendao.ProduitDao;
 import model.CategorieBddManager;
 import model.ProduitBddManager;
 
@@ -32,12 +30,7 @@ import model.ProduitBddManager;
 
 public class DialogProduit extends DialogFragment {
 
-    // Dao --> Data Acces Object
-    private ProduitDao produitDao; // Sql acces object
-    private ProduitBddManager produitBddManager;
-    private CategorieBddManager categorieBddManager;
-    private CategorieDao categorieDao;
-    private Categorie categorie;
+    private Categorie categorieSelected;
     private EditText editNom;
     private Spinner editCategorie;
     private EditText editPrix;
@@ -45,7 +38,6 @@ public class DialogProduit extends DialogFragment {
     private Produit produit;
     private List<Categorie> listCategories;
     private SpinnerAdapter spinnerTest;
-    private String nomCategorie;
 
     @NonNull
     @Override
@@ -54,15 +46,9 @@ public class DialogProduit extends DialogFragment {
         final LayoutInflater inflater = getActivity().getLayoutInflater();
         final View alertDialogView = inflater.inflate(R.layout.dialog_produit, null);
 
-        //Initalise la DAO
-        produitBddManager = new ProduitBddManager();
-        produitDao = produitBddManager.setupDB(this.getContext());
-
         //Initialisation de la liste de catégories
         listCategories = new ArrayList<>();
-        categorieBddManager = new CategorieBddManager();
-        categorieDao = categorieBddManager.setupDB(this.getContext());
-        listCategories = categorieBddManager.getFromSQLCategories(categorieDao);
+        listCategories = CategorieBddManager.getFromSQLCategories();
 
         // instancie l'adapteur pour la liste déroulante
         spinnerTest = new vue.SpinnerAdapter(this.getActivity(), listCategories);
@@ -71,28 +57,24 @@ public class DialogProduit extends DialogFragment {
         builder.setView(alertDialogView)
                 .setPositiveButton("Envoyer", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //Ensemble des taches a realiser quand l'utilisateur cliq sur envoyer
-                        //On recupere les elements graphique et leur valeur
-                        //Recupère ce qui est contenu dans le champ apres saisi de l'utilisateur
+                        //On recupere les elements graphique et leur valeur, Recupère ce qui est contenu dans le champ apres saisi de l'utilisateur
                         editNom = (EditText) alertDialogView.findViewById(R.id.editNomProduit);
                         editPrix = (EditText) alertDialogView.findViewById(R.id.editPrixProduit);
                         editLot = (EditText) alertDialogView.findViewById(R.id.editLotProduit);
 
-                        //----------------------------- A FINIR ------------------------------------//
-
                         //TO DO: Gérer les Exceptions en cas d'input VIDE
+
                         //On passe les données recupèrer dans l'objet Catégorie
                         produit = new Produit();
-                        produit.setNom(editNom.getText().toString());
+
                         // TO DO : verifier le type de données saisies
-                        produit.setLot(Integer.valueOf(String.valueOf(editLot.getText())));
+                        produit.setNom(editNom.getText().toString());
                         produit.setPrix(Float.valueOf(String.valueOf(editPrix.getText())));
-                        Produit insProduit = new Produit(null, produit.getNom(), produit.getPrix(), produit.getLot(), null, null);
-                        produitBddManager.saveToSQLPproduit(produitDao, insProduit);
-                        produitBddManager.generateResultProduit(produitDao);
-                        Log.v("TAG3", nomCategorie);
-                        String test3 = categorieBddManager.getIdCategorie(categorieDao, nomCategorie);
-                        Log.v("TAG4", test3);
+                        produit.setLot(Integer.valueOf(String.valueOf(editLot.getText())));
+                        produit.setCategorieID(categorieSelected.getId());
+
+                        ProduitBddManager.saveToSQLPproduit(produit);
+                        Log.v("TAG5", categorieSelected.getId().toString());
                     }
                 })
                 .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
@@ -106,7 +88,7 @@ public class DialogProduit extends DialogFragment {
         editCategorie.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                nomCategorie = String.valueOf(spinnerTest.getItem(position));
+                categorieSelected = (Categorie) spinnerTest.getItem(position);
             }
 
             @Override

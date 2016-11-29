@@ -32,8 +32,8 @@ public class ProduitDao extends AbstractDao<Produit, Long> {
         public final static Property Nom = new Property(1, String.class, "nom", false, "NOM");
         public final static Property Prix = new Property(2, Float.class, "prix", false, "PRIX");
         public final static Property Lot = new Property(3, Integer.class, "lot", false, "LOT");
-        public final static Property Cosommation = new Property(4, Integer.class, "cosommation", false, "COSOMMATION");
-        public final static Property CategorieID = new Property(5, Long.class, "CategorieID", false, "CATEGORIE_ID");
+        public final static Property Consommation = new Property(4, Integer.class, "consommation", false, "CONSOMMATION");
+        public final static Property CategorieID = new Property(5, long.class, "CategorieID", false, "CATEGORIE_ID");
         public final static Property ProduitID = new Property(6, Long.class, "produitID", false, "PRODUIT_ID");
     };
 
@@ -58,8 +58,8 @@ public class ProduitDao extends AbstractDao<Produit, Long> {
                 "'NOM' TEXT," + // 1: nom
                 "'PRIX' REAL," + // 2: prix
                 "'LOT' INTEGER," + // 3: lot
-                "'COSOMMATION' INTEGER," + // 4: cosommation
-                "'CATEGORIE_ID' INTEGER," + // 5: CategorieID
+                "'CONSOMMATION' INTEGER," + // 4: consommation
+                "'CATEGORIE_ID' INTEGER NOT NULL ," + // 5: CategorieID
                 "'PRODUIT_ID' INTEGER);"); // 6: produitID
     }
 
@@ -94,15 +94,11 @@ public class ProduitDao extends AbstractDao<Produit, Long> {
             stmt.bindLong(4, lot);
         }
  
-        Integer cosommation = entity.getCosommation();
-        if (cosommation != null) {
-            stmt.bindLong(5, cosommation);
+        Integer consommation = entity.getConsommation();
+        if (consommation != null) {
+            stmt.bindLong(5, consommation);
         }
- 
-        Long CategorieID = entity.getCategorieID();
-        if (CategorieID != null) {
-            stmt.bindLong(6, CategorieID);
-        }
+        stmt.bindLong(6, entity.getCategorieID());
     }
 
     @Override
@@ -125,8 +121,8 @@ public class ProduitDao extends AbstractDao<Produit, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // nom
             cursor.isNull(offset + 2) ? null : cursor.getFloat(offset + 2), // prix
             cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // lot
-            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // cosommation
-            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5) // CategorieID
+            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // consommation
+            cursor.getLong(offset + 5) // CategorieID
         );
         return entity;
     }
@@ -138,8 +134,8 @@ public class ProduitDao extends AbstractDao<Produit, Long> {
         entity.setNom(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setPrix(cursor.isNull(offset + 2) ? null : cursor.getFloat(offset + 2));
         entity.setLot(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
-        entity.setCosommation(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
-        entity.setCategorieID(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
+        entity.setConsommation(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
+        entity.setCategorieID(cursor.getLong(offset + 5));
      }
     
     /** @inheritdoc */
@@ -200,7 +196,9 @@ public class ProduitDao extends AbstractDao<Produit, Long> {
         int offset = getAllColumns().length;
 
         Categorie categorie = loadCurrentOther(daoSession.getCategorieDao(), cursor, offset);
-        entity.setCategorie(categorie);
+         if(categorie != null) {
+            entity.setCategorie(categorie);
+        }
 
         return entity;    
     }

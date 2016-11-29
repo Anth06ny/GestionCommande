@@ -34,7 +34,7 @@ public class SpinnerAdapter extends BaseAdapter implements android.widget.Spinne
 
     @Override
     public Object getItem(int position) {
-        return listCategories.get(position).getNom();
+        return listCategories.get(position);
     }
 
     @Override
