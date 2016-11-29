@@ -26,7 +26,6 @@ public class CategorieDao extends AbstractDao<Categorie, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Nom = new Property(1, String.class, "nom", false, "NOM");
         public final static Property Couleur = new Property(2, String.class, "couleur", false, "COULEUR");
-        public final static Property ProduitID = new Property(3, Long.class, "produitID", false, "PRODUIT_ID");
     };
 
     private DaoSession daoSession;
@@ -47,8 +46,7 @@ public class CategorieDao extends AbstractDao<Categorie, Long> {
         db.execSQL("CREATE TABLE " + constraint + "'CATEGORIE' (" + //
                 "'_id' INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "'NOM' TEXT," + // 1: nom
-                "'COULEUR' TEXT," + // 2: couleur
-                "'PRODUIT_ID' INTEGER);"); // 3: produitID
+                "'COULEUR' TEXT);"); // 2: couleur
     }
 
     /** Drops the underlying database table. */
@@ -76,11 +74,6 @@ public class CategorieDao extends AbstractDao<Categorie, Long> {
         if (couleur != null) {
             stmt.bindString(3, couleur);
         }
- 
-        Long produitID = entity.getProduitID();
-        if (produitID != null) {
-            stmt.bindLong(4, produitID);
-        }
     }
 
     @Override
@@ -101,8 +94,7 @@ public class CategorieDao extends AbstractDao<Categorie, Long> {
         Categorie entity = new Categorie( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // nom
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // couleur
-            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3) // produitID
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // couleur
         );
         return entity;
     }
@@ -113,7 +105,6 @@ public class CategorieDao extends AbstractDao<Categorie, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setNom(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setCouleur(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setProduitID(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
      }
     
     /** @inheritdoc */

@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -48,7 +47,7 @@ public class DialogProduit extends DialogFragment {
 
         //Initialisation de la liste de catégories
         listCategories = new ArrayList<>();
-        listCategories = CategorieBddManager.getFromSQLCategories();
+        listCategories = CategorieBddManager.getCategories();
 
         // instancie l'adapteur pour la liste déroulante
         spinnerTest = new vue.SpinnerAdapter(this.getActivity(), listCategories);
@@ -62,19 +61,17 @@ public class DialogProduit extends DialogFragment {
                         editPrix = (EditText) alertDialogView.findViewById(R.id.editPrixProduit);
                         editLot = (EditText) alertDialogView.findViewById(R.id.editLotProduit);
 
-                        //TO DO: Gérer les Exceptions en cas d'input VIDE
+                        //TODO: Gérer les Exceptions en cas d'input VIDE
 
                         //On passe les données recupèrer dans l'objet Catégorie
                         produit = new Produit();
 
-                        // TO DO : verifier le type de données saisies
+                        // TODO : verifier le type de données saisies
                         produit.setNom(editNom.getText().toString());
                         produit.setPrix(Float.valueOf(String.valueOf(editPrix.getText())));
                         produit.setLot(Integer.valueOf(String.valueOf(editLot.getText())));
                         produit.setCategorieID(categorieSelected.getId());
-
-                        ProduitBddManager.saveToSQLPproduit(produit);
-                        Log.v("TAG5", categorieSelected.getId().toString());
+                        ProduitBddManager.insertOrUpdate(produit);
                     }
                 })
                 .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {

@@ -47,13 +47,14 @@ public class DialogCategorie extends DialogFragment {
 
                         //TO DO: Gérer les Exceptions en cas d'input VIDE
 
+                        categorie = new Categorie();
                         //On passe les données recupèrer dans l'objet Catégorie
                         categorie = new Categorie();
                         categorie.setNom(edit_nomCategorie.getText().toString());
                         categorie.setCouleur(String.valueOf(couleurChoisi));
                         // Class object, Id est auto incrémenté
 
-                        CategorieBddManager.SaveToSQLCategorie(categorie);
+                        CategorieBddManager.insertOrUpdate(categorie);
                     }
                 })
                 .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {

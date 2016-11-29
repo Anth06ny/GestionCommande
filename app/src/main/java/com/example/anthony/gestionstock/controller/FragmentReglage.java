@@ -13,6 +13,9 @@ import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
 
+import greendao.Categorie;
+import vue.CategoryAdapter;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -21,7 +24,7 @@ import com.example.anthony.gestionstock.R;
  * Use the {@link FragmentReglage#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentReglage extends Fragment implements View.OnClickListener {
+public class FragmentReglage extends Fragment implements View.OnClickListener, CategoryAdapter.CategoryAdapterCallBack {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,6 +32,8 @@ public class FragmentReglage extends Fragment implements View.OnClickListener {
     private Button btnAddCategorie;
     private Button btnAddProduit;
     private static final String tag = "fragment";
+
+    private CategoryAdapter categoryAdapter;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -102,6 +107,8 @@ public class FragmentReglage extends Fragment implements View.OnClickListener {
                 newFragment.show(getFragmentManager(), tag);
             }
         });
+
+        categoryAdapter = new CategoryAdapter(ProductAffichageEnum.Reglage, null, this);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -146,6 +153,18 @@ public class FragmentReglage extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+
+    }
+
+    @Override
+    public void clicOnDeleteCallback(Categorie categorie) {
+        //supp de green dao
+        //la retirer de l'arrayList en recup sa position
+        // categoryAdapter.notifyItemRemoved(position);
+    }
+
+    @Override
+    public void clicOnModify(Categorie categorie) {
 
     }
 }

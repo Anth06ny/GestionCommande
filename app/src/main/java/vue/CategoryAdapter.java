@@ -1,6 +1,5 @@
 package vue;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,12 +22,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     private ProductAffichageEnum choixAffichage;
     private ArrayList<Categorie> category_bean;
-    private Context context;
+    private CategoryAdapterCallBack categoryAdapterCallBack;
 
-    public CategoryAdapter(Context context, ProductAffichageEnum choixAffichage, ArrayList<Categorie> category_bean) {
-        this.context = context;
+    public CategoryAdapter(ProductAffichageEnum choixAffichage, ArrayList<Categorie> category_bean, CategoryAdapterCallBack categoryAdapterCallBack) {
         this.choixAffichage = choixAffichage;
         this.category_bean = category_bean;
+        this.categoryAdapterCallBack = categoryAdapterCallBack;
     }
 
     @Override
@@ -51,9 +50,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(CategoryAdapter.ViewHolder holder, int position) {
-        Categorie categoriebean = category_bean.get(position);
-
+    public void onBindViewHolder(final CategoryAdapter.ViewHolder holder, int position) {
+        final Categorie categoriebean = category_bean.get(position);
 
         switch (choixAffichage) {
 
@@ -72,6 +70,23 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 holder.displayCategory.setText(categoriebean.getNom());
                 holder.displayColor.setText(categoriebean.getCouleur());
         }
+
+        holder.root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                categoriebean.setSelected(!categoriebean.isSelected());
+                notifyItemChanged(holder.getAdapterPosition());
+            }
+        });
+
+        holder.displayModifyCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (categoryAdapterCallBack != null) {
+                    categoryAdapterCallBack.clicOnModify(categoriebean);
+                }
+            }
+        });
     }
 
     @Override
@@ -84,6 +99,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         public TextView displayColor;
         public Button displayModifyCategory;
         public ImageView displayDelete;
+        public View root;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -91,6 +107,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             displayColor = (TextView) itemView.findViewById(R.id.txt_color);
             displayModifyCategory = (Button) itemView.findViewById(R.id.btn_modifiy_cat);
             displayDelete = (ImageView) itemView.findViewById(R.id.img_cat);
+            root = itemView.findViewById(R.id.root);
         }
     }
 
@@ -107,6 +124,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             displayModifyCategory = (Button) itemView.findViewById(R.id.btn_modifiy_cat);
             displayDelete = (ImageView) itemView.findViewById(R.id.img_cat);
         }
+    }
+
+    public interface CategoryAdapterCallBack {
+        void clicOnDeleteCallback(Categorie categorie);
+
+        void clicOnModify(Categorie categorie);
     }
 }
 

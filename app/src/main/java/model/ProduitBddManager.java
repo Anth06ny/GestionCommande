@@ -15,12 +15,20 @@ public class ProduitBddManager {
 
     // ------------------------------------ '' SQL QUERY Fnctions ''' -------------------------------- //
 
-    public static List<Produit> getFromSQLProduit() {
-        return MyApplication.getDaoSession().getProduitDao().queryBuilder().orderDesc(ProduitDao.Properties.Id).build().list();
+    public static List<Produit> getProduit() {
+        return MyApplication.getDaoSession().getProduitDao().loadAll();
     }
 
-    public static void saveToSQLPproduit(Produit produit) {
-        MyApplication.getDaoSession().getProduitDao().insert(produit);
+    public static Produit getProduitFromName(String name) {
+        return MyApplication.getDaoSession().getProduitDao().queryBuilder().where(ProduitDao.Properties.Nom.eq(name)).unique();
+    }
+
+    public static void insertOrUpdate(Produit produit) {
+        MyApplication.getDaoSession().getProduitDao().insertOrReplace(produit);
+    }
+
+    public static void clearProduit() {
+        MyApplication.getDaoSession().getProduitDao().deleteAll();
     }
 
     // --------------------------------- ''' END SQL QUERY ''' -----------------------------------//

@@ -34,7 +34,6 @@ public class ProduitDao extends AbstractDao<Produit, Long> {
         public final static Property Lot = new Property(3, Integer.class, "lot", false, "LOT");
         public final static Property Consommation = new Property(4, Integer.class, "consommation", false, "CONSOMMATION");
         public final static Property CategorieID = new Property(5, long.class, "CategorieID", false, "CATEGORIE_ID");
-        public final static Property ProduitID = new Property(6, Long.class, "produitID", false, "PRODUIT_ID");
     };
 
     private DaoSession daoSession;
@@ -59,8 +58,7 @@ public class ProduitDao extends AbstractDao<Produit, Long> {
                 "'PRIX' REAL," + // 2: prix
                 "'LOT' INTEGER," + // 3: lot
                 "'CONSOMMATION' INTEGER," + // 4: consommation
-                "'CATEGORIE_ID' INTEGER NOT NULL ," + // 5: CategorieID
-                "'PRODUIT_ID' INTEGER);"); // 6: produitID
+                "'CATEGORIE_ID' INTEGER NOT NULL );"); // 5: CategorieID
     }
 
     /** Drops the underlying database table. */
@@ -162,16 +160,16 @@ public class ProduitDao extends AbstractDao<Produit, Long> {
     }
     
     /** Internal query to resolve the "produitList" to-many relationship of Categorie. */
-    public List<Produit> _queryCategorie_ProduitList(Long produitID) {
+    public List<Produit> _queryCategorie_ProduitList(long CategorieID) {
         synchronized (this) {
             if (categorie_ProduitListQuery == null) {
                 QueryBuilder<Produit> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.ProduitID.eq(null));
+                queryBuilder.where(Properties.CategorieID.eq(null));
                 categorie_ProduitListQuery = queryBuilder.build();
             }
         }
         Query<Produit> query = categorie_ProduitListQuery.forCurrentThread();
-        query.setParameter(0, produitID);
+        query.setParameter(0, CategorieID);
         return query.list();
     }
 

@@ -15,12 +15,20 @@ public class CategorieBddManager {
 
     // ------------------------------------ '' SQL QUERY Functions ''' -------------------------------- //
 
-    public static List<Categorie> getFromSQLCategories() {
-        return MyApplication.getDaoSession().getCategorieDao().queryBuilder().orderDesc(CategorieDao.Properties.Id).build().list();
+    public static List<Categorie> getCategories() {
+        return MyApplication.getDaoSession().getCategorieDao().loadAll();
     }
 
-    public static void SaveToSQLCategorie(Categorie categorie) {
-        MyApplication.getDaoSession().getCategorieDao().insert(categorie);
+    public static List<Categorie> getCategoriesSortName() {
+        return MyApplication.getDaoSession().getCategorieDao().queryBuilder().orderAsc(CategorieDao.Properties.Nom).list();
+    }
+
+    public static long insertOrUpdate(Categorie categorie) {
+        return MyApplication.getDaoSession().getCategorieDao().insertOrReplace(categorie);
+    }
+
+    public static void clearCategorie() {
+        MyApplication.getDaoSession().getCategorieDao().deleteAll();
     }
 
     // --------------------------------- ''' END SQL QUERY ''' -----------------------------------//

@@ -22,6 +22,7 @@ public class MyDaoGenerator {
         categorie.addIdProperty().autoincrement();
         categorie.addStringProperty("nom");
         categorie.addStringProperty("couleur");
+        categorie.setHasKeepSections(true);
 
         Entity consomme = schema.addEntity("Consomme");
         consomme.addIdProperty().autoincrement();
@@ -32,8 +33,7 @@ public class MyDaoGenerator {
         Property categorieID = produit.addLongProperty("CategorieID").notNull().getProperty();
         produit.addToOne(categorie, categorieID);
 
-        Property produitID = categorie.addLongProperty("produitID").getProperty();
-        categorie.addToMany(produit, produitID);
+        categorie.addToMany(produit, categorieID);
 
         new DaoGenerator().generateAll(schema, args[0]);
     }
