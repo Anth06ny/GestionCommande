@@ -40,11 +40,25 @@ public class DialogCategorie extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View alertDialogView = inflater.inflate(R.layout.dialog_categorie, null);
-
-        categorieSelected = new Categorie();
         mArgs = getArguments();
 
+        //Recuperation des elements graphique de la dialog box
+        box = (TextView) alertDialogView.findViewById(R.id.boxCouleur);
+        btnChoisirCouleur = (Button) alertDialogView.findViewById(R.id.btnChoisirCouleur);
         edit_nomCategorie = (EditText) alertDialogView.findViewById(R.id.nomCategorie);
+
+        //On recupere les arguments transmit depuis FragmentReglage
+        mArgs = getArguments();
+
+        //Si il y a des arguments
+        if (mArgs != null) {
+            categorieSelected = new Categorie();
+            categorieSelected.setId(mArgs.getLong("id"));
+            categorieSelected.setNom(mArgs.getString("nom"));
+            categorieSelected.setCouleur(mArgs.getString("couleur"));
+            edit_nomCategorie.setText(categorieSelected.getNom());
+            box.setBackgroundColor(Integer.parseInt(categorieSelected.getCouleur()));
+        }
 
         //On build la dialog box avec la vue personaliser + l'ajout des boutons positifs et négatif
         builder.setView(alertDialogView)
@@ -58,9 +72,14 @@ public class DialogCategorie extends DialogFragment {
                         categorie = new Categorie();
                         if (categorieSelected != null) {
                             categorie.setId(categorieSelected.getId());
+                            categorie.setNom(categorieSelected.getNom());
+                            categorie.setCouleur(categorieSelected.getCouleur());
                         }
                         categorie.setNom(edit_nomCategorie.getText().toString());
-                        categorie.setCouleur(String.valueOf(couleurChoisi));
+
+                        if (couleurChoisi != 0) {
+                            categorie.setCouleur(String.valueOf(couleurChoisi));
+                        }
                         // Class object, Id est auto incrémenté
 
                         CategorieBddManager.insertOrUpdate(categorie);
@@ -71,18 +90,6 @@ public class DialogCategorie extends DialogFragment {
                         //Ensemble des taches a realiser quand l'utilisateur cliq sur annuler
                     }
                 });
-
-        //Recuperation des elements graphique de la dialog box
-        box = (TextView) alertDialogView.findViewById(R.id.boxCouleur);
-        btnChoisirCouleur = (Button) alertDialogView.findViewById(R.id.btnChoisirCouleur);
-
-        if (mArgs != null) {
-            categorieSelected.setId(mArgs.getLong("id"));
-            categorieSelected.setNom(mArgs.getString("nom"));
-            categorieSelected.setCouleur(mArgs.getString("couleur"));
-            edit_nomCategorie.setText(categorieSelected.getNom());
-            box.setBackgroundColor(Integer.parseInt(categorieSelected.getCouleur()));
-        }
 
         //Au cliq du bouton on ouvre une nouvelle dialog box qui affiche le color picker
         btnChoisirCouleur.setOnClickListener(new View.OnClickListener() {
