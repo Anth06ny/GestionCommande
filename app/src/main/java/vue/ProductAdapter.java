@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.anthony.gestionstock.R;
-import com.example.anthony.gestionstock.controller.ProductAffichageEnum;
 
 import java.util.ArrayList;
 

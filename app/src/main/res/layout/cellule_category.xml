@@ -33,14 +33,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="MODIFIER"/>
+            android:text="MODIFIER"
+            android:visibility="invisible"/>
 
         <ImageView
             android:id="@+id/img_cat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_menu_camera"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            android:visibility="invisible"/>
 
 
     </LinearLayout>

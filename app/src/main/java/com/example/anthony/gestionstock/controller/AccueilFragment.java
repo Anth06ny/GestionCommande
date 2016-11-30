@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 
 import com.example.anthony.gestionstock.R;
 
+import vue.ProductAffichageEnum;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the

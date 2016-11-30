@@ -5,6 +5,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +16,10 @@ import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
 
+import java.util.ArrayList;
+
 import greendao.Categorie;
+import model.CategorieBddManager;
 import vue.CategoryAdapter;
 
 /**
@@ -32,8 +38,10 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     private Button btnAddCategorie;
     private Button btnAddProduit;
     private static final String tag = "fragment";
-
     private CategoryAdapter categoryAdapter;
+    private ArrayList<Categorie> categorieList;
+    private RecyclerView recyclerViewCategories;
+    private RecyclerView getRecyclerViewProduits;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -86,6 +94,13 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
 
     // initUI permet de recupere les elements graphique et faire des operations sur ces elements
     private void initUI(View v) {
+        categorieList = new ArrayList<Categorie>();
+        categorieList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
+        categoryAdapter = new CategoryAdapter(categorieList, this);
+        recyclerViewCategories = (RecyclerView) v.findViewById(R.id.rv_categorie);
+        recyclerViewCategories.setAdapter(categoryAdapter);
+        recyclerViewCategories.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recyclerViewCategories.setItemAnimator(new DefaultItemAnimator());
 
         btnAddCategorie = (Button) v.findViewById(R.id.btn_addCategorie);
         btnAddCategorie.setOnClickListener(new View.OnClickListener() {
@@ -107,8 +122,6 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                 newFragment.show(getFragmentManager(), tag);
             }
         });
-
-        categoryAdapter = new CategoryAdapter(ProductAffichageEnum.Reglage, null, this);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

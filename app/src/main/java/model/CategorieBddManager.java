@@ -31,5 +31,7 @@ public class CategorieBddManager {
         MyApplication.getDaoSession().getCategorieDao().deleteAll();
     }
 
+
+
     // --------------------------------- ''' END SQL QUERY ''' -----------------------------------//
 }

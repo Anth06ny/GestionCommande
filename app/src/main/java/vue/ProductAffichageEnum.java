@@ -1,4 +1,4 @@
-package com.example.anthony.gestionstock.controller;
+package vue;
 
 /**
  * Created by Axel legué on 29/11/2016.
