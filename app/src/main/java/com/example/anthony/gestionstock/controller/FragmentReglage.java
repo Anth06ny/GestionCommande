@@ -108,12 +108,13 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         recyclerViewCategories.setItemAnimator(new DefaultItemAnimator());
 
         btnAddCategorie = (Button) v.findViewById(R.id.btn_addCategorie);
+
         btnAddCategorie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Add Categorie", Toast.LENGTH_SHORT).show();
-                DialogFragment newFragment = new DialogCategorie();
-                newFragment.show(getFragmentManager(), tag);
+                //On appel clicOnModify avec null en paramatre car il n'y a pas de categorie deja existante quand on ajoute une categorie
+                clicOnModify(null);
             }
         });
 
@@ -182,15 +183,29 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     }
 
     @Override
-    public void clicOnModify(Categorie categorie) {
-        DialogFragment newFragment = new DialogCategorie();
+    public void clicOnModify(Categorie cat) {
+        //On instancie la dialog Categorie
+        DialogCategorie newFragment = new DialogCategorie();
 
-        Bundle args = new Bundle();
-        args.putLong("id", categorie.getId());
-        args.putString("nom", categorie.getNom());
-        args.putString("couleur", categorie.getCouleur());
-        args.putBoolean("choix", true);
-        newFragment.setArguments(args);
+        //On creer une categorie ou on recupere la categorie entrer en parametre
+        final Categorie finalCategorie = cat == null ? new Categorie() : cat;
+
+        //On envoie la categorie dans la dialog Categorie
+        newFragment.setCategorie(finalCategorie);
+        newFragment.setDialogCategorieCallBack(new DialogCategorie.DialogCategorieCallBack() {
+            @Override
+            public void dialogCategorieClicOnValider() {
+                CategorieBddManager.insertOrUpdate(finalCategorie);
+                int positionCategorie = categorieList.indexOf(finalCategorie);
+                if (positionCategorie >= 0) {
+                    categoryAdapter.notifyItemChanged(positionCategorie);
+                }
+                else {
+                    categorieList.add(finalCategorie);
+                    categoryAdapter.notifyItemInserted(categorieList.size() - 1);
+                }
+            }
+        });
         newFragment.show(getFragmentManager(), tag);
     }
 }

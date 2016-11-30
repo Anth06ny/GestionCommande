@@ -17,7 +17,6 @@ import com.turkialkhateeb.materialcolorpicker.ColorChooserDialog;
 import com.turkialkhateeb.materialcolorpicker.ColorListener;
 
 import greendao.Categorie;
-import model.CategorieBddManager;
 
 /**
  * Created by Allan on 23/11/2016.
@@ -31,59 +30,45 @@ public class DialogCategorie extends DialogFragment {
     private Categorie categorie;
     private EditText edit_nomCategorie;
     private Boolean choixDialog;
-    private Categorie categorieSelected;
     private Bundle mArgs;
+
+    DialogCategorieCallBack dialogCategorieCallBack;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View alertDialogView = inflater.inflate(R.layout.dialog_categorie, null);
-        mArgs = getArguments();
 
         //Recuperation des elements graphique de la dialog box
         box = (TextView) alertDialogView.findViewById(R.id.boxCouleur);
         btnChoisirCouleur = (Button) alertDialogView.findViewById(R.id.btnChoisirCouleur);
         edit_nomCategorie = (EditText) alertDialogView.findViewById(R.id.nomCategorie);
 
-        //On recupere les arguments transmit depuis FragmentReglage
-        mArgs = getArguments();
+        //Si on est en modification on va rentrer par defaut les valeurs de la categorie selectionner
+        if (categorie.getNom() != null) {
+            edit_nomCategorie.setText(categorie.getNom());
+        }
 
-
-        //Si il y a des arguments
-        if (mArgs != null) {
-            categorieSelected = new Categorie();
-            categorieSelected.setId(mArgs.getLong("id"));
-            categorieSelected.setNom(mArgs.getString("nom"));
-            categorieSelected.setCouleur(mArgs.getString("couleur"));
-            edit_nomCategorie.setText(categorieSelected.getNom());
-            box.setBackgroundColor(Integer.parseInt(categorieSelected.getCouleur()));
+        if (categorie.getCouleur() != null) {
+            box.setBackgroundColor(Integer.parseInt(categorie.getCouleur()));
         }
 
         //On build la dialog box avec la vue personaliser + l'ajout des boutons positifs et négatif
         builder.setView(alertDialogView)
                 .setPositiveButton("Envoyer", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //Recupère ce qui est contenu dans le champ apres saisi de l'utilisateur
 
                         //TO DO: Gérer les Exceptions en cas d'input VIDE
 
                         //On passe les données recupèrer dans l'objet Catégorie
-                        categorie = new Categorie();
-                        if (categorieSelected != null) {
-                            categorie.setId(categorieSelected.getId());
-                            categorie.setNom(categorieSelected.getNom());
-                            categorie.setCouleur(categorieSelected.getCouleur());
-                        }
                         categorie.setNom(edit_nomCategorie.getText().toString());
-
                         if (couleurChoisi != 0) {
                             categorie.setCouleur(String.valueOf(couleurChoisi));
                         }
-                        // Class object, Id est auto incrémenté
 
-                        CategorieBddManager.insertOrUpdate(categorie);
+                        dialogCategorieCallBack.dialogCategorieClicOnValider();
                     }
                 })
                 .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
@@ -116,5 +101,17 @@ public class DialogCategorie extends DialogFragment {
         });
 
         return builder.create();
+    }
+
+    public void setDialogCategorieCallBack(DialogCategorieCallBack dialogCategorieCallBack) {
+        this.dialogCategorieCallBack = dialogCategorieCallBack;
+    }
+
+    public void setCategorie(Categorie categorie) {
+        this.categorie = categorie;
+    }
+
+    public interface DialogCategorieCallBack {
+        void dialogCategorieClicOnValider();
     }
 }
