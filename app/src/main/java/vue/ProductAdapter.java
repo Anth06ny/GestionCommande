@@ -12,7 +12,6 @@ import com.example.anthony.gestionstock.R;
 
 import java.util.ArrayList;
 
-import greendao.Categorie;
 import greendao.Produit;
 
 /**
@@ -21,11 +20,12 @@ import greendao.Produit;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
     private ProductAffichageEnum choixAffichage;
-    private ArrayList<Produit> produitArrayList;
+    private ArrayList<Produit> getProduitArrayList;
+    private View v;
 
-    public ProductAdapter(ProductAffichageEnum choixAffichage, ArrayList<Categorie> category_bean) {
+    public ProductAdapter(ProductAffichageEnum choixAffichage, ArrayList<Produit> getProduitArrayList) {
         this.choixAffichage = choixAffichage;
-        //    this.category_bean = category_bean;
+        this.getProduitArrayList = getProduitArrayList;
     }
 
     @Override
@@ -33,43 +33,50 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         switch (choixAffichage) {
 
             case Note:
-
+                v = LayoutInflater.from(vg.getContext()).inflate(R.layout.cellule_produit_reglage, vg, false);
                 break;
             case Accueil:
-                View v = LayoutInflater.from(vg.getContext()).inflate(R.layout.cellule_category, vg, false);
+                v = LayoutInflater.from(vg.getContext()).inflate(R.layout.cellule_produit_reglage, vg, false);
             case Reglage:
+                v = LayoutInflater.from(vg.getContext()).inflate(R.layout.cellule_produit_reglage, vg, false);
                 break;
             case Bilan:
+                v = LayoutInflater.from(vg.getContext()).inflate(R.layout.cellule_produit_reglage, vg, false);
                 break;
         }
 
-        View v = LayoutInflater.from(vg.getContext()).inflate(R.layout.cellule_category, vg, false);
         return new ProductAdapter.ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ProductAdapter.ViewHolder holder, int position) {
-      /*  Categorie categoriebean = category_bean.get(position);
-
-        if (holder.product_libelle != null) {
-            holder.product_libelle.setText(categoriebean.getNom());
-        }*/
+    public void onBindViewHolder(final ProductAdapter.ViewHolder holder, int position) {
+        final Produit produitbean = getProduitArrayList.get(position);
+        holder.displaylibelle.setText(produitbean.getNom());
+        holder.displayTarif.setText(String.valueOf(produitbean.getPrix())); // A voir par Allan
+        holder.displayLot.setText(String.valueOf(produitbean.getLot())); // A voir par Allan
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return getProduitArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView product_libelle;
-        public TextView displayColor;
-        public Button displayModifyCategory;
-        public ImageView displayDelete;
+        public TextView displaylibelle;
+        public TextView displayLot;
+        public TextView displayTarif;
+        public Button displayModifyProduit;
+        public ImageView displayDeleteProduit;
+        public View root;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            product_libelle = (TextView) itemView.findViewById(R.id.txt_category);
+            displaylibelle = (TextView) itemView.findViewById(R.id.txt_produit);
+            displayLot = (TextView) itemView.findViewById(R.id.txt_lot);
+            displayTarif = (TextView) itemView.findViewById(R.id.txt_tarif);
+            displayModifyProduit = (Button) itemView.findViewById(R.id.btn_modifiy_prod);
+            displayDeleteProduit = (ImageView) itemView.findViewById(R.id.img_prod);
+            root = itemView.findViewById(R.id.root_produit);
         }
     }
 }
