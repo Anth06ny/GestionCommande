@@ -19,6 +19,7 @@ public class ProduitBddManager {
         return MyApplication.getDaoSession().getProduitDao().loadAll();
     }
 
+
     public static Produit getProduitFromName(String name) {
         return MyApplication.getDaoSession().getProduitDao().queryBuilder().where(ProduitDao.Properties.Nom.eq(name)).unique();
     }

@@ -1,5 +1,8 @@
 package vue;
 
+import android.content.Context;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,18 +16,25 @@ import com.example.anthony.gestionstock.R;
 import java.util.ArrayList;
 
 import greendao.Categorie;
+import greendao.Produit;
 
 /**
  * Created by Axel legué on 23/11/2016.
  */
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
-
     private ArrayList<Categorie> category_bean;
     private CategoryAdapterCallBack categoryAdapterCallBack;
+    private ArrayList<Produit> produit_bean;
+    private ProductAdapter productAdapter;
+    private RecyclerView getRecyclerViewProduits;
+    private Context context;
+    private View view;
 
-    public CategoryAdapter(ArrayList<Categorie> category_bean, CategoryAdapterCallBack categoryAdapterCallBack) {
+    public CategoryAdapter(ArrayList<Categorie> category_bean, CategoryAdapterCallBack categoryAdapterCallBack, Context context, View view) {
         this.category_bean = category_bean;
         this.categoryAdapterCallBack = categoryAdapterCallBack;
+        this.context = context;
+        this.view = view;
     }
 
     @Override
@@ -52,7 +62,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 categoriebean.setSelected(!categoriebean.isSelected());
-
+                produit_bean = new ArrayList<Produit>();
+                produit_bean = (ArrayList<Produit>) categoriebean.getProduitList();
+                productAdapter = new ProductAdapter(ProductAffichageEnum.Reglage, produit_bean);
+                getRecyclerViewProduits = (RecyclerView) view.findViewById(R.id.rv_produit);
+                getRecyclerViewProduits.setAdapter(productAdapter);
+                getRecyclerViewProduits.setLayoutManager(new LinearLayoutManager(context));
+                getRecyclerViewProduits.setItemAnimator(new DefaultItemAnimator());
                 notifyItemChanged(holder.getAdapterPosition());
             }
         });

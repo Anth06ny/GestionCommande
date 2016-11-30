@@ -21,10 +21,8 @@ import java.util.ArrayList;
 import greendao.Categorie;
 import greendao.Produit;
 import model.CategorieBddManager;
-import model.ProduitBddManager;
 import vue.CategoryAdapter;
 import vue.ProductAdapter;
-import vue.ProductAffichageEnum;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -103,7 +101,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     private void initUI(View v) {
         categorieList = new ArrayList<Categorie>();
         categorieList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
-        categoryAdapter = new CategoryAdapter(categorieList, this);
+        categoryAdapter = new CategoryAdapter(categorieList, this, this.getContext(), v);
         recyclerViewCategories = (RecyclerView) v.findViewById(R.id.rv_categorie);
         recyclerViewCategories.setAdapter(categoryAdapter);
         recyclerViewCategories.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -118,14 +116,6 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                 newFragment.show(getFragmentManager(), tag);
             }
         });
-
-        produitList = new ArrayList<Produit>();
-        produitList = (ArrayList<Produit>) ProduitBddManager.getProduit();
-        productAdapter = new ProductAdapter(ProductAffichageEnum.Reglage, produitList);
-        getRecyclerViewProduits = (RecyclerView) v.findViewById(R.id.rv_produit);
-        getRecyclerViewProduits.setAdapter(productAdapter);
-        getRecyclerViewProduits.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        getRecyclerViewProduits.setItemAnimator(new DefaultItemAnimator());
 
         btnAddProduit = (Button) v.findViewById(R.id.btn_addProduit);
         btnAddProduit.setOnClickListener(new View.OnClickListener() {
