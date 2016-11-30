@@ -19,8 +19,12 @@ import com.example.anthony.gestionstock.R;
 import java.util.ArrayList;
 
 import greendao.Categorie;
+import greendao.Produit;
 import model.CategorieBddManager;
+import model.ProduitBddManager;
 import vue.CategoryAdapter;
+import vue.ProductAdapter;
+import vue.ProductAffichageEnum;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,6 +45,9 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     private CategoryAdapter categoryAdapter;
     private ArrayList<Categorie> categorieList;
     private RecyclerView recyclerViewCategories;
+
+    private ProductAdapter productAdapter;
+    private ArrayList<Produit> produitList;
     private RecyclerView getRecyclerViewProduits;
 
     // TODO: Rename and change types of parameters
@@ -111,6 +118,14 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                 newFragment.show(getFragmentManager(), tag);
             }
         });
+
+        produitList = new ArrayList<Produit>();
+        produitList = (ArrayList<Produit>) ProduitBddManager.getProduit();
+        productAdapter = new ProductAdapter(ProductAffichageEnum.Reglage, produitList);
+        getRecyclerViewProduits = (RecyclerView) v.findViewById(R.id.rv_produit);
+        getRecyclerViewProduits.setAdapter(productAdapter);
+        getRecyclerViewProduits.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        getRecyclerViewProduits.setItemAnimator(new DefaultItemAnimator());
 
         btnAddProduit = (Button) v.findViewById(R.id.btn_addProduit);
         btnAddProduit.setOnClickListener(new View.OnClickListener() {
