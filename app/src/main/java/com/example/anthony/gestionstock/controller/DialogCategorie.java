@@ -50,6 +50,7 @@ public class DialogCategorie extends DialogFragment {
         //On recupere les arguments transmit depuis FragmentReglage
         mArgs = getArguments();
 
+
         //Si il y a des arguments
         if (mArgs != null) {
             categorieSelected = new Categorie();

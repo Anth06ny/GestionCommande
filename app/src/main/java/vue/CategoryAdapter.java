@@ -49,6 +49,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.displayCategory.setText(categoriebean.getNom());
         holder.displayColor.setText(categoriebean.getCouleur());
 
+
         if (categoriebean.isSelected()) {
             holder.displayModifyCategory.setVisibility(View.VISIBLE);
             holder.displayDelete.setVisibility(View.VISIBLE);
