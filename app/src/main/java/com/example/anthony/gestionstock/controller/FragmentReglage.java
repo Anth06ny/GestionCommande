@@ -114,6 +114,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                 Toast.makeText(getContext(), "Add Categorie", Toast.LENGTH_SHORT).show();
                 DialogFragment newFragment = new DialogCategorie();
                 newFragment.show(getFragmentManager(), tag);
+
             }
         });
 
