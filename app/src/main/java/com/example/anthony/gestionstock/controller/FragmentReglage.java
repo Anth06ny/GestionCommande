@@ -101,8 +101,12 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
 
     // initUI permet de recupere les elements graphique et faire des operations sur ces elements
     private void initUI(View v) {
+
+        //On recupere la liste de categorie dans la bdd
         categorieList = new ArrayList<Categorie>();
         categorieList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
+
+        //On creer l'adapteur et le recycler view
         categoryAdapter = new CategoryAdapter(categorieList, this);
         recyclerViewCategories = (RecyclerView) v.findViewById(R.id.rv_categorie);
         recyclerViewCategories.setAdapter(categoryAdapter);
@@ -119,8 +123,11 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
             }
         });
 
+        //On recupere la liste de produits dans la bdd
         produitList = new ArrayList<Produit>();
         produitList = (ArrayList<Produit>) ProduitBddManager.getProduit();
+
+        //On creer l'adapteur et le recycler view
         productAdapter = new ProductAdapter(ProductAffichageEnum.Reglage, produitList);
         getRecyclerViewProduits = (RecyclerView) v.findViewById(R.id.rv_produit);
         getRecyclerViewProduits.setAdapter(productAdapter);
