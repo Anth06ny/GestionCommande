@@ -38,19 +38,20 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         final Categorie categoriebean = category_bean.get(position);
         holder.displayCategory.setText(categoriebean.getNom());
         holder.displayColor.setText(categoriebean.getCouleur());
+
+        if (categoriebean.isSelected()) {
+            holder.displayModifyCategory.setVisibility(View.VISIBLE);
+            holder.displayDelete.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.displayModifyCategory.setVisibility(View.INVISIBLE);
+            holder.displayDelete.setVisibility(View.INVISIBLE);
+        }
+
         holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 categoriebean.setSelected(!categoriebean.isSelected());
-
-                if (categoriebean.isSelected()) {
-                    holder.displayModifyCategory.setVisibility(View.VISIBLE);
-                    holder.displayDelete.setVisibility(View.VISIBLE);
-                }
-                else {
-                    holder.displayModifyCategory.setVisibility(View.INVISIBLE);
-                    holder.displayDelete.setVisibility(View.INVISIBLE);
-                }
 
                 notifyItemChanged(holder.getAdapterPosition());
             }
