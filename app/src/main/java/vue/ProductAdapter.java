@@ -51,9 +51,36 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     @Override
     public void onBindViewHolder(final ProductAdapter.ViewHolder holder, int position) {
         final Produit produitbean = getProduitArrayList.get(position);
-        holder.displaylibelle.setText(produitbean.getNom());
-        holder.displayTarif.setText(String.valueOf(produitbean.getPrix())); // A voir par Allan
-        holder.displayLot.setText(String.valueOf(produitbean.getLot())); // A voir par Allan
+        switch (choixAffichage) {
+            case Note:
+                break;
+            case Accueil:
+                break;
+            case Reglage:
+                holder.displaylibelle.setText(produitbean.getNom());
+                holder.displayTarif.setText(String.valueOf(produitbean.getPrix())); // A voir par Allan
+                holder.displayLot.setText(String.valueOf(produitbean.getLot())); // A voir par Allan
+
+                if (produitbean.isSelected()) {
+                    holder.displayModifyProduit.setVisibility(View.VISIBLE);
+                    holder.displayDeleteProduit.setVisibility(View.VISIBLE);
+                }
+                else {
+                    holder.displayModifyProduit.setVisibility(View.INVISIBLE);
+                    holder.displayDeleteProduit.setVisibility(View.INVISIBLE);
+                }
+                break;
+            case Bilan:
+                break;
+        }
+
+        holder.root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                produitbean.setSelected(!produitbean.isSelected());
+                notifyItemChanged(holder.getAdapterPosition());
+            }
+        });
     }
 
     @Override
@@ -71,12 +98,22 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         public ViewHolder(View itemView) {
             super(itemView);
-            displaylibelle = (TextView) itemView.findViewById(R.id.txt_produit);
-            displayLot = (TextView) itemView.findViewById(R.id.txt_lot);
-            displayTarif = (TextView) itemView.findViewById(R.id.txt_tarif);
-            displayModifyProduit = (Button) itemView.findViewById(R.id.btn_modifiy_prod);
-            displayDeleteProduit = (ImageView) itemView.findViewById(R.id.img_prod);
-            root = itemView.findViewById(R.id.root_produit);
+            switch (choixAffichage) {
+                case Note:
+                    break;
+                case Accueil:
+                    break;
+                case Reglage:
+                    displaylibelle = (TextView) itemView.findViewById(R.id.txt_produit);
+                    displayLot = (TextView) itemView.findViewById(R.id.txt_lot);
+                    displayTarif = (TextView) itemView.findViewById(R.id.txt_tarif);
+                    displayModifyProduit = (Button) itemView.findViewById(R.id.btn_modifiy_prod);
+                    displayDeleteProduit = (ImageView) itemView.findViewById(R.id.img_prod);
+                    root = itemView.findViewById(R.id.root_produit);
+                    break;
+                case Bilan:
+                    break;
+            }
         }
     }
 }
