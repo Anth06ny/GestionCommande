@@ -178,6 +178,14 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
 
     @Override
     public void clicOnModify(Categorie categorie) {
+        DialogFragment newFragment = new DialogCategorie();
 
+        Bundle args = new Bundle();
+        args.putLong("id", categorie.getId());
+        args.putString("nom", categorie.getNom());
+        args.putString("couleur", categorie.getCouleur());
+        args.putBoolean("choix", true);
+        newFragment.setArguments(args);
+        newFragment.show(getFragmentManager(), tag);
     }
 }

@@ -30,6 +30,9 @@ public class DialogCategorie extends DialogFragment {
     private TextView box;
     private Categorie categorie;
     private EditText edit_nomCategorie;
+    private Boolean choixDialog;
+    private Categorie categorieSelected;
+    private Bundle mArgs;
 
     @NonNull
     @Override
@@ -38,18 +41,24 @@ public class DialogCategorie extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View alertDialogView = inflater.inflate(R.layout.dialog_categorie, null);
 
+        categorieSelected = new Categorie();
+        mArgs = getArguments();
+
+        edit_nomCategorie = (EditText) alertDialogView.findViewById(R.id.nomCategorie);
+
         //On build la dialog box avec la vue personaliser + l'ajout des boutons positifs et négatif
         builder.setView(alertDialogView)
                 .setPositiveButton("Envoyer", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //Recupère ce qui est contenu dans le champ apres saisi de l'utilisateur
-                        edit_nomCategorie = (EditText) alertDialogView.findViewById(R.id.nomCategorie);
 
                         //TO DO: Gérer les Exceptions en cas d'input VIDE
 
-                        categorie = new Categorie();
                         //On passe les données recupèrer dans l'objet Catégorie
                         categorie = new Categorie();
+                        if (categorieSelected != null) {
+                            categorie.setId(categorieSelected.getId());
+                        }
                         categorie.setNom(edit_nomCategorie.getText().toString());
                         categorie.setCouleur(String.valueOf(couleurChoisi));
                         // Class object, Id est auto incrémenté
@@ -66,6 +75,14 @@ public class DialogCategorie extends DialogFragment {
         //Recuperation des elements graphique de la dialog box
         box = (TextView) alertDialogView.findViewById(R.id.boxCouleur);
         btnChoisirCouleur = (Button) alertDialogView.findViewById(R.id.btnChoisirCouleur);
+
+        if (mArgs != null) {
+            categorieSelected.setId(mArgs.getLong("id"));
+            categorieSelected.setNom(mArgs.getString("nom"));
+            categorieSelected.setCouleur(mArgs.getString("couleur"));
+            edit_nomCategorie.setText(categorieSelected.getNom());
+            box.setBackgroundColor(Integer.parseInt(categorieSelected.getCouleur()));
+        }
 
         //Au cliq du bouton on ouvre une nouvelle dialog box qui affiche le color picker
         btnChoisirCouleur.setOnClickListener(new View.OnClickListener() {
