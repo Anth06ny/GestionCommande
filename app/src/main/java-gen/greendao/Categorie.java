@@ -31,7 +31,7 @@ public class Categorie {
     private List<Produit> produitList;
 
     // KEEP FIELDS - put your custom fields here
-    private boolean isSelected;
+    private boolean isSelected = true;
     // KEEP FIELDS END
 
     public Categorie() {

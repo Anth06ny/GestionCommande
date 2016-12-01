@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import greendao.Categorie;
 import greendao.Produit;
+import model.CategorieBddManager;
 
 /**
  * Created by Axel legué on 23/11/2016.
@@ -29,6 +30,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private RecyclerView getRecyclerViewProduits;
     private Context context;
     private View view;
+    private CategorieBddManager categorieBddManager;
+    private int countCategories;
 
     public CategoryAdapter(ArrayList<Categorie> category_bean, CategoryAdapterCallBack categoryAdapterCallBack, Context context, View view) {
         this.category_bean = category_bean;
@@ -44,25 +47,30 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(final CategoryAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final CategoryAdapter.ViewHolder holder, final int position) {
         final Categorie categoriebean = category_bean.get(position);
+        countCategories = category_bean.size();
+        // Recupère la taille de la liste de catégorie
+
         holder.displayCategory.setText(categoriebean.getNom());
         holder.displayColor.setText(categoriebean.getCouleur());
-
-
-        if (categoriebean.isSelected()) {
-            holder.displayModifyCategory.setVisibility(View.VISIBLE);
-            holder.displayDelete.setVisibility(View.VISIBLE);
-        }
-        else {
-            holder.displayModifyCategory.setVisibility(View.INVISIBLE);
-            holder.displayDelete.setVisibility(View.INVISIBLE);
-        }
+        holder.displayModifyCategory.setVisibility(View.INVISIBLE);
+        holder.displayDelete.setVisibility(View.INVISIBLE);
 
         holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                categoriebean.setSelected(!categoriebean.isSelected());
+                for (int i = 0; i < countCategories; i++) {
+                    if (!categoriebean.isSelected()) {
+                        holder.displayModifyCategory.setVisibility(View.INVISIBLE);
+                        holder.displayDelete.setVisibility(View.INVISIBLE);
+                    }
+                    else {
+                        holder.displayModifyCategory.setVisibility(View.VISIBLE);
+                        holder.displayDelete.setVisibility(View.VISIBLE);
+                    }
+                }
+
                 produit_bean = new ArrayList<Produit>();
                 produit_bean = (ArrayList<Produit>) categoriebean.getProduitList();
                 productAdapter = new ProductAdapter(ProductAffichageEnum.Reglage, produit_bean);
@@ -70,6 +78,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 getRecyclerViewProduits.setAdapter(productAdapter);
                 getRecyclerViewProduits.setLayoutManager(new LinearLayoutManager(context));
                 getRecyclerViewProduits.setItemAnimator(new DefaultItemAnimator());
+
                 notifyItemChanged(holder.getAdapterPosition());
             }
         });
