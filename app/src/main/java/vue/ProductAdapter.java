@@ -74,8 +74,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 holder.root.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        produitbean.setSelected(!produitbean.isSelected());
-                        notifyItemChanged(holder.getAdapterPosition());
+                        productAdapterCallBack.clicOnProduit(produitbean);
                     }
                 });
                 holder.displayModifyProduit.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +127,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     public interface ProductAdapterCallBack {
         void clicOnModifyProduit(Produit produit);
+
+        void clicOnProduit(Produit produit);
     }
 }
 

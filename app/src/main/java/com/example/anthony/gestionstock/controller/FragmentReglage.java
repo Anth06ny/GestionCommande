@@ -271,4 +271,16 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         });
         newFragment.show(getFragmentManager(), tag);
     }
+
+    @Override
+    public void clicOnProduit(Produit produit) {
+
+        for (int i = 0; i < produitList.size(); i++) {
+            produitList.get(i).setSelected(false);
+            if (produitList.get(i) == produit) {
+                produitList.get(i).setSelected(true);
+            }
+        }
+        productAdapter.notifyDataSetChanged();
+    }
 }
