@@ -1,8 +1,5 @@
 package vue;
 
-import android.content.Context;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,16 +25,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private ArrayList<Produit> produit_bean;
     private ProductAdapter productAdapter;
     private RecyclerView getRecyclerViewProduits;
-    private Context context;
-    private View view;
+
     private CategorieBddManager categorieBddManager;
     private int countCategories;
 
-    public CategoryAdapter(ArrayList<Categorie> category_bean, CategoryAdapterCallBack categoryAdapterCallBack, Context context, View view) {
+    public CategoryAdapter(ArrayList<Categorie> category_bean, CategoryAdapterCallBack categoryAdapterCallBack) {
         this.category_bean = category_bean;
         this.categoryAdapterCallBack = categoryAdapterCallBack;
-        this.context = context;
-        this.view = view;
     }
 
     @Override
@@ -57,29 +51,18 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.displayModifyCategory.setVisibility(View.INVISIBLE);
         holder.displayDelete.setVisibility(View.INVISIBLE);
 
+        if (!categoriebean.isSelected()) {
+            holder.displayModifyCategory.setVisibility(View.INVISIBLE);
+            holder.displayDelete.setVisibility(View.INVISIBLE);
+        }
+        else {
+            holder.displayModifyCategory.setVisibility(View.VISIBLE);
+            holder.displayDelete.setVisibility(View.VISIBLE);
+        }
         holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (int i = 0; i < countCategories; i++) {
-                    if (!categoriebean.isSelected()) {
-                        holder.displayModifyCategory.setVisibility(View.INVISIBLE);
-                        holder.displayDelete.setVisibility(View.INVISIBLE);
-                    }
-                    else {
-                        holder.displayModifyCategory.setVisibility(View.VISIBLE);
-                        holder.displayDelete.setVisibility(View.VISIBLE);
-                    }
-                }
-
-                produit_bean = new ArrayList<Produit>();
-                produit_bean = (ArrayList<Produit>) categoriebean.getProduitList();
-                productAdapter = new ProductAdapter(ProductAffichageEnum.Reglage, produit_bean);
-                getRecyclerViewProduits = (RecyclerView) view.findViewById(R.id.rv_produit);
-                getRecyclerViewProduits.setAdapter(productAdapter);
-                getRecyclerViewProduits.setLayoutManager(new LinearLayoutManager(context));
-                getRecyclerViewProduits.setItemAnimator(new DefaultItemAnimator());
-
-                notifyItemChanged(holder.getAdapterPosition());
+                categoryAdapterCallBack.clicOnCategory(categoriebean);
             }
         });
 
@@ -119,6 +102,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         void clicOnDeleteCallback(Categorie categorie);
 
         void clicOnModify(Categorie categorie);
+
+        void clicOnCategory(Categorie categorie);
     }
 }
 

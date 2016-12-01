@@ -22,10 +22,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     private ProductAffichageEnum choixAffichage;
     private ArrayList<Produit> getProduitArrayList;
     private View v;
+    private ProductAdapterCallBack productAdapterCallBack;
 
-    public ProductAdapter(ProductAffichageEnum choixAffichage, ArrayList<Produit> getProduitArrayList) {
+    public ProductAdapter(ProductAffichageEnum choixAffichage, ArrayList<Produit> getProduitArrayList, ProductAdapterCallBack productAdapterCallBack) {
         this.choixAffichage = choixAffichage;
         this.getProduitArrayList = getProduitArrayList;
+        this.productAdapterCallBack = productAdapterCallBack;
     }
 
     @Override
@@ -69,18 +71,25 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     holder.displayModifyProduit.setVisibility(View.INVISIBLE);
                     holder.displayDeleteProduit.setVisibility(View.INVISIBLE);
                 }
+                holder.root.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        produitbean.setSelected(!produitbean.isSelected());
+                        notifyItemChanged(holder.getAdapterPosition());
+                    }
+                });
+                holder.displayModifyProduit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (productAdapterCallBack != null) {
+                            productAdapterCallBack.clicOnModifyProduit(produitbean);
+                        }
+                    }
+                });
                 break;
             case Bilan:
                 break;
         }
-
-        holder.root.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                produitbean.setSelected(!produitbean.isSelected());
-                notifyItemChanged(holder.getAdapterPosition());
-            }
-        });
     }
 
     @Override
@@ -115,6 +124,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     break;
             }
         }
+    }
+
+    public interface ProductAdapterCallBack {
+        void clicOnModifyProduit(Produit produit);
     }
 }
 

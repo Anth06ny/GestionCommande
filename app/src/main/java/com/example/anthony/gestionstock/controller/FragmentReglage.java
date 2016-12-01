@@ -3,7 +3,6 @@ package com.example.anthony.gestionstock.controller;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,8 +20,10 @@ import java.util.ArrayList;
 import greendao.Categorie;
 import greendao.Produit;
 import model.CategorieBddManager;
+import model.ProduitBddManager;
 import vue.CategoryAdapter;
 import vue.ProductAdapter;
+import vue.ProductAffichageEnum;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,7 +33,7 @@ import vue.ProductAdapter;
  * Use the {@link FragmentReglage#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentReglage extends Fragment implements View.OnClickListener, CategoryAdapter.CategoryAdapterCallBack {
+public class FragmentReglage extends Fragment implements View.OnClickListener, CategoryAdapter.CategoryAdapterCallBack, ProductAdapter.ProductAdapterCallBack {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -42,11 +43,13 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     private static final String tag = "fragment";
     private CategoryAdapter categoryAdapter;
     private ArrayList<Categorie> categorieList;
+    private ArrayList<Produit> produitList;
     private RecyclerView recyclerViewCategories;
 
     private ProductAdapter productAdapter;
-    private ArrayList<Produit> produitList;
     private RecyclerView getRecyclerViewProduits;
+
+    private View v;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -89,7 +92,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_reglage, container, false);
+        v = inflater.inflate(R.layout.fragment_reglage, container, false);
 
         // Recupere la vue pour ce fragment
         initUI(v);
@@ -101,7 +104,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     private void initUI(View v) {
         categorieList = new ArrayList<Categorie>();
         categorieList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
-        categoryAdapter = new CategoryAdapter(categorieList, this, this.getContext(), v);
+        categoryAdapter = new CategoryAdapter(categorieList, this);
         recyclerViewCategories = (RecyclerView) v.findViewById(R.id.rv_categorie);
         recyclerViewCategories.setAdapter(categoryAdapter);
         recyclerViewCategories.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -113,7 +116,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Add Categorie", Toast.LENGTH_SHORT).show();
-                //On appel clicOnModify avec null en paramatre car il n'y a pas de categorie deja existante quand on ajoute une categorie
+                //On appel clicOnModifyProduit avec null en paramatre car il n'y a pas de categorie deja existante quand on ajoute une categorie
                 clicOnModify(null);
             }
         });
@@ -124,8 +127,8 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Add Produit", Toast.LENGTH_SHORT).show();
-                DialogFragment newFragment = new DialogProduit();
-                newFragment.show(getFragmentManager(), tag);
+
+                clicOnModifyProduit(null);
             }
         });
     }
@@ -203,6 +206,66 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                 else {
                     categorieList.add(finalCategorie);
                     categoryAdapter.notifyItemInserted(categorieList.size() - 1);
+                }
+            }
+        });
+        newFragment.show(getFragmentManager(), tag);
+    }
+
+    @Override
+    public void clicOnCategory(Categorie categorie) {
+        produitList = new ArrayList<>();
+        produitList = (ArrayList<Produit>) categorie.getProduitList();
+
+        for (int i = 0; i < categorieList.size(); i++) {
+            categorieList.get(i).setSelected(false);
+            if (categorieList.get(i) == categorie) {
+                categorieList.get(i).setSelected(true);
+            }
+        }
+        categoryAdapter.notifyDataSetChanged();
+
+        productAdapter = new ProductAdapter(ProductAffichageEnum.Reglage, produitList, this);
+        getRecyclerViewProduits = (RecyclerView) v.findViewById(R.id.rv_produit);
+        getRecyclerViewProduits.setAdapter(productAdapter);
+        getRecyclerViewProduits.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        getRecyclerViewProduits.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    @Override
+    public void clicOnModifyProduit(final Produit produit) {
+        final DialogProduit newFragment = new DialogProduit();
+
+        final Produit finalProduit = produit == null ? new Produit() : produit;
+
+        newFragment.setProduit(finalProduit);
+        newFragment.setDialogProduitCallBack(new DialogProduit.DialogProduitCallBack() {
+            @Override
+            public void dialogProduitClicOnValider() {
+                ProduitBddManager.insertOrUpdate(finalProduit);
+                Categorie categorieSelected = new Categorie();
+                for (int i = 0; i < categorieList.size(); i++) {
+                    if (categorieList.get(i).getId() == finalProduit.getCategorieID()) {
+                        categorieSelected = categorieList.get(i);
+                    }
+                }
+
+                if (categorieSelected.getProduitList() == produitList) {
+                    if (produitList.size() != 0) {
+
+                        int positionProduit = produitList.indexOf(finalProduit);
+                        if (positionProduit >= 0) {
+                            productAdapter.notifyItemChanged(positionProduit);
+                        }
+                        else {
+                            produitList.add(finalProduit);
+                            productAdapter.notifyItemInserted(produitList.size() - 1);
+                        }
+                    }
+                    else {
+                        produitList.add(finalProduit);
+                        productAdapter.notifyItemInserted(produitList.size() - 1);
+                    }
                 }
             }
         });

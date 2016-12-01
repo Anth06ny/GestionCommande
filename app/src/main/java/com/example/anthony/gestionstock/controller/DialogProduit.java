@@ -21,7 +21,6 @@ import java.util.List;
 import greendao.Categorie;
 import greendao.Produit;
 import model.CategorieBddManager;
-import model.ProduitBddManager;
 
 /**
  * Created by Allan on 23/11/2016.
@@ -38,6 +37,8 @@ public class DialogProduit extends DialogFragment {
     private List<Categorie> listCategories;
     private SpinnerAdapter spinnerTest;
 
+    DialogProduitCallBack dialogProduitCallBack;
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -52,26 +53,38 @@ public class DialogProduit extends DialogFragment {
         // instancie l'adapteur pour la liste déroulante
         spinnerTest = new vue.SpinnerAdapter(this.getActivity(), listCategories);
 
+        //On recupere les elements graphique et leur valeur, Recupère ce qui est contenu dans le champ apres saisi de l'utilisateur
+        editNom = (EditText) alertDialogView.findViewById(R.id.editNomProduit);
+        editPrix = (EditText) alertDialogView.findViewById(R.id.editPrixProduit);
+        editLot = (EditText) alertDialogView.findViewById(R.id.editLotProduit);
+
+        if (produit.getNom() != null) {
+            editNom.setText(produit.getNom());
+        }
+        if (produit.getPrix() != null) {
+            editPrix.setText(String.valueOf(produit.getPrix()));
+        }
+        if (produit.getLot() != null) {
+            editLot.setText(String.valueOf(produit.getLot()));
+        }
+        if (produit.getCategorieID() >= 0) {
+        }
         //On build la dialog box avec la vue personaliser + l'ajout des boutons positifs et négatif
         builder.setView(alertDialogView)
                 .setPositiveButton("Envoyer", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //On recupere les elements graphique et leur valeur, Recupère ce qui est contenu dans le champ apres saisi de l'utilisateur
-                        editNom = (EditText) alertDialogView.findViewById(R.id.editNomProduit);
-                        editPrix = (EditText) alertDialogView.findViewById(R.id.editPrixProduit);
-                        editLot = (EditText) alertDialogView.findViewById(R.id.editLotProduit);
 
                         //TODO: Gérer les Exceptions en cas d'input VIDE
+                        // TODO : verifier le type de données saisies
 
                         //On passe les données recupèrer dans l'objet Catégorie
-                        produit = new Produit();
 
-                        // TODO : verifier le type de données saisies
                         produit.setNom(editNom.getText().toString());
                         produit.setPrix(Float.valueOf(String.valueOf(editPrix.getText())));
                         produit.setLot(Integer.valueOf(String.valueOf(editLot.getText())));
                         produit.setCategorieID(categorieSelected.getId());
-                        ProduitBddManager.insertOrUpdate(produit);
+
+                        dialogProduitCallBack.dialogProduitClicOnValider();
                     }
                 })
                 .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
@@ -95,5 +108,17 @@ public class DialogProduit extends DialogFragment {
         });
 
         return builder.create();
+    }
+
+    public interface DialogProduitCallBack {
+        void dialogProduitClicOnValider();
+    }
+
+    public void setDialogProduitCallBack(DialogProduitCallBack dialogProduitCallBack) {
+        this.dialogProduitCallBack = dialogProduitCallBack;
+    }
+
+    public void setProduit(Produit produit) {
+        this.produit = produit;
     }
 }
