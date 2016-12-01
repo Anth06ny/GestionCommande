@@ -15,23 +15,26 @@
 
         <TextView
             android:id="@+id/txt_category"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="APERITIF"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            android:textAllCaps="true"/>
 
         <TextView
             android:id="@+id/txt_color"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="#c72727"/>
+            android:background="#c72727"
+            />
 
         <Button
             android:id="@+id/btn_modifiy_cat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:layout_weight="1"
             android:text="MODIFIER"
             android:visibility="invisible"/>
@@ -40,7 +43,10 @@
             android:id="@+id/img_cat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_menu_camera"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/ic_delete_forever_black_24dp"
             android:textAlignment="center"
             android:visibility="invisible"/>
 

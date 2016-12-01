@@ -23,8 +23,9 @@
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="Catégories"/>
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:text="CATÉGORIES"/>
 
             <LinearLayout
                 android:id="@+id/sousTitreCat"
@@ -33,16 +34,21 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="40dp"
                     android:layout_weight="2"
-                    android:text="Libellé"
+                    android:text="LIBELLÉ"
                     tools:layout_marginLeft="10dp"/>
 
                 <Button
                     android:id="@+id/btn_addCategorie"
-                    android:layout_width="wrap_content"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="40dp"
                     android:layout_weight="2"
                     android:text="Ajouter une catégorie"
                     />
@@ -70,7 +76,9 @@
                 android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Produits"/>
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:text="PRODUITS"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -80,27 +88,36 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="10"
-                    android:text="Libellé"/>
+                    android:paddingLeft="10dp"
+                    android:text="LIBELLÉ"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="10"
-                    android:text="Tarif"/>
+                    android:paddingLeft="27dp"
+                    android:text="TARIF"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="10"
-                    android:text="Prix"/>
+                    android:paddingLeft="30dp"
+                    android:text="LOT"/>
 
                 <Button
                     android:id="@+id/btn_addProduit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="1"
-                    android:text="Ajouter un produit"/>
+                    android:text="Ajouter un produit"
+                    android:textAlignment="center"/>
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView

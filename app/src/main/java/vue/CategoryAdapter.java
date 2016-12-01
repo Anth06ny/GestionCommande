@@ -47,7 +47,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         // Recupère la taille de la liste de catégorie
 
         holder.displayCategory.setText(categoriebean.getNom());
-        holder.displayColor.setText(categoriebean.getCouleur());
+        holder.displayColor.setBackgroundColor(Integer.parseInt(categoriebean.getCouleur()));
         holder.displayModifyCategory.setVisibility(View.INVISIBLE);
         holder.displayDelete.setVisibility(View.INVISIBLE);
 
