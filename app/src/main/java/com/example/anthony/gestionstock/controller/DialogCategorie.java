@@ -68,7 +68,7 @@ public class DialogCategorie extends DialogFragment {
                         int tag = 0;
                         if (edit_nomCategorie.getText().toString().length() != 0) {
                             Boolean erreur = false;
-                            ArrayList<Categorie> categorieArrayList = new ArrayList<>();
+                            ArrayList<Categorie> categorieArrayList;
                             categorieArrayList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
 
                             categorie.setNom(edit_nomCategorie.getText().toString());

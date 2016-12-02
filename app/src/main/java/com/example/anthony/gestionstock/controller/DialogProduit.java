@@ -17,10 +17,12 @@ import com.example.anthony.gestionstock.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import greendao.Categorie;
 import greendao.Produit;
 import model.CategorieBddManager;
+import model.ProduitBddManager;
 
 /**
  * Created by Allan on 23/11/2016.
@@ -74,17 +76,35 @@ public class DialogProduit extends DialogFragment {
                 .setPositiveButton("Envoyer", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
+                        ArrayList<Produit> produitArrayList = (ArrayList<Produit>) ProduitBddManager.getProduit();
                         //TODO: Gérer les Exceptions en cas d'input VIDE
                         // TODO : verifier le type de données saisies
 
                         //On passe les données recupèrer dans l'objet Catégorie
+                        int tag = 0;
+                        Boolean erreur = false;
+                        if (editNom.getText().length() != 0 && editPrix.getText().length() != 0 && editLot.getText().length() != 0) {
+                            produit.setNom(editNom.getText().toString());
+                            for (int i = 0; i < produitArrayList.size(); i++) {
+                                if (Objects.equals(produit.getNom(), produitArrayList.get(i).getNom()) && !Objects.equals(produit.getId(), produitArrayList.get(i).getId())) {
+                                    erreur = true;
+                                    tag = 1;
+                                }
+                            }
+                            if (!erreur) {
+                                produit.setPrix(Float.valueOf(String.valueOf(editPrix.getText())));
+                                produit.setLot(Integer.valueOf(String.valueOf(editLot.getText())));
+                                produit.setCategorieID(categorieSelected.getId());
 
-                        produit.setNom(editNom.getText().toString());
-                        produit.setPrix(Float.valueOf(String.valueOf(editPrix.getText())));
-                        produit.setLot(Integer.valueOf(String.valueOf(editLot.getText())));
-                        produit.setCategorieID(categorieSelected.getId());
-
-                        dialogProduitCallBack.dialogProduitClicOnValider();
+                                dialogProduitCallBack.dialogProduitClicOnValider();
+                            }
+                            else {
+                                dialogProduitCallBack.dialogProduitClicOnValiderErreur(tag);
+                            }
+                        }
+                        else {
+                            dialogProduitCallBack.dialogProduitClicOnValiderErreur(tag);
+                        }
                     }
                 })
                 .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
@@ -112,6 +132,8 @@ public class DialogProduit extends DialogFragment {
 
     public interface DialogProduitCallBack {
         void dialogProduitClicOnValider();
+
+        void dialogProduitClicOnValiderErreur(int tag);
     }
 
     public void setDialogProduitCallBack(DialogProduitCallBack dialogProduitCallBack) {

@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
 
@@ -117,7 +116,6 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         btnAddCategorie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Add Categorie", Toast.LENGTH_SHORT).show();
                 //On appel clicOnModifyProduit avec null en paramatre car il n'y a pas de categorie deja existante quand on ajoute une categorie
                 clicOnModifyCategory(null);
             }
@@ -128,7 +126,6 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Add Produit", Toast.LENGTH_SHORT).show();
 
                 clicOnModifyProduit(null);
             }
@@ -338,6 +335,36 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                         productAdapter.notifyItemInserted(produitList.size() - 1);
                     }
                 }
+            }
+
+            @Override
+            public void dialogProduitClicOnValiderErreur(int tag) {
+
+                //On creer un alert dialog pour indiquer que les valeurs saisie par l 'utilisateur sont incorrect
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        getContext());
+
+                //On set tous les elements et on display la dialog box
+                alertDialogBuilder.setTitle("Erreur");
+                switch (tag) {
+                    case 0:
+                        alertDialogBuilder
+                                .setMessage("Erreur lors de l'envoie des données saisie veuillez réessayer");
+                        break;
+                    case 1:
+                        alertDialogBuilder
+                                .setMessage("Produit déjà existant");
+                        break;
+                }
+
+                alertDialogBuilder.setCancelable(false)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                            }
+                        });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
             }
         });
         newFragment.show(getFragmentManager(), tag);
