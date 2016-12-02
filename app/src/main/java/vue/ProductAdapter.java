@@ -58,6 +58,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             case Note:
                 break;
             case Accueil:
+                holder.produitAccueil.setText(produitbean.getNom());
                 break;
             case Reglage:
                 holder.displaylibelle.setText(produitbean.getNom());
@@ -110,6 +111,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         public Button displayModifyProduit;
         public ImageView displayDeleteProduit;
         public View root;
+        public Button produitAccueil;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -117,6 +119,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 case Note:
                     break;
                 case Accueil:
+                    produitAccueil = (Button) itemView.findViewById(R.id.produit);
                     break;
                 case Reglage:
                     displaylibelle = (TextView) itemView.findViewById(R.id.txt_produit);
