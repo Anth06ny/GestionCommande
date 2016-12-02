@@ -273,7 +273,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
 
     @Override
     public void clicOnDeleteCategory(final Categorie categorie) {
-        //On creer un alert dialog pour indiquer que les valeurs saisie par l'utilisateur sont incorrect
+        //On creer un alert dialog pour confirmer la suppression de la categorie
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 getContext());
 
@@ -408,7 +408,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
 
     @Override
     public void clicOnDeleteProduit(final Produit produit) {
-        //On creer un alert dialog pour indiquer que les valeurs saisie par l'utilisateur sont incorrect
+        //On creer un alert dialog pour confirmer la suppression du produit
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 getContext());
 
