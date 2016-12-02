@@ -60,15 +60,23 @@ public class DialogCategorie extends DialogFragment {
                 .setPositiveButton("Envoyer", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
-                        //TO DO: Gérer les Exceptions en cas d'input VIDE
+                        //TODO: Gérer les Exceptions en cas d'ajout d'une categorie deja existante
 
                         if (edit_nomCategorie.getText().toString().length() != 0) {
                             categorie.setNom(edit_nomCategorie.getText().toString());
+
                             if (couleurChoisi != 0) {
+
                                 categorie.setCouleur(String.valueOf(couleurChoisi));
                             }
-
-                            dialogCategorieCallBack.dialogCategorieClicOnValider();
+                            else {
+                                if (categorie.getCouleur() == null) {
+                                    dialogCategorieCallBack.dialogCategorieClicOnValiderErreur();
+                                }
+                                else {
+                                    dialogCategorieCallBack.dialogCategorieClicOnValider();
+                                }
+                            }
                         }
                         else {
                             dialogCategorieCallBack.dialogCategorieClicOnValiderErreur();

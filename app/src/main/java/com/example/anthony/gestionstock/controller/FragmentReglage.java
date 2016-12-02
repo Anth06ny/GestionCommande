@@ -259,6 +259,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         recyclerViewProduits.setAdapter(productAdapter);
         recyclerViewProduits.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerViewProduits.setItemAnimator(new DefaultItemAnimator());
+        productAdapter.notifyDataSetChanged();
     }
 
     @Override

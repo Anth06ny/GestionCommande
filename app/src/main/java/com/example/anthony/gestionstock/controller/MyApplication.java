@@ -20,6 +20,9 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         setupDatabase();
+
+        /*CategorieBddManager.clearCategorie();
+        ProduitBddManager.clearProduit();*/
     }
 
     private void setupDatabase() {
