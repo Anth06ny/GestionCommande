@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import greendao.DaoMaster;
 import greendao.DaoSession;
+import model.CategorieBddManager;
+import model.ProduitBddManager;
 
 /**
  * Created by Allan on 29/11/2016.
@@ -21,8 +23,8 @@ public class MyApplication extends Application {
         super.onCreate();
         setupDatabase();
 
-        /*CategorieBddManager.clearCategorie();
-        ProduitBddManager.clearProduit();*/
+        CategorieBddManager.clearCategorie();
+        ProduitBddManager.clearProduit();
     }
 
     private void setupDatabase() {

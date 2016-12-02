@@ -16,7 +16,11 @@ import com.example.anthony.gestionstock.R;
 import com.turkialkhateeb.materialcolorpicker.ColorChooserDialog;
 import com.turkialkhateeb.materialcolorpicker.ColorListener;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 import greendao.Categorie;
+import model.CategorieBddManager;
 
 /**
  * Created by Allan on 23/11/2016.
@@ -38,7 +42,7 @@ public class DialogCategorie extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        final LayoutInflater inflater = getActivity().getLayoutInflater();
         final View alertDialogView = inflater.inflate(R.layout.dialog_categorie, null);
 
         //Recuperation des elements graphique de la dialog box
@@ -63,11 +67,20 @@ public class DialogCategorie extends DialogFragment {
                         //TODO: Gérer les Exceptions en cas d'ajout d'une categorie deja existante
 
                         if (edit_nomCategorie.getText().toString().length() != 0) {
+                            Boolean erreur = false;
+                            ArrayList<Categorie> categorieArrayList = new ArrayList<>();
+                            categorieArrayList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
+
                             categorie.setNom(edit_nomCategorie.getText().toString());
 
-                            if (couleurChoisi != 0) {
-
+                            for (int i = 0; i < categorieArrayList.size(); i++) {
+                                if (Objects.equals(categorie.getNom(), categorieArrayList.get(i).getNom()) && !Objects.equals(categorie.getId(), categorieArrayList.get(i).getId())) {
+                                    erreur = true;
+                                }
+                            }
+                            if (couleurChoisi != 0 && !erreur) {
                                 categorie.setCouleur(String.valueOf(couleurChoisi));
+                                dialogCategorieCallBack.dialogCategorieClicOnValider();
                             }
                             else {
                                 if (categorie.getCouleur() == null) {
@@ -78,11 +91,10 @@ public class DialogCategorie extends DialogFragment {
                                 }
                             }
                         }
+
                         else {
                             dialogCategorieCallBack.dialogCategorieClicOnValiderErreur();
                         }
-                        //On passe les données recupèrer dans l'objet Catégorie
-
                     }
                 })
                 .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
