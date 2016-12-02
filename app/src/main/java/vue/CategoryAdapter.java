@@ -27,7 +27,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private RecyclerView getRecyclerViewProduits;
 
     private CategorieBddManager categorieBddManager;
-    private int countCategories;
 
     public CategoryAdapter(ArrayList<Categorie> category_bean, CategoryAdapterCallBack categoryAdapterCallBack) {
         this.category_bean = category_bean;
@@ -43,8 +42,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     @Override
     public void onBindViewHolder(final CategoryAdapter.ViewHolder holder, final int position) {
         final Categorie categoriebean = category_bean.get(position);
-        countCategories = category_bean.size();
-        // Recupère la taille de la liste de catégorie
 
         holder.displayCategory.setText(categoriebean.getNom());
         holder.displayColor.setBackgroundColor(Integer.parseInt(categoriebean.getCouleur()));
@@ -70,8 +67,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 if (categoryAdapterCallBack != null) {
-                    categoryAdapterCallBack.clicOnModify(categoriebean);
+                    categoryAdapterCallBack.clicOnModifyCategory(categoriebean);
                 }
+            }
+        });
+
+        holder.displayDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                categoryAdapterCallBack.clicOnDeleteCategory(categoriebean);
             }
         });
     }
@@ -99,11 +103,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     }
 
     public interface CategoryAdapterCallBack {
-        void clicOnDeleteCallback(Categorie categorie);
 
-        void clicOnModify(Categorie categorie);
+        void clicOnModifyCategory(Categorie categorie);
 
         void clicOnCategory(Categorie categorie);
+
+        void clicOnDeleteCategory(Categorie categorie);
     }
 }
 

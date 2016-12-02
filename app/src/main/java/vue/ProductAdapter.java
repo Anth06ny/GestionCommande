@@ -85,6 +85,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                         }
                     }
                 });
+                holder.displayDeleteProduit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        productAdapterCallBack.clicOnDeleteProduit(produitbean);
+                    }
+                });
                 break;
             case Bilan:
                 break;
@@ -129,6 +135,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         void clicOnModifyProduit(Produit produit);
 
         void clicOnProduit(Produit produit);
+
+        void clicOnDeleteProduit(Produit produit);
     }
 }
 

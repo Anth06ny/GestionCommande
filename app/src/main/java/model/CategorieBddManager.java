@@ -31,7 +31,9 @@ public class CategorieBddManager {
         MyApplication.getDaoSession().getCategorieDao().deleteAll();
     }
 
-
+    public static void deleteCategorie(Categorie categorie) {
+        MyApplication.getDaoSession().getCategorieDao().delete(categorie);
+    }
 
     // --------------------------------- ''' END SQL QUERY ''' -----------------------------------//
 }

@@ -31,7 +31,10 @@ public class ProduitBddManager {
         MyApplication.getDaoSession().getProduitDao().deleteAll();
     }
 
-    // --------------------------------- ''' END SQL QUERY ''' -----------------------------------//
+    public static void deleteProduit(Produit produit) {
+        MyApplication.getDaoSession().getProduitDao().delete(produit);
+    }
 
+    // --------------------------------- ''' END SQL QUERY ''' -----------------------------------//
 }
 

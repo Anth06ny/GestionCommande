@@ -1,9 +1,11 @@
 package com.example.anthony.gestionstock.controller;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -47,7 +49,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     private RecyclerView recyclerViewCategories;
 
     private ProductAdapter productAdapter;
-    private RecyclerView getRecyclerViewProduits;
+    private RecyclerView recyclerViewProduits;
 
     private View v;
 
@@ -117,7 +119,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Add Categorie", Toast.LENGTH_SHORT).show();
                 //On appel clicOnModifyProduit avec null en paramatre car il n'y a pas de categorie deja existante quand on ajoute une categorie
-                clicOnModify(null);
+                clicOnModifyCategory(null);
             }
         });
 
@@ -178,15 +180,9 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
 
     }
 
+    /////////////// Call Back Categorie ///////////////
     @Override
-    public void clicOnDeleteCallback(Categorie categorie) {
-        //supp de green dao
-        //la retirer de l'arrayList en recup sa position
-        // categoryAdapter.notifyItemRemoved(position);
-    }
-
-    @Override
-    public void clicOnModify(Categorie cat) {
+    public void clicOnModifyCategory(Categorie cat) {
         //On instancie la dialog Categorie
         DialogCategorie newFragment = new DialogCategorie();
 
@@ -198,15 +194,43 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         newFragment.setDialogCategorieCallBack(new DialogCategorie.DialogCategorieCallBack() {
             @Override
             public void dialogCategorieClicOnValider() {
+                //On insert ou on update la categorie que l'on a ajouter ou modifier
                 CategorieBddManager.insertOrUpdate(finalCategorie);
+
+                //On recupere la position de cette categorie dans la liste des categories
                 int positionCategorie = categorieList.indexOf(finalCategorie);
                 if (positionCategorie >= 0) {
+                    //Si la categorie est a une position de 0 ou plus c'est que la categorie existait deja dans la liste
+                    //Donc on recharge le recycle view avec un item changed
                     categoryAdapter.notifyItemChanged(positionCategorie);
                 }
                 else {
+                    //Sinon cela indique que la categorie n'appartenait pas a la liste
+                    //Donc on insert la categorie dans la liste et on recharge le recycle view avec un item inserted
                     categorieList.add(finalCategorie);
                     categoryAdapter.notifyItemInserted(categorieList.size() - 1);
                 }
+            }
+
+            @Override
+            public void dialogCategorieClicOnValiderErreur() {
+                //On creer un alert dialog pour indiquer que les valeurs saisie par l'utilisateur sont incorrect
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        getContext());
+
+                //On set tous les elements et on display la dialog box
+                alertDialogBuilder.setTitle("Erreur");
+
+                alertDialogBuilder
+                        .setMessage("Erreur lors de l'envoie des données saisie veuillez réessayer")
+                        .setCancelable(false)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                            }
+                        });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
             }
         });
         newFragment.show(getFragmentManager(), tag);
@@ -214,30 +238,64 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
 
     @Override
     public void clicOnCategory(Categorie categorie) {
+        //Au clic sur une categorie on recupere la liste de produit qui lui est associer
         produitList = new ArrayList<>();
         produitList = (ArrayList<Produit>) categorie.getProduitList();
 
+        //On set selected la categorie choisie a true et les autres a false pour display seulement les boutons de la categorie choisie
         for (int i = 0; i < categorieList.size(); i++) {
             categorieList.get(i).setSelected(false);
             if (categorieList.get(i) == categorie) {
                 categorieList.get(i).setSelected(true);
             }
         }
+
+        //On recharge le recycle view
         categoryAdapter.notifyDataSetChanged();
 
+        //On creer l'adapteur et on set le recycler view des produits avec la liste de produits qui correpondent a la categorie choisie
         productAdapter = new ProductAdapter(ProductAffichageEnum.Reglage, produitList, this);
-        getRecyclerViewProduits = (RecyclerView) v.findViewById(R.id.rv_produit);
-        getRecyclerViewProduits.setAdapter(productAdapter);
-        getRecyclerViewProduits.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        getRecyclerViewProduits.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewProduits = (RecyclerView) v.findViewById(R.id.rv_produit);
+        recyclerViewProduits.setAdapter(productAdapter);
+        recyclerViewProduits.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recyclerViewProduits.setItemAnimator(new DefaultItemAnimator());
     }
 
     @Override
+    public void clicOnDeleteCategory(Categorie categorie) {
+        //On recupere la position de la categorie dans la liste qu'on veut supprimer
+        int positionCategorie = categorieList.indexOf(categorie);
+
+        //On recupere la liste des produits qui appartiennent a cette categorie
+        ArrayList<Produit> categorieProduitList = (ArrayList<Produit>) categorie.getProduitList();
+
+        //On fait une boucle pour supprimer de la liste et de la bdd tous les produits de cette categorie
+        while (categorieProduitList.size() > 0) {
+            ProduitBddManager.deleteProduit(categorieProduitList.get(0));
+            categorieProduitList.remove(0);
+        }
+
+        //On met a jour le recycle view
+        productAdapter.notifyDataSetChanged();
+
+        //On supprime la categorie de la liste de categorie et on recharche le recycle view
+        categorieList.remove(positionCategorie);
+        categoryAdapter.notifyItemRemoved(positionCategorie);
+
+        //On supprime la categorie de la bdd
+        CategorieBddManager.deleteCategorie(categorie);
+    }
+
+    /////////////// Call Back Produit ///////////////
+    @Override
     public void clicOnModifyProduit(final Produit produit) {
+        //On instancie la dialog produit
         final DialogProduit newFragment = new DialogProduit();
 
+        //On creer un produit ou on recupere le produit entrer en parametre
         final Produit finalProduit = produit == null ? new Produit() : produit;
 
+        //On envoie la categorie dans la dialog Categorie
         newFragment.setProduit(finalProduit);
         newFragment.setDialogProduitCallBack(new DialogProduit.DialogProduitCallBack() {
             @Override
@@ -275,12 +333,26 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     @Override
     public void clicOnProduit(Produit produit) {
 
+        //On set selected le produit choisi a true et les autres a false pour display seulement les boutons du produit choisi
         for (int i = 0; i < produitList.size(); i++) {
             produitList.get(i).setSelected(false);
             if (produitList.get(i) == produit) {
                 produitList.get(i).setSelected(true);
             }
         }
+
+        //On recharge le recycle view
         productAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void clicOnDeleteProduit(Produit produit) {
+        //On recupere la position du produit qu'on veut delete dans la liste
+        int positionProduit = produitList.indexOf(produit);
+        //On retire le produit de la liste et on recharche le recycle view
+        produitList.remove(positionProduit);
+        productAdapter.notifyItemRemoved(positionProduit);
+        //On supprime le produit de la bdd
+        ProduitBddManager.deleteProduit(produit);
     }
 }

@@ -62,13 +62,19 @@ public class DialogCategorie extends DialogFragment {
 
                         //TO DO: Gérer les Exceptions en cas d'input VIDE
 
-                        //On passe les données recupèrer dans l'objet Catégorie
-                        categorie.setNom(edit_nomCategorie.getText().toString());
-                        if (couleurChoisi != 0) {
-                            categorie.setCouleur(String.valueOf(couleurChoisi));
-                        }
+                        if (edit_nomCategorie.getText().toString().length() != 0) {
+                            categorie.setNom(edit_nomCategorie.getText().toString());
+                            if (couleurChoisi != 0) {
+                                categorie.setCouleur(String.valueOf(couleurChoisi));
+                            }
 
-                        dialogCategorieCallBack.dialogCategorieClicOnValider();
+                            dialogCategorieCallBack.dialogCategorieClicOnValider();
+                        }
+                        else {
+                            dialogCategorieCallBack.dialogCategorieClicOnValiderErreur();
+                        }
+                        //On passe les données recupèrer dans l'objet Catégorie
+
                     }
                 })
                 .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
@@ -113,5 +119,7 @@ public class DialogCategorie extends DialogFragment {
 
     public interface DialogCategorieCallBack {
         void dialogCategorieClicOnValider();
+
+        void dialogCategorieClicOnValiderErreur();
     }
 }
