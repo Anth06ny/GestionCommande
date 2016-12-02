@@ -60,7 +60,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 break;
             case Reglage:
                 holder.displaylibelle.setText(produitbean.getNom());
-                holder.displayTarif.setText(String.valueOf(produitbean.getPrix())); // A voir par Allan
+                holder.displayTarif.setText(String.valueOf(produitbean.getPrix() + " €")); // A voir par Allan
                 holder.displayLot.setText(String.valueOf(produitbean.getLot())); // A voir par Allan
 
                 if (produitbean.isSelected()) {
