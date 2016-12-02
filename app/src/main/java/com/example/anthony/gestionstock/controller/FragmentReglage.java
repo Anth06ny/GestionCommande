@@ -235,7 +235,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                 alertDialogBuilder.setCancelable(false)
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-
+                                dialog.cancel();
                             }
                         });
                 AlertDialog alertDialog = alertDialogBuilder.create();
@@ -272,28 +272,49 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     }
 
     @Override
-    public void clicOnDeleteCategory(Categorie categorie) {
-        //On recupere la position de la categorie dans la liste qu'on veut supprimer
-        int positionCategorie = categorieList.indexOf(categorie);
+    public void clicOnDeleteCategory(final Categorie categorie) {
+        //On creer un alert dialog pour indiquer que les valeurs saisie par l'utilisateur sont incorrect
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getContext());
 
-        //On recupere la liste des produits qui appartiennent a cette categorie
-        ArrayList<Produit> categorieProduitList = (ArrayList<Produit>) categorie.getProduitList();
+        //On set tous les elements et on display la dialog box
+        alertDialogBuilder.setTitle("Confirmation");
 
-        //On fait une boucle pour supprimer de la liste et de la bdd tous les produits de cette categorie
-        while (categorieProduitList.size() > 0) {
-            ProduitBddManager.deleteProduit(categorieProduitList.get(0));
-            categorieProduitList.remove(0);
-        }
+        alertDialogBuilder
+                .setMessage("Voulez-vous supprimer cette catégorie ?");
 
-        //On met a jour le recycle view
-        productAdapter.notifyDataSetChanged();
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //On recupere la position de la categorie dans la liste qu'on veut supprimer
+                        int positionCategorie = categorieList.indexOf(categorie);
 
-        //On supprime la categorie de la liste de categorie et on recharche le recycle view
-        categorieList.remove(positionCategorie);
-        categoryAdapter.notifyItemRemoved(positionCategorie);
+                        //On recupere la liste des produits qui appartiennent a cette categorie
+                        ArrayList<Produit> categorieProduitList = (ArrayList<Produit>) categorie.getProduitList();
 
-        //On supprime la categorie de la bdd
-        CategorieBddManager.deleteCategorie(categorie);
+                        //On fait une boucle pour supprimer de la liste et de la bdd tous les produits de cette categorie
+                        while (categorieProduitList.size() > 0) {
+                            ProduitBddManager.deleteProduit(categorieProduitList.get(0));
+                            categorieProduitList.remove(0);
+                        }
+
+                        //On met a jour le recycle view
+                        productAdapter.notifyDataSetChanged();
+
+                        //On supprime la categorie de la liste de categorie et on recharche le recycle view
+                        categorieList.remove(positionCategorie);
+                        categoryAdapter.notifyItemRemoved(positionCategorie);
+
+                        //On supprime la categorie de la bdd
+                        CategorieBddManager.deleteCategorie(categorie);
+                    }
+                }).setNegativeButton("Non", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     /////////////// Call Back Produit ///////////////
@@ -360,7 +381,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                 alertDialogBuilder.setCancelable(false)
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-
+                                dialog.cancel();
                             }
                         });
                 AlertDialog alertDialog = alertDialogBuilder.create();
@@ -386,13 +407,34 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     }
 
     @Override
-    public void clicOnDeleteProduit(Produit produit) {
-        //On recupere la position du produit qu'on veut delete dans la liste
-        int positionProduit = produitList.indexOf(produit);
-        //On retire le produit de la liste et on recharche le recycle view
-        produitList.remove(positionProduit);
-        productAdapter.notifyItemRemoved(positionProduit);
-        //On supprime le produit de la bdd
-        ProduitBddManager.deleteProduit(produit);
+    public void clicOnDeleteProduit(final Produit produit) {
+        //On creer un alert dialog pour indiquer que les valeurs saisie par l'utilisateur sont incorrect
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getContext());
+
+        //On set tous les elements et on display la dialog box
+        alertDialogBuilder.setTitle("Confirmation");
+
+        alertDialogBuilder
+                .setMessage("Voulez-vous supprimer ce produit ?");
+
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //On recupere la position du produit qu'on veut delete dans la liste
+                        int positionProduit = produitList.indexOf(produit);
+                        //On retire le produit de la liste et on recharche le recycle view
+                        produitList.remove(positionProduit);
+                        productAdapter.notifyItemRemoved(positionProduit);
+                        //On supprime le produit de la bdd
+                        ProduitBddManager.deleteProduit(produit);
+                    }
+                }).setNegativeButton("Non", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 }
