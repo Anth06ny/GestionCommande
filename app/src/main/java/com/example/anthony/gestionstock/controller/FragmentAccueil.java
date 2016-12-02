@@ -4,31 +4,50 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.anthony.gestionstock.R;
 
+import java.util.ArrayList;
+
+import greendao.Categorie;
+import greendao.Produit;
+import model.CategorieBddManager;
+import model.ProduitBddManager;
+import vue.ProductAdapter;
 import vue.ProductAffichageEnum;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AccueilFragment.OnFragmentInteractionListener} interface
+ * {@link FragmentAccueil.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link AccueilFragment#newInstance} factory method to
+ * Use the {@link FragmentAccueil#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AccueilFragment extends Fragment implements View.OnClickListener {
+public class FragmentAccueil extends Fragment implements View.OnClickListener, ProductAdapter.ProductAdapterCallBack {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private View v;
+    private Button btn_cancel;
+    private Button btn_note;
+    private Button btn_off_client;
+    private ProductAdapter productAdapter;
+    private ArrayList<Categorie> categorieArrayList;
+    private ArrayList<Produit> produitArrayList;
+    private RecyclerView recyclerViewProduits;
 
     private OnFragmentInteractionListener mListener;
 
@@ -38,11 +57,11 @@ public class AccueilFragment extends Fragment implements View.OnClickListener {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AccueilFragment.
+     * @return A new instance of fragment FragmentAccueil.
      */
     // TODO: Rename and change types and number of parameters
-    public static AccueilFragment newInstance(String param1, String param2) {
-        AccueilFragment fragment = new AccueilFragment();
+    public static FragmentAccueil newInstance(String param1, String param2) {
+        FragmentAccueil fragment = new FragmentAccueil();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -50,7 +69,7 @@ public class AccueilFragment extends Fragment implements View.OnClickListener {
         return fragment;
     }
 
-    public AccueilFragment() {
+    public FragmentAccueil() {
         // Required empty public constructor
     }
 
@@ -67,7 +86,24 @@ public class AccueilFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_accueil, container, false);
+        v = inflater.inflate(R.layout.fragment_accueil, container, false);
+        initUI(v);
+        return v;
+    }
+
+    private void initUI(View v) {
+        //Création de la liste de catégories
+        categorieArrayList = new ArrayList<Categorie>();
+        //Remplissage de la liste
+        categorieArrayList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
+
+        produitArrayList = new ArrayList<Produit>(); // Instanciation de la liste de produits
+        produitArrayList = (ArrayList<Produit>) ProduitBddManager.getProduit(); // remplissage de la liste de produits
+        productAdapter = new ProductAdapter(ProductAffichageEnum.Accueil, produitArrayList, this); // instanciation de l'adpateur de produit
+        recyclerViewProduits = (RecyclerView) v.findViewById(R.id.rv_accueilProduit);
+        recyclerViewProduits.setAdapter(productAdapter);
+        recyclerViewProduits.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recyclerViewProduits.setItemAnimator(new DefaultItemAnimator());
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -127,5 +163,20 @@ public class AccueilFragment extends Fragment implements View.OnClickListener {
             case Bilan:
                 break;
         }
+    }
+
+    @Override
+    public void clicOnModifyProduit(Produit produit) {
+
+    }
+
+    @Override
+    public void clicOnProduit(Produit produit) {
+
+    }
+
+    @Override
+    public void clicOnDeleteProduit(Produit produit) {
+
     }
 }

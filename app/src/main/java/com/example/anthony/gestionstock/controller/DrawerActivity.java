@@ -17,7 +17,8 @@ import android.widget.Toast;
 import com.example.anthony.gestionstock.R;
 
 public class DrawerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, FragmentReglage.OnFragmentInteractionListener, FragmentStock.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, FragmentReglage.OnFragmentInteractionListener, FragmentStock.OnFragmentInteractionListener,
+        FragmentAccueil.OnFragmentInteractionListener {
     private DrawerLayout mDrawer;
 
     @Override
@@ -105,8 +106,7 @@ public class DrawerActivity extends AppCompatActivity
             fragmentClass = FragmentStock.class;
         }
         else if (id == R.id.nav_slideshow) {
-            Toast.makeText(this, "not implemented", Toast.LENGTH_SHORT).show();
-            return false;
+            fragmentClass = FragmentAccueil.class;
         }
         else if (id == R.id.nav_manage) {
             Toast.makeText(this, "not implemented", Toast.LENGTH_SHORT).show();

@@ -23,7 +23,6 @@
             android:textColor="@color/blue_grey"/>
 
         <TextView
-
             android:id="@+id/txt_tarif"
             android:layout_width="30dp"
             android:layout_height="wrap_content"

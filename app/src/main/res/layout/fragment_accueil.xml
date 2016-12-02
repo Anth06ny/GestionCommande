@@ -2,7 +2,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="com.example.anthony.gestionstock.controller.AccueilFragment">
+             tools:context="com.example.anthony.gestionstock.controller.FragmentAccueil">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
