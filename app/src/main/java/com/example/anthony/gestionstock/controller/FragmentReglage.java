@@ -154,6 +154,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     @Override
     public void onDetach() {
         super.onDetach();
+
         mListener = null;
     }
 

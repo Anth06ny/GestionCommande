@@ -109,6 +109,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
             }
         });
 

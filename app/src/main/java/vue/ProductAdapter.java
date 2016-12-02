@@ -20,6 +20,7 @@ import greendao.Produit;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
     private ProductAffichageEnum choixAffichage;
+
     private ArrayList<Produit> getProduitArrayList;
     private View v;
     private ProductAdapterCallBack productAdapterCallBack;
