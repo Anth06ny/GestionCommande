@@ -213,17 +213,29 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
             }
 
             @Override
-            public void dialogCategorieClicOnValiderErreur() {
+            public void dialogCategorieClicOnValiderErreur(int tag) {
                 //On creer un alert dialog pour indiquer que les valeurs saisie par l'utilisateur sont incorrect
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                         getContext());
 
                 //On set tous les elements et on display la dialog box
                 alertDialogBuilder.setTitle("Erreur");
+                switch (tag) {
+                    case 0:
+                        alertDialogBuilder
+                                .setMessage("Erreur lors de l'envoie des données saisie veuillez réessayer");
+                        break;
+                    case 1:
+                        alertDialogBuilder
+                                .setMessage("Catégorie déjà existante");
+                        break;
+                    case 2:
+                        alertDialogBuilder
+                                .setMessage("Couleur déjà utiliser");
+                        break;
+                }
 
-                alertDialogBuilder
-                        .setMessage("Erreur lors de l'envoie des données saisie veuillez réessayer")
-                        .setCancelable(false)
+                alertDialogBuilder.setCancelable(false)
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 

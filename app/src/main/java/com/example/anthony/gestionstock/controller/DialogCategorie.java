@@ -65,7 +65,7 @@ public class DialogCategorie extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
 
                         //TODO: Gérer les Exceptions en cas d'ajout d'une categorie deja existante
-
+                        int tag = 0;
                         if (edit_nomCategorie.getText().toString().length() != 0) {
                             Boolean erreur = false;
                             ArrayList<Categorie> categorieArrayList = new ArrayList<>();
@@ -76,15 +76,28 @@ public class DialogCategorie extends DialogFragment {
                             for (int i = 0; i < categorieArrayList.size(); i++) {
                                 if (Objects.equals(categorie.getNom(), categorieArrayList.get(i).getNom()) && !Objects.equals(categorie.getId(), categorieArrayList.get(i).getId())) {
                                     erreur = true;
+                                    tag = 1;
                                 }
                             }
                             if (couleurChoisi != 0 && !erreur) {
                                 categorie.setCouleur(String.valueOf(couleurChoisi));
-                                dialogCategorieCallBack.dialogCategorieClicOnValider();
+                                for (int i = 0; i < categorieArrayList.size(); i++) {
+                                    if (Objects.equals(categorie.getCouleur(), categorieArrayList.get(i).getCouleur()) && !Objects.equals(categorie.getId(),
+                                            categorieArrayList.get(i).getId())) {
+                                        erreur = true;
+                                        tag = 2;
+                                    }
+                                }
+                                if (erreur) {
+                                    dialogCategorieCallBack.dialogCategorieClicOnValiderErreur(tag);
+                                }
+                                else {
+                                    dialogCategorieCallBack.dialogCategorieClicOnValider();
+                                }
                             }
                             else {
                                 if (categorie.getCouleur() == null) {
-                                    dialogCategorieCallBack.dialogCategorieClicOnValiderErreur();
+                                    dialogCategorieCallBack.dialogCategorieClicOnValiderErreur(tag);
                                 }
                                 else {
                                     dialogCategorieCallBack.dialogCategorieClicOnValider();
@@ -93,7 +106,7 @@ public class DialogCategorie extends DialogFragment {
                         }
 
                         else {
-                            dialogCategorieCallBack.dialogCategorieClicOnValiderErreur();
+                            dialogCategorieCallBack.dialogCategorieClicOnValiderErreur(tag);
                         }
                     }
                 })
@@ -140,6 +153,6 @@ public class DialogCategorie extends DialogFragment {
     public interface DialogCategorieCallBack {
         void dialogCategorieClicOnValider();
 
-        void dialogCategorieClicOnValiderErreur();
+        void dialogCategorieClicOnValiderErreur(int tag);
     }
 }
