@@ -81,6 +81,7 @@ public class DialogCategorie extends DialogFragment {
                             //Si les id ne correspondent pas alors on informe l'utilisateur que la categorie qu'il a saisie existe deja dans la bdd
                             for (int i = 0; i < categorieArrayList.size(); i++) {
                                 if (Objects.equals(categorie.getNom(), categorieArrayList.get(i).getNom()) && !Objects.equals(categorie.getId(), categorieArrayList.get(i).getId())) {
+                                    //Si le nom existe deja et que les id sont different alors on passe un boolean erreur a true
                                     erreur = true;
                                     tag = 1;
                                 }
@@ -96,6 +97,7 @@ public class DialogCategorie extends DialogFragment {
                                 for (int i = 0; i < categorieArrayList.size(); i++) {
                                     if (Objects.equals(categorie.getCouleur(), categorieArrayList.get(i).getCouleur()) && !Objects.equals(categorie.getId(),
                                             categorieArrayList.get(i).getId())) {
+                                        //Si la couleur est deja utiliser et que les id sont different alors on passe un boolean erreur a true
                                         erreur = true;
                                         tag = 2;
                                     }
