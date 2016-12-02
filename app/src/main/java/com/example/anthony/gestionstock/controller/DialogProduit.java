@@ -77,20 +77,27 @@ public class DialogProduit extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
 
                         ArrayList<Produit> produitArrayList = (ArrayList<Produit>) ProduitBddManager.getProduit();
-                        //TODO: Gérer les Exceptions en cas d'input VIDE
-                        // TODO : verifier le type de données saisies
 
-                        //On passe les données recupèrer dans l'objet Catégorie
                         int tag = 0;
                         Boolean erreur = false;
+                        //On verifie que les edit text de la dialog produit ne sont pas vide
                         if (editNom.getText().length() != 0 && editPrix.getText().length() != 0 && editLot.getText().length() != 0) {
                             produit.setNom(editNom.getText().toString());
+
+                            //On verifie que le nom du produit saisie dans l'edit ne correpond a aucun autre produit de la base de donnees
+                            //Et si il y a un produit qui porte le meme nom on verifie les id des deux produits
+                            //Si les id correpondent alors il n'y a pas d'erreur puisqu'on est en train de modifier un produit
+                            //Si les id ne correspondent pas alors on informe l'utilisateur que le produit qu'il a saisie existe deja dans la bdd
                             for (int i = 0; i < produitArrayList.size(); i++) {
                                 if (Objects.equals(produit.getNom(), produitArrayList.get(i).getNom()) && !Objects.equals(produit.getId(), produitArrayList.get(i).getId())) {
+                                    //Si le nom existe deja et que les id sont different alors on passe un boolean erreur a true
                                     erreur = true;
                                     tag = 1;
                                 }
                             }
+
+                            //Si le boolean erreur est a false alors on peut recupere les donnees saisie par l'utilisateur et les envoyer grace au callback a la
+                            // page fragment reglage qui va envoye en bdd le produit
                             if (!erreur) {
                                 produit.setPrix(Float.valueOf(String.valueOf(editPrix.getText())));
                                 produit.setLot(Integer.valueOf(String.valueOf(editLot.getText())));
@@ -98,10 +105,12 @@ public class DialogProduit extends DialogFragment {
 
                                 dialogProduitCallBack.dialogProduitClicOnValider();
                             }
+                            //Si le boolean erreur est vrai alors on envoie un callback d'erreur qui va indiquer a l'utilisateur qu'il y a une erreur
                             else {
                                 dialogProduitCallBack.dialogProduitClicOnValiderErreur(tag);
                             }
                         }
+                        //Si le champ nom du produit n'est pas remplie on envoie un callback d'erreur qui va indiquer a l'utilisateur qu'il y a une erreur
                         else {
                             dialogProduitCallBack.dialogProduitClicOnValiderErreur(tag);
                         }

@@ -66,21 +66,33 @@ public class DialogCategorie extends DialogFragment {
 
                         //TODO: Gérer les Exceptions en cas d'ajout d'une categorie deja existante
                         int tag = 0;
+                        Boolean erreur = false;
+
+                        //On verifie que l'edit text de la dialog categorie n'est pas vide
                         if (edit_nomCategorie.getText().toString().length() != 0) {
-                            Boolean erreur = false;
                             ArrayList<Categorie> categorieArrayList;
                             categorieArrayList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
 
                             categorie.setNom(edit_nomCategorie.getText().toString());
 
+                            //On verifie que le nom de la categorie saisie dans l'edit ne correpond a aucune autre categorie de la bdd
+                            //Et si il y a une categorie qui porte le meme nom on verifie les id des deux categories
+                            //Si les id correpondent alors il n'y a pas d'erreur puisqu'on est en train de modifier une categorie
+                            //Si les id ne correspondent pas alors on informe l'utilisateur que la categorie qu'il a saisie existe deja dans la bdd
                             for (int i = 0; i < categorieArrayList.size(); i++) {
                                 if (Objects.equals(categorie.getNom(), categorieArrayList.get(i).getNom()) && !Objects.equals(categorie.getId(), categorieArrayList.get(i).getId())) {
                                     erreur = true;
                                     tag = 1;
                                 }
                             }
+                            //Si le boolean erreur est a false et que l'utilisateur a saisie une couleur
                             if (couleurChoisi != 0 && !erreur) {
                                 categorie.setCouleur(String.valueOf(couleurChoisi));
+                                //On verifie que la couleur choisie ne correpond pas a une couleur d'une autre categorie dans la bdd
+                                //Si il y a deux couleur iddentique on verifie les id des deux categorie
+                                //Si les id correpondent alors il n'y a pas d'erreur puisqu'on est en train de modifier une categorie
+                                //Si les id ne correspondent pas alors on informe l'utilisateur que la couleur qu'il a choisie est deja utiliser pour une
+                                // autre categorie dans la bdd
                                 for (int i = 0; i < categorieArrayList.size(); i++) {
                                     if (Objects.equals(categorie.getCouleur(), categorieArrayList.get(i).getCouleur()) && !Objects.equals(categorie.getId(),
                                             categorieArrayList.get(i).getId())) {
@@ -88,23 +100,28 @@ public class DialogCategorie extends DialogFragment {
                                         tag = 2;
                                     }
                                 }
-                                if (erreur) {
-                                    dialogCategorieCallBack.dialogCategorieClicOnValiderErreur(tag);
+                                if (!erreur) {
+                                    //Si il n'y a pas d'erreur on envoie a l'aide du callback la categorie a ajouter a l'ecran reglage qui va l'ajouter en bdd
+                                    dialogCategorieCallBack.dialogCategorieClicOnValider();
                                 }
                                 else {
-                                    dialogCategorieCallBack.dialogCategorieClicOnValider();
+                                    //Si il y a une erreur on envoie a l'aide un callback d'erreur qui va indiquer a l'utilisateur qu'il y a une erreur
+                                    dialogCategorieCallBack.dialogCategorieClicOnValiderErreur(tag);
                                 }
                             }
+                            //Si il n'y a pas de couleur saisie
                             else {
-                                if (categorie.getCouleur() == null) {
-                                    dialogCategorieCallBack.dialogCategorieClicOnValiderErreur(tag);
-                                }
-                                else {
+                                //Si il ya une couleur dans categorie on envoie via le callback en bdd la categorie
+                                if (categorie.getCouleur() != null) {
                                     dialogCategorieCallBack.dialogCategorieClicOnValider();
+                                }
+                                //Sinon on envoie un callback d'erreur
+                                else {
+                                    dialogCategorieCallBack.dialogCategorieClicOnValiderErreur(tag);
                                 }
                             }
                         }
-
+                        //Si il n'y a pas de nom saisie on envoie un callback d'erreur
                         else {
                             dialogCategorieCallBack.dialogCategorieClicOnValiderErreur(tag);
                         }
