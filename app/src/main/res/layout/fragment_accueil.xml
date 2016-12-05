@@ -3,7 +3,6 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context="com.example.anthony.gestionstock.controller.FragmentAccueil">
-
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +21,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp">
-
             </android.support.v7.widget.RecyclerView>
 
             <LinearLayout
@@ -50,7 +48,6 @@
                     android:layout_weight="1"
                     android:text="OFF CLIENT"/>
             </LinearLayout>
-
         </LinearLayout>
 
         <LinearLayout
@@ -110,7 +107,6 @@
                 android:text="CAT7"/>
         </LinearLayout>
 
-
         <LinearLayout
             android:id="@+id/layoutAccueilProduit"
             android:layout_width="wrap_content"
@@ -121,14 +117,19 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_accueilProduit"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp">
-
+                android:layout_height="180dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="2dp"
+                android:fadeScrollbars="false"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbars="vertical">
             </android.support.v7.widget.RecyclerView>
 
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
                 android:columnCount="3"
                 android:orientation="horizontal"
                 android:rowCount="2">

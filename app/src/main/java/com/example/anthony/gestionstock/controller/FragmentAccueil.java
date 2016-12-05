@@ -4,8 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,8 +46,9 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     private ProductAdapter productAdapter;
     private ArrayList<Categorie> categorieArrayList;
     private ArrayList<Produit> produitArrayList;
-    private RecyclerView recyclerViewProduits;
     private OnFragmentInteractionListener mListener;
+    private RecyclerView recyclerViewProduits;
+    private GridLayoutManager layoutManager;
 
     /**
      * Use this factory method to create a new instance of
@@ -91,18 +91,28 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     }
 
     private void initUI(View v) {
+
         //Création de la liste de catégories
         categorieArrayList = new ArrayList<Categorie>();
         //Remplissage de la liste
         categorieArrayList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
-
         produitArrayList = new ArrayList<Produit>(); // Instanciation de la liste de produits
         produitArrayList = (ArrayList<Produit>) ProduitBddManager.getProduit(); // remplissage de la liste de produits
-        productAdapter = new ProductAdapter(ProductAffichageEnum.Accueil, produitArrayList, this); // instanciation de l'adpateur de produit
+
+        //On instancie un grid layoutmanager qui prend en parametre le context et le nombre de colonne/ligne
+        layoutManager = new GridLayoutManager(getContext(), 3);
+
+        //on reucpere le recycler view
         recyclerViewProduits = (RecyclerView) v.findViewById(R.id.rv_accueilProduit);
+
+        // on passe le layout manager au recyclerview
+        recyclerViewProduits.setLayoutManager(layoutManager);
+
+        // instancie l'adpateur.
+        productAdapter = new ProductAdapter(ProductAffichageEnum.Accueil, produitArrayList, this);
+
+        // on passe l'adapter au recycler view
         recyclerViewProduits.setAdapter(productAdapter);
-        recyclerViewProduits.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        recyclerViewProduits.setItemAnimator(new DefaultItemAnimator());
 
         btn_cancel = (Button) v.findViewById(R.id.btn_deleteNote);
         btn_cancel.setOnClickListener(new View.OnClickListener() {
