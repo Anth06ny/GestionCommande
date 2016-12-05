@@ -115,6 +115,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         recyclerViewProduits.setAdapter(productAdapter);
 
         btn_cancel = (Button) v.findViewById(R.id.btn_deleteNote);
+
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

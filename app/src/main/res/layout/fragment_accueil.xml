@@ -107,6 +107,7 @@
                 android:text="CAT7"/>
         </LinearLayout>
 
+
         <LinearLayout
             android:id="@+id/layoutAccueilProduit"
             android:layout_width="wrap_content"
