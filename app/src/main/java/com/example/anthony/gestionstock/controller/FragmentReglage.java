@@ -250,9 +250,10 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
 
     @Override
     public void clicOnCategory(Categorie categorie) {
+        //TODO Impossible de mettre a jour la liste de produit a afficher si on est sur une autre que categorie que celle ou l'on insert le produit
+
         //Au clic sur une categorie on recupere la liste de produit qui lui est associer
         produitList = new ArrayList<>();
-        produitList = null;
         produitList = (ArrayList<Produit>) categorie.getProduitList();
 
         //On set selected la categorie choisie a true et les autres a false pour display seulement les boutons de la categorie choisie
@@ -290,6 +291,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+
                         //On recupere la position de la categorie dans la liste qu'on veut supprimer
                         int positionCategorie = categorieList.indexOf(categorie);
 
@@ -345,7 +347,6 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
 
                 if (categorieSelected.getProduitList() == produitList) {
                     if (produitList.size() != 0) {
-
                         int positionProduit = produitList.indexOf(finalProduit);
                         if (positionProduit >= 0) {
                             productAdapter.notifyItemChanged(positionProduit);

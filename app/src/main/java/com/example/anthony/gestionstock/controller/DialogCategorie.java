@@ -33,8 +33,6 @@ public class DialogCategorie extends DialogFragment {
     private TextView box;
     private Categorie categorie;
     private EditText edit_nomCategorie;
-    private Boolean choixDialog;
-    private Bundle mArgs;
     private final int NB_MAX_CATEGORIE = 7;
 
     DialogCategorieCallBack dialogCategorieCallBack;
@@ -65,7 +63,6 @@ public class DialogCategorie extends DialogFragment {
                 .setPositiveButton("Envoyer", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 
-                                //TODO: Gérer les Exceptions en cas d'ajout d'une categorie deja existante
                                 int tag = 0;
                                 Boolean erreur = false;
 
@@ -149,9 +146,7 @@ public class DialogCategorie extends DialogFragment {
                                          );
 
         //Au cliq du bouton on ouvre une nouvelle dialog box qui affiche le color picker
-        btnChoisirCouleur.setOnClickListener(new View.OnClickListener()
-
-                                             {
+        btnChoisirCouleur.setOnClickListener(new View.OnClickListener() {
                                                  public void onClick(View v) {
                                                      final ColorChooserDialog dialog = new ColorChooserDialog(getContext());
 
