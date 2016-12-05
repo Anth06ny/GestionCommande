@@ -103,22 +103,21 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         recyclerViewProduits.setAdapter(productAdapter);
         recyclerViewProduits.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerViewProduits.setItemAnimator(new DefaultItemAnimator());
+
         btn_cancel = (Button) v.findViewById(R.id.btn_deleteNote);
-        btn_note = (Button) v.findViewById(R.id.btn_printNote);
-        btn_off_client = (Button) v.findViewById(R.id.btn_offClient);
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
-
+        btn_note = (Button) v.findViewById(R.id.btn_printNote);
         btn_note.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             }
         });
-
+        btn_off_client = (Button) v.findViewById(R.id.btn_offClient);
         btn_off_client.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

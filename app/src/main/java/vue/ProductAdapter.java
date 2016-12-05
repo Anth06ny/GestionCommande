@@ -20,7 +20,6 @@ import greendao.Produit;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
     private ProductAffichageEnum choixAffichage;
-
     private ArrayList<Produit> getProduitArrayList;
     private View v;
     private ProductAdapterCallBack productAdapterCallBack;
@@ -121,7 +120,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 case Note:
                     break;
                 case Accueil:
-                    produitAccueil = (Button) itemView.findViewById(R.id.produit);
+                    produitAccueil = (Button) itemView.findViewById(R.id.root_produit_accueil);
                     break;
                 case Reglage:
                     displaylibelle = (TextView) itemView.findViewById(R.id.txt_produit);
