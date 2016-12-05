@@ -21,8 +21,8 @@ public class MyApplication extends Application {
         super.onCreate();
         setupDatabase();
 
-        /*CategorieBddManager.clearCategorie();
-        ProduitBddManager.clearProduit();*/
+        //CategorieBddManager.clearCategorie();
+       // ProduitBddManager.clearProduit();
     }
 
     private void setupDatabase() {

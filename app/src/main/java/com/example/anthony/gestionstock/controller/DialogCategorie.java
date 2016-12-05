@@ -33,7 +33,7 @@ public class DialogCategorie extends DialogFragment {
     private TextView box;
     private Categorie categorie;
     private EditText edit_nomCategorie;
-    private final int NB_MAX_CATEGORIE = 7;
+    private final int NB_MAX_CATEGORIE = 6;
 
     DialogCategorieCallBack dialogCategorieCallBack;
 

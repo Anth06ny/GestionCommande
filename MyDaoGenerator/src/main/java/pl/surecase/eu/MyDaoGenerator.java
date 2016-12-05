@@ -9,13 +9,14 @@ public class MyDaoGenerator {
 
     public static void main(String args[]) throws Exception {
 
-        Schema schema = new Schema(2, "greendao");
+        Schema schema = new Schema(3, "greendao");
         Entity produit = schema.addEntity("Produit");
         produit.addIdProperty().autoincrement();
         produit.addStringProperty("nom");
         produit.addFloatProperty("prix");
         produit.addIntProperty("lot");
         produit.addIntProperty("consommation");
+        produit.addBooleanProperty("favori");
         produit.setHasKeepSections(true);
 
         Entity categorie = schema.addEntity("Categorie");

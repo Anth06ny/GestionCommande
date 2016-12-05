@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -39,6 +40,7 @@ public class DialogProduit extends DialogFragment {
     private List<Categorie> listCategories;
     private SpinnerAdapter spinnerTest;
     private ArrayList<Produit> produitArrayList;
+    private CheckBox checkBoxFavori;
 
     DialogProduitCallBack dialogProduitCallBack;
 
@@ -64,6 +66,7 @@ public class DialogProduit extends DialogFragment {
         editPrix = (EditText) alertDialogView.findViewById(R.id.editPrixProduit);
         editLot = (EditText) alertDialogView.findViewById(R.id.editLotProduit);
         editCategorie = (Spinner) alertDialogView.findViewById(R.id.editCategorieProduit);
+        checkBoxFavori = (CheckBox) alertDialogView.findViewById(R.id.check_favori);
 
         if (produit.getNom() != null) {
             editNom.setText(produit.getNom());
@@ -76,6 +79,9 @@ public class DialogProduit extends DialogFragment {
         }
         if (produit.getCategorieID() >= 0) {
             editCategorie.setSelection(0);
+        }
+        if (produit.getFavori() != null) {
+            checkBoxFavori.setChecked(produit.getFavori());
         }
         //On build la dialog box avec la vue personaliser + l'ajout des boutons positifs et négatif
         builder.setView(alertDialogView)
@@ -99,13 +105,23 @@ public class DialogProduit extends DialogFragment {
                                     tag = 1;
                                 }
                             }
-
+                            int countFavori = 0;
+                            for(int j = 0 ; j < produitArrayList.size() ; j++){
+                                if(produitArrayList.get(j).getFavori()){
+                                    countFavori++;
+                                }
+                                if(countFavori == 6){
+                                    erreur = true;
+                                    tag = 2;
+                                }
+                            }
                             //Si le boolean erreur est a false alors on peut recupere les donnees saisie par l'utilisateur et les envoyer grace au callback a la
                             // page fragment reglage qui va envoye en bdd le produit
                             if (!erreur) {
                                 produit.setPrix(Float.valueOf(String.valueOf(editPrix.getText())));
                                 produit.setLot(Integer.valueOf(String.valueOf(editLot.getText())));
                                 produit.setCategorieID(categorieSelected.getId());
+                                produit.setFavori(checkBoxFavori.isChecked());
                                 dialogProduitCallBack.dialogProduitClicOnValider();
                             }
                             //Si le boolean erreur est vrai alors on envoie un callback d'erreur qui va indiquer a l'utilisateur qu'il y a une erreur

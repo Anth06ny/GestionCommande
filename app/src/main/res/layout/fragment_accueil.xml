@@ -126,46 +126,47 @@
                 android:rowCount="2">
 
                 <Button
-                    android:id="@+id/btn_prod2"
+                    android:id="@+id/btn_prod1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="PRODUIT 1"/>
 
                 <Button
-                    android:id="@+id/btn_prod3"
+                    android:id="@+id/btn_prod2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="PRODUIT 2"/>
 
                 <Button
-                    android:id="@+id/btn_prod4"
+                    android:id="@+id/btn_prod3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="PRODUIT 3"/>
 
                 <Button
-                    android:id="@+id/btn_prod5"
+                    android:id="@+id/btn_prod4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="PRODUIT 4"/>
 
                 <Button
-                    android:id="@+id/btn_prod6"
+                    android:id="@+id/btn_prod5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="PRODUIT 5"/>
 
                 <Button
-                    android:id="@+id/btn_prod7"
+                    android:id="@+id/btn_prod6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="PRODUIT 6"/>
+
             </GridLayout>
         </LinearLayout>
     </LinearLayout>

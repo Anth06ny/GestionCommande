@@ -53,6 +53,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerViewProduits;
     private GridLayoutManager layoutManager;
+    private ArrayList<Produit> produitArrayListFavoris;
     private Button btn_cat1;
     private Button btn_cat2;
     private Button btn_cat3;
@@ -105,8 +106,14 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         categorieArrayList = new ArrayList<Categorie>();
         //Remplissage de la liste
         categorieArrayList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
+
         produitArrayList = new ArrayList<Produit>(); // Instanciation de la liste de produits
         produitArrayList = (ArrayList<Produit>) ProduitBddManager.getProduit(); // remplissage de la liste de produits
+        for (int i = 0; i < produitArrayList.size(); i++) {
+            if (produitArrayList.get(i).getFavori()) {
+                produitArrayListFavoris.add(produitArrayList.get(i));
+            }
+        }
 
         //On instancie un grid layoutmanager qui prend en parametre le context et le nombre de colonne/ligne
         layoutManager = new GridLayoutManager(getContext(), 3);
@@ -163,6 +170,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
             buttons[k + 1].setBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(categorieArrayList.get(k).getCouleur())));
             buttons[k + 1].setVisibility(View.VISIBLE);
         }
+        //TODO récupérer les boutons et afficher les favoris
     }
 
     // TODO: Rename method, update argument and hook method into UI event

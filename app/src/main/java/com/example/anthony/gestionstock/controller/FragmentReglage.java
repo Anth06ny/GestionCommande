@@ -229,7 +229,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                         break;
                     case 2:
                         alertDialogBuilder
-                                .setMessage("Couleur déjà utiliser");
+                                .setMessage("Couleur déjà utilisé");
                         break;
                     case 3:
                         alertDialogBuilder.setMessage("Nombre maximal de catégorie atteint");
@@ -381,6 +381,8 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                         alertDialogBuilder
                                 .setMessage("Produit déjà existant");
                         break;
+                    case 2:
+                        alertDialogBuilder.setMessage("Nombre de produit favoris maximal atteint");
                 }
 
                 alertDialogBuilder.setCancelable(false)
