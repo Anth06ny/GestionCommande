@@ -35,6 +35,7 @@ public class DialogCategorie extends DialogFragment {
     private EditText edit_nomCategorie;
     private Boolean choixDialog;
     private Bundle mArgs;
+    private final int NB_MAX_CATEGORIE = 7;
 
     DialogCategorieCallBack dialogCategorieCallBack;
 
@@ -62,101 +63,117 @@ public class DialogCategorie extends DialogFragment {
         //On build la dialog box avec la vue personaliser + l'ajout des boutons positifs et négatif
         builder.setView(alertDialogView)
                 .setPositiveButton("Envoyer", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+                            public void onClick(DialogInterface dialog, int id) {
 
-                        //TODO: Gérer les Exceptions en cas d'ajout d'une categorie deja existante
-                        int tag = 0;
-                        Boolean erreur = false;
+                                //TODO: Gérer les Exceptions en cas d'ajout d'une categorie deja existante
+                                int tag = 0;
+                                Boolean erreur = false;
 
-                        //On verifie que l'edit text de la dialog categorie n'est pas vide
-                        if (edit_nomCategorie.getText().toString().length() != 0) {
-                            ArrayList<Categorie> categorieArrayList;
-                            categorieArrayList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
+                                //On verifie que l'edit text de la dialog categorie n'est pas vide
+                                ArrayList<Categorie> categorieArrayList;
+                                categorieArrayList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
+                                if (categorieArrayList.size() < NB_MAX_CATEGORIE) {
+                                    if (edit_nomCategorie.getText().toString().length() != 0) {
 
-                            categorie.setNom(edit_nomCategorie.getText().toString());
+                                        categorie.setNom(edit_nomCategorie.getText().toString());
 
-                            //On verifie que le nom de la categorie saisie dans l'edit ne correpond a aucune autre categorie de la bdd
-                            //Et si il y a une categorie qui porte le meme nom on verifie les id des deux categories
-                            //Si les id correpondent alors il n'y a pas d'erreur puisqu'on est en train de modifier une categorie
-                            //Si les id ne correspondent pas alors on informe l'utilisateur que la categorie qu'il a saisie existe deja dans la bdd
-                            for (int i = 0; i < categorieArrayList.size(); i++) {
-                                if (Objects.equals(categorie.getNom(), categorieArrayList.get(i).getNom()) && !Objects.equals(categorie.getId(), categorieArrayList.get(i).getId())) {
-                                    //Si le nom existe deja et que les id sont different alors on passe un boolean erreur a true
-                                    erreur = true;
-                                    tag = 1;
-                                }
-                            }
-                            //Si le boolean erreur est a false et que l'utilisateur a saisie une couleur
-                            if (couleurChoisi != 0 && !erreur) {
-                                categorie.setCouleur(String.valueOf(couleurChoisi));
-                                //On verifie que la couleur choisie ne correpond pas a une couleur d'une autre categorie dans la bdd
-                                //Si il y a deux couleur iddentique on verifie les id des deux categorie
-                                //Si les id correpondent alors il n'y a pas d'erreur puisqu'on est en train de modifier une categorie
-                                //Si les id ne correspondent pas alors on informe l'utilisateur que la couleur qu'il a choisie est deja utiliser pour une
-                                // autre categorie dans la bdd
-                                for (int i = 0; i < categorieArrayList.size(); i++) {
-                                    if (Objects.equals(categorie.getCouleur(), categorieArrayList.get(i).getCouleur()) && !Objects.equals(categorie.getId(),
-                                            categorieArrayList.get(i).getId())) {
-                                        //Si la couleur est deja utiliser et que les id sont different alors on passe un boolean erreur a true
-                                        erreur = true;
-                                        tag = 2;
+                                        //On verifie que le nom de la categorie saisie dans l'edit ne correpond a aucune autre categorie de la bdd
+                                        //Et si il y a une categorie qui porte le meme nom on verifie les id des deux categories
+                                        //Si les id correpondent alors il n'y a pas d'erreur puisqu'on est en train de modifier une categorie
+                                        //Si les id ne correspondent pas alors on informe l'utilisateur que la categorie qu'il a saisie existe deja dans la bdd
+                                        for (int i = 0; i < categorieArrayList.size(); i++) {
+                                            if (Objects.equals(categorie.getNom(), categorieArrayList.get(i).getNom()) && !Objects.equals(categorie.getId(), categorieArrayList.get(i).getId())) {
+                                                //Si le nom existe deja et que les id sont different alors on passe un boolean erreur a true
+                                                erreur = true;
+                                                tag = 1;
+                                            }
+                                        }
+                                        //Si le boolean erreur est a false et que l'utilisateur a saisie une couleur
+                                        if (couleurChoisi != 0 && !erreur) {
+                                            categorie.setCouleur(String.valueOf(couleurChoisi));
+                                            //On verifie que la couleur choisie ne correpond pas a une couleur d'une autre categorie dans la bdd
+                                            //Si il y a deux couleur iddentique on verifie les id des deux categorie
+                                            //Si les id correpondent alors il n'y a pas d'erreur puisqu'on est en train de modifier une categorie
+                                            //Si les id ne correspondent pas alors on informe l'utilisateur que la couleur qu'il a choisie est deja utiliser pour une
+                                            // autre categorie dans la bdd
+                                            for (int i = 0; i < categorieArrayList.size(); i++) {
+                                                if (Objects.equals(categorie.getCouleur(), categorieArrayList.get(i).getCouleur()) && !Objects.equals(categorie.getId(),
+                                                        categorieArrayList.get(i).getId())) {
+                                                    //Si la couleur est deja utiliser et que les id sont different alors on passe un boolean erreur a true
+                                                    erreur = true;
+                                                    tag = 2;
+                                                }
+                                            }
+                                            if (!erreur) {
+                                                //Si il n'y a pas d'erreur on envoie a l'aide du callback la categorie a ajouter a l'ecran reglage qui va l'ajouter en bdd
+                                                dialogCategorieCallBack.dialogCategorieClicOnValider();
+                                            }
+                                            else {
+                                                //Si il y a une erreur on envoie a l'aide un callback d'erreur qui va indiquer a l'utilisateur qu'il y a une erreur
+                                                dialogCategorieCallBack.dialogCategorieClicOnValiderErreur(tag);
+                                            }
+                                        }
+                                        //Si il n'y a pas de couleur saisie
+                                        else {
+                                            //Si il ya une couleur dans categorie on envoie via le callback en bdd la categorie
+                                            if (categorie.getCouleur() != null) {
+                                                dialogCategorieCallBack.dialogCategorieClicOnValider();
+                                            }
+                                            //Sinon on envoie un callback d'erreur
+                                            else {
+                                                dialogCategorieCallBack.dialogCategorieClicOnValiderErreur(tag);
+                                            }
+                                        }
+                                    }
+                                    //Si il n'y a pas de nom saisie on envoie un callback d'erreur
+                                    else {
+                                        dialogCategorieCallBack.dialogCategorieClicOnValiderErreur(tag);
                                     }
                                 }
-                                if (!erreur) {
-                                    //Si il n'y a pas d'erreur on envoie a l'aide du callback la categorie a ajouter a l'ecran reglage qui va l'ajouter en bdd
-                                    dialogCategorieCallBack.dialogCategorieClicOnValider();
-                                }
                                 else {
-                                    //Si il y a une erreur on envoie a l'aide un callback d'erreur qui va indiquer a l'utilisateur qu'il y a une erreur
-                                    dialogCategorieCallBack.dialogCategorieClicOnValiderErreur(tag);
-                                }
-                            }
-                            //Si il n'y a pas de couleur saisie
-                            else {
-                                //Si il ya une couleur dans categorie on envoie via le callback en bdd la categorie
-                                if (categorie.getCouleur() != null) {
-                                    dialogCategorieCallBack.dialogCategorieClicOnValider();
-                                }
-                                //Sinon on envoie un callback d'erreur
-                                else {
+                                    tag = 3;
                                     dialogCategorieCallBack.dialogCategorieClicOnValiderErreur(tag);
                                 }
                             }
                         }
-                        //Si il n'y a pas de nom saisie on envoie un callback d'erreur
-                        else {
-                            dialogCategorieCallBack.dialogCategorieClicOnValiderErreur(tag);
-                        }
-                    }
-                })
-                .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //Ensemble des taches a realiser quand l'utilisateur cliq sur annuler
-                    }
-                });
+
+                                  )
+                .
+
+                        setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        //Ensemble des taches a realiser quand l'utilisateur cliq sur annuler
+                                    }
+                                }
+
+                                         );
 
         //Au cliq du bouton on ouvre une nouvelle dialog box qui affiche le color picker
-        btnChoisirCouleur.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                final ColorChooserDialog dialog = new ColorChooserDialog(getContext());
+        btnChoisirCouleur.setOnClickListener(new View.OnClickListener()
 
-                dialog.setTitle("Titre");
-                dialog.setColorListener(new ColorListener() {
-                    @Override
-                    public void OnColorClick(View v, int color) {
-                        //Lorsque l'utilisateur selectionne une couleur on recupere la valeur int de la couleur choisie
-                        couleurChoisi = color;
+                                             {
+                                                 public void onClick(View v) {
+                                                     final ColorChooserDialog dialog = new ColorChooserDialog(getContext());
 
-                        //On display la couleur choisie sur la dialog box precedente
-                        box.setBackgroundColor(couleurChoisi);
+                                                     dialog.setTitle("Titre");
+                                                     dialog.setColorListener(new ColorListener() {
+                                                         @Override
+                                                         public void OnColorClick(View v, int color) {
+                                                             //Lorsque l'utilisateur selectionne une couleur on recupere la valeur int de la couleur choisie
+                                                             couleurChoisi = color;
 
-                        //On termine le picker color et on retourne sur la dialog box precedente
-                        dialog.cancel();
-                    }
-                });
-                dialog.show();
-            }
-        });
+                                                             //On display la couleur choisie sur la dialog box precedente
+                                                             box.setBackgroundColor(couleurChoisi);
+
+                                                             //On termine le picker color et on retourne sur la dialog box precedente
+                                                             dialog.cancel();
+                                                         }
+                                                     });
+                                                     dialog.show();
+                                                 }
+                                             }
+
+                                            );
 
         return builder.create();
     }

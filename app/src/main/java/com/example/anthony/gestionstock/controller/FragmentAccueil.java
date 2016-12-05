@@ -49,6 +49,13 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     private ArrayList<Produit> produitArrayList;
     private RecyclerView recyclerViewProduits;
     private OnFragmentInteractionListener mListener;
+    private Button btn_cat1;
+    private Button btn_cat2;
+    private Button btn_cat3;
+    private Button btn_cat4;
+    private Button btn_cat5;
+    private Button btn_cat6;
+    private Button btn_cat7;
 
     /**
      * Use this factory method to create a new instance of
@@ -95,6 +102,26 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         categorieArrayList = new ArrayList<Categorie>();
         //Remplissage de la liste
         categorieArrayList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
+
+        btn_cat1 = (Button) v.findViewById(R.id.btn_cat1);
+        btn_cat2 = (Button) v.findViewById(R.id.btn_cat2);
+        btn_cat3 = (Button) v.findViewById(R.id.btn_cat3);
+        btn_cat4 = (Button) v.findViewById(R.id.btn_cat4);
+        btn_cat5 = (Button) v.findViewById(R.id.btn_cat5);
+        btn_cat6 = (Button) v.findViewById(R.id.btn_cat6);
+        btn_cat7 = (Button) v.findViewById(R.id.btn_cat7);
+
+        btn_cat1.setOnClickListener(this);
+        btn_cat2.setOnClickListener(this);
+        btn_cat3.setOnClickListener(this);
+        btn_cat4.setOnClickListener(this);
+        btn_cat5.setOnClickListener(this);
+        btn_cat6.setOnClickListener(this);
+        btn_cat7.setOnClickListener(this);
+
+        for (int i = 0; i < categorieArrayList.size(); i++) {
+            String test = "btn_cat" + i;
+        }
 
         produitArrayList = new ArrayList<Produit>(); // Instanciation de la liste de produits
         produitArrayList = (ArrayList<Produit>) ProduitBddManager.getProduit(); // remplissage de la liste de produits
@@ -168,6 +195,28 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     @Override
     public void onClick(View v) {
         testEnum(ProductAffichageEnum.Accueil);
+
+        if (v == btn_cat1) {
+
+        }
+        if (v == btn_cat2) {
+
+        }
+        if (v == btn_cat3) {
+
+        }
+        if (v == btn_cat4) {
+
+        }
+        if (v == btn_cat5) {
+
+        }
+        if (v == btn_cat6) {
+
+        }
+        if (v == btn_cat7) {
+
+        }
     }
 
     public void testEnum(ProductAffichageEnum choixAffichage) {
