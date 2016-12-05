@@ -59,52 +59,44 @@
 
             <Button
                 android:id="@+id/btn_cat1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="CAT1"/>
+                android:layout_width="90dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"/>
 
             <Button
                 android:id="@+id/btn_cat2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="90dp"
+                android:layout_height="60dp"
                 android:layout_weight="1"
-                android:text="CAT2"/>
+                />
 
             <Button
                 android:id="@+id/btn_cat3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="90dp"
+                android:layout_height="60dp"
                 android:layout_weight="1"
-                android:text="CAT3"/>
+                />
 
             <Button
                 android:id="@+id/btn_cat4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="90dp"
+                android:layout_height="60dp"
                 android:layout_weight="1"
-                android:text="CAT4"/>
+                />
 
             <Button
                 android:id="@+id/btn_cat5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="90dp"
+                android:layout_height="60dp"
                 android:layout_weight="1"
-                android:text="CAT5"/>
+                />
 
             <Button
                 android:id="@+id/btn_cat6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="90dp"
+                android:layout_height="60dp"
                 android:layout_weight="1"
-                android:text="CAT6"/>
-
-            <Button
-                android:id="@+id/btn_cat7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="CAT7"/>
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -118,7 +110,6 @@
                 android:id="@+id/rv_accueilProduit"
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
-                android:layout_marginLeft="10dp"
                 android:layout_marginRight="2dp"
                 android:fadeScrollbars="false"
                 android:scrollbarAlwaysDrawVerticalTrack="true"

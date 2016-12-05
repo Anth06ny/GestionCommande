@@ -1,6 +1,7 @@
 package com.example.anthony.gestionstock.controller;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
 
@@ -39,6 +41,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Context context;
 
     private View v;
     private Button btn_cancel;
@@ -50,6 +53,12 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerViewProduits;
     private GridLayoutManager layoutManager;
+    private Button btn_cat1;
+    private Button btn_cat2;
+    private Button btn_cat3;
+    private Button btn_cat4;
+    private Button btn_cat5;
+    private Button btn_cat6;
 
     /**
      * Use this factory method to create a new instance of
@@ -92,7 +101,6 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     }
 
     private void initUI(View v) {
-
         //Création de la liste de catégories
         categorieArrayList = new ArrayList<Categorie>();
         //Remplissage de la liste
@@ -116,7 +124,6 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         recyclerViewProduits.setAdapter(productAdapter);
 
         btn_cancel = (Button) v.findViewById(R.id.btn_deleteNote);
-
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,6 +142,27 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
             public void onClick(View v) {
             }
         });
+
+        // Gestion des Boutons de CATEGORIES
+        Button[] buttons = new Button[10];
+        for (int j = 1; j <= 6; j++) {
+            String buttonId = "btn_cat" + j;
+            int resId = getResources().getIdentifier(buttonId, "id", "com.example.anthony.gestionstock");
+            buttons[j] = ((Button) v.findViewById(resId));
+            buttons[j].setVisibility(View.INVISIBLE);
+            final int finalJ = j;
+            buttons[j].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getContext(), "Clic " + finalJ, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        for (int k = 0; k < categorieArrayList.size(); k++) {
+            buttons[k + 1].setText(categorieArrayList.get(k).getNom());
+            buttons[k + 1].setBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(categorieArrayList.get(k).getCouleur())));
+            buttons[k + 1].setVisibility(View.VISIBLE);
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -209,5 +237,15 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     @Override
     public void clicOnDeleteProduit(Produit produit) {
 
+    }
+
+    public void addNameToButtonCategories(int index, Button button) {
+        if (categorieArrayList.get(index).getNom().length() > 0) {
+            button.setText(categorieArrayList.get(index).getNom());
+            button.setVisibility(View.VISIBLE);
+        }
+        else {
+            button.setVisibility(View.INVISIBLE);
+        }
     }
 }
