@@ -38,6 +38,7 @@ public class DialogProduit extends DialogFragment {
     private Produit produit;
     private List<Categorie> listCategories;
     private SpinnerAdapter spinnerTest;
+    private ArrayList<Produit> produitArrayList;
 
     DialogProduitCallBack dialogProduitCallBack;
 
@@ -52,6 +53,9 @@ public class DialogProduit extends DialogFragment {
         listCategories = new ArrayList<>();
         listCategories = CategorieBddManager.getCategories();
 
+        produitArrayList = new ArrayList<>();
+        produitArrayList = (ArrayList<Produit>) ProduitBddManager.getProduit();
+
         // instancie l'adapteur pour la liste déroulante
         spinnerTest = new vue.SpinnerAdapter(this.getActivity(), listCategories);
 
@@ -59,6 +63,7 @@ public class DialogProduit extends DialogFragment {
         editNom = (EditText) alertDialogView.findViewById(R.id.editNomProduit);
         editPrix = (EditText) alertDialogView.findViewById(R.id.editPrixProduit);
         editLot = (EditText) alertDialogView.findViewById(R.id.editLotProduit);
+        editCategorie = (Spinner) alertDialogView.findViewById(R.id.editCategorieProduit);
 
         if (produit.getNom() != null) {
             editNom.setText(produit.getNom());
@@ -70,13 +75,12 @@ public class DialogProduit extends DialogFragment {
             editLot.setText(String.valueOf(produit.getLot()));
         }
         if (produit.getCategorieID() >= 0) {
+            editCategorie.setSelection(0);
         }
         //On build la dialog box avec la vue personaliser + l'ajout des boutons positifs et négatif
         builder.setView(alertDialogView)
                 .setPositiveButton("Envoyer", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
-                        ArrayList<Produit> produitArrayList = (ArrayList<Produit>) ProduitBddManager.getProduit();
 
                         int tag = 0;
                         Boolean erreur = false;
@@ -102,7 +106,6 @@ public class DialogProduit extends DialogFragment {
                                 produit.setPrix(Float.valueOf(String.valueOf(editPrix.getText())));
                                 produit.setLot(Integer.valueOf(String.valueOf(editLot.getText())));
                                 produit.setCategorieID(categorieSelected.getId());
-
                                 dialogProduitCallBack.dialogProduitClicOnValider();
                             }
                             //Si le boolean erreur est vrai alors on envoie un callback d'erreur qui va indiquer a l'utilisateur qu'il y a une erreur

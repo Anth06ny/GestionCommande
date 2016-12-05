@@ -231,6 +231,8 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                         alertDialogBuilder
                                 .setMessage("Couleur déjà utiliser");
                         break;
+                    case 3:
+                        alertDialogBuilder.setMessage("Nombre maximal de catégorie atteint");
                 }
 
                 alertDialogBuilder.setCancelable(false)
@@ -250,6 +252,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     public void clicOnCategory(Categorie categorie) {
         //Au clic sur une categorie on recupere la liste de produit qui lui est associer
         produitList = new ArrayList<>();
+        produitList = null;
         produitList = (ArrayList<Produit>) categorie.getProduitList();
 
         //On set selected la categorie choisie a true et les autres a false pour display seulement les boutons de la categorie choisie
