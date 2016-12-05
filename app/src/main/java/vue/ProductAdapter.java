@@ -56,6 +56,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public void onBindViewHolder(final ProductAdapter.ViewHolder holder, int position) {
         final Produit produitbean = getProduitArrayList.get(position);
         switch (choixAffichage) {
+
             case Note:
                 break;
             case Accueil:
