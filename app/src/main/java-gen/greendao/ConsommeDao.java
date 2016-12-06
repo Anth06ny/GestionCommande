@@ -24,8 +24,8 @@ public class ConsommeDao extends AbstractDao<Consomme, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Date = new Property(1, java.util.Date.class, "date", false, "DATE");
-        public final static Property Quantite = new Property(2, Integer.class, "quantite", false, "QUANTITE");
+        public final static Property Quantite = new Property(1, Integer.class, "quantite", false, "QUANTITE");
+        public final static Property Date = new Property(2, java.util.Date.class, "date", false, "DATE");
     };
 
 
@@ -42,8 +42,8 @@ public class ConsommeDao extends AbstractDao<Consomme, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'CONSOMME' (" + //
                 "'_id' INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "'DATE' INTEGER," + // 1: date
-                "'QUANTITE' INTEGER);"); // 2: quantite
+                "'QUANTITE' INTEGER," + // 1: quantite
+                "'DATE' INTEGER);"); // 2: date
     }
 
     /** Drops the underlying database table. */
@@ -62,14 +62,14 @@ public class ConsommeDao extends AbstractDao<Consomme, Long> {
             stmt.bindLong(1, id);
         }
  
-        java.util.Date date = entity.getDate();
-        if (date != null) {
-            stmt.bindLong(2, date.getTime());
-        }
- 
         Integer quantite = entity.getQuantite();
         if (quantite != null) {
-            stmt.bindLong(3, quantite);
+            stmt.bindLong(2, quantite);
+        }
+ 
+        java.util.Date date = entity.getDate();
+        if (date != null) {
+            stmt.bindLong(3, date.getTime());
         }
     }
 
@@ -84,8 +84,8 @@ public class ConsommeDao extends AbstractDao<Consomme, Long> {
     public Consomme readEntity(Cursor cursor, int offset) {
         Consomme entity = new Consomme( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : new java.util.Date(cursor.getLong(offset + 1)), // date
-            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2) // quantite
+            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // quantite
+            cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)) // date
         );
         return entity;
     }
@@ -94,8 +94,8 @@ public class ConsommeDao extends AbstractDao<Consomme, Long> {
     @Override
     public void readEntity(Cursor cursor, Consomme entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setDate(cursor.isNull(offset + 1) ? null : new java.util.Date(cursor.getLong(offset + 1)));
-        entity.setQuantite(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
+        entity.setQuantite(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
+        entity.setDate(cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)));
      }
     
     /** @inheritdoc */

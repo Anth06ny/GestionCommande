@@ -50,6 +50,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             case Bilan:
                 v = LayoutInflater.from(vg.getContext()).inflate(R.layout.cellule_produit_reglage, vg, false);
                 break;
+            case Stock:
+                v = LayoutInflater.from(vg.getContext()).inflate(R.layout.cellule_produit_stock, vg, false);
+                break;
         }
 
         return new ProductAdapter.ViewHolder(v);
@@ -119,6 +122,33 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 break;
             case Bilan:
                 break;
+            case Stock:
+                holder.displaylibelle.setText(produitbean.getNom());
+                holder.displayMin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        productAdapterCallBack.clicOnMinStock(produitbean);
+                    }
+                });
+                holder.displayRemove.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        productAdapterCallBack.clicOnRemoveStock(produitbean);
+                    }
+                });
+                holder.displayAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        productAdapterCallBack.clicOnAddStock(produitbean);
+                    }
+                });
+                holder.displayMax.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        productAdapterCallBack.clicOnMaxStock(produitbean);
+                    }
+                });
+                break;
         }
     }
 
@@ -137,6 +167,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         public ImageView displayDeleteProduit;
         public View root;
         public Button produitAccueil;
+        public TextView displayMin;
+        public TextView displayMax;
+        public TextView displayLotRecommande;
+        public ImageView displayRemove;
+        public ImageView displayAdd;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -148,9 +183,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     displayMontant = (TextView) itemView.findViewById(R.id.montant_note);
                     displayDeleteProduit = (ImageView) itemView.findViewById(R.id.delete_produit_note);
                     break;
+
                 case Accueil:
                     produitAccueil = (Button) itemView.findViewById(R.id.root_produit_accueil);
                     break;
+
                 case Reglage:
                     displaylibelle = (TextView) itemView.findViewById(R.id.txt_produit);
                     displayLot = (TextView) itemView.findViewById(R.id.txt_lot);
@@ -159,7 +196,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     displayDeleteProduit = (ImageView) itemView.findViewById(R.id.img_prod);
                     root = itemView.findViewById(R.id.root_produit); // permet de recupèrer le clic sur le cardview
                     break;
+
                 case Bilan:
+                    break;
+
+                case Stock:
+                    displaylibelle = (TextView) itemView.findViewById(R.id.libelle_stock);
+                    displayQuantite = (TextView) itemView.findViewById(R.id.quantite_consomme_stock);
+                    displayLot = (TextView) itemView.findViewById(R.id.lot_consomme_stock);
+                    displayMin = (TextView) itemView.findViewById(R.id.min_stock);
+                    displayRemove = (ImageView) itemView.findViewById(R.id.img_remove_stock);
+                    displayLotRecommande = (TextView) itemView.findViewById(R.id.lot_recommande_stock);
+                    displayAdd = (ImageView) itemView.findViewById(R.id.img_add_stock);
+                    displayMax = (TextView) itemView.findViewById(R.id.max_stock);
                     break;
             }
         }
@@ -175,6 +224,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         void clicOnProduitAcceuil(Produit produit);
 
         void clicOnDeleteProduitNote(Produit produit);
+
+        void clicOnMinStock(Produit produit);
+
+        void clicOnRemoveStock(Produit produit);
+
+        void clicOnAddStock(Produit produit);
+
+        void clicOnMaxStock(Produit produit);
     }
 }
 

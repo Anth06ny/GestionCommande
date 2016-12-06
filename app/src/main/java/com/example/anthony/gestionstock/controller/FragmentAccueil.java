@@ -44,7 +44,6 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private Context context;
     private final int NB_MAX_CATEGORIES = 6;
     private final int NB_MAX_FAVORIS = 6;
     private View v;
@@ -215,6 +214,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
             buttonsFavoris[l].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     //On ajoute le produit favoris à la liste des produits de la note
                     produitArrayListNote.add(produitArrayListFavoris.get(finalL));
 
@@ -328,5 +328,25 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         int positionProduitNote = produitArrayListNote.indexOf(produit);
         produitArrayListNote.remove(positionProduitNote);
         productAdapterNote.notifyItemRemoved(positionProduitNote);
+    }
+
+    @Override
+    public void clicOnMinStock(Produit produit) {
+
+    }
+
+    @Override
+    public void clicOnRemoveStock(Produit produit) {
+
+    }
+
+    @Override
+    public void clicOnAddStock(Produit produit) {
+
+    }
+
+    @Override
+    public void clicOnMaxStock(Produit produit) {
+
     }
 }

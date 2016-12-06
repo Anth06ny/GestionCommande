@@ -6,6 +6,6 @@ package vue;
 
 public enum ProductAffichageEnum {
 
-    Note, Accueil, Reglage, Bilan
+    Note, Accueil, Reglage, Bilan, Stock
 
 }

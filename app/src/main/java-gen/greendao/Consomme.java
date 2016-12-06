@@ -7,8 +7,8 @@ package greendao;
 public class Consomme {
 
     private Long id;
-    private java.util.Date date;
     private Integer quantite;
+    private java.util.Date date;
 
     public Consomme() {
     }
@@ -17,10 +17,10 @@ public class Consomme {
         this.id = id;
     }
 
-    public Consomme(Long id, java.util.Date date, Integer quantite) {
+    public Consomme(Long id, Integer quantite, java.util.Date date) {
         this.id = id;
-        this.date = date;
         this.quantite = quantite;
+        this.date = date;
     }
 
     public Long getId() {
@@ -31,20 +31,20 @@ public class Consomme {
         this.id = id;
     }
 
-    public java.util.Date getDate() {
-        return date;
-    }
-
-    public void setDate(java.util.Date date) {
-        this.date = date;
-    }
-
     public Integer getQuantite() {
         return quantite;
     }
 
     public void setQuantite(Integer quantite) {
         this.quantite = quantite;
+    }
+
+    public java.util.Date getDate() {
+        return date;
+    }
+
+    public void setDate(java.util.Date date) {
+        this.date = date;
     }
 
 }

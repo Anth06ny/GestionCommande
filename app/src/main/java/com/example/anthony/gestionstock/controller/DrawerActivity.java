@@ -112,14 +112,6 @@ public class DrawerActivity extends AppCompatActivity
             Toast.makeText(this, "not implemented", Toast.LENGTH_SHORT).show();
             return false;
         }
-        else if (id == R.id.nav_share) {
-            Toast.makeText(this, "not implemented", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        else if (id == R.id.nav_send) {
-            Toast.makeText(this, "not implemented", Toast.LENGTH_SHORT).show();
-            return false;
-        }
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         }

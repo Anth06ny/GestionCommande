@@ -9,7 +9,14 @@ public class MyDaoGenerator {
 
     public static void main(String args[]) throws Exception {
 
-        Schema schema = new Schema(3, "greendao");
+        Schema schema = new Schema(8, "greendao");
+
+        Entity categorie = schema.addEntity("Categorie");
+        categorie.addIdProperty().autoincrement();
+        categorie.addStringProperty("nom");
+        categorie.addStringProperty("couleur");
+        categorie.setHasKeepSections(true);
+
         Entity produit = schema.addEntity("Produit");
         produit.addIdProperty().autoincrement();
         produit.addStringProperty("nom");
@@ -19,16 +26,10 @@ public class MyDaoGenerator {
         produit.addBooleanProperty("favori");
         produit.setHasKeepSections(true);
 
-        Entity categorie = schema.addEntity("Categorie");
-        categorie.addIdProperty().autoincrement();
-        categorie.addStringProperty("nom");
-        categorie.addStringProperty("couleur");
-        categorie.setHasKeepSections(true);
-
         Entity consomme = schema.addEntity("Consomme");
         consomme.addIdProperty().autoincrement();
-        consomme.addDateProperty("date");
         consomme.addIntProperty("quantite");
+        consomme.addDateProperty("date");
 
         //Création des clés étrangère et ajout de leur contenu
         Property categorieID = produit.addLongProperty("CategorieID").notNull().getProperty();
