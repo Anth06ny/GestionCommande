@@ -48,6 +48,7 @@
                 android:layout_weight="1"
                 android:text="Lot recommandé"
                 android:textAlignment="center"
+
                 android:textAllCaps="true"
                 />
         </LinearLayout>

@@ -320,6 +320,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         else {
             productAdapterNote = new ProductAdapter(ProductAffichageEnum.Note, produitArrayListNote, productAdapterCallBack);
             recyclerViewNote.setAdapter(productAdapterNote);
+
         }
     }
 
