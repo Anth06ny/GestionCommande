@@ -449,4 +449,9 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     public void clicOnProduitAcceuil(Produit produit) {
 
     }
+
+    @Override
+    public void clicOnDeleteProduitNote(Produit produit) {
+
+    }
 }

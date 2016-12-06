@@ -21,22 +21,25 @@ import greendao.Produit;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
     private ProductAffichageEnum choixAffichage;
-    private ArrayList<Produit> getProduitArrayList;
+    private ArrayList<Produit> getProduitArrayList = new ArrayList<>();
     private View v;
     private ProductAdapterCallBack productAdapterCallBack;
 
+    // -------------------------------- CONSTRUCTOR -------------------------------------------------- //
     public ProductAdapter(ProductAffichageEnum choixAffichage, ArrayList<Produit> getProduitArrayList, ProductAdapterCallBack productAdapterCallBack) {
         this.choixAffichage = choixAffichage;
         this.getProduitArrayList = getProduitArrayList;
         this.productAdapterCallBack = productAdapterCallBack;
     }
 
+    // --------------------------------  END CONSTRUCTOR -------------------------------------------------- //
+
     @Override
     public ProductAdapter.ViewHolder onCreateViewHolder(ViewGroup vg, int viewType) {
         switch (choixAffichage) {
 
             case Note:
-                v = LayoutInflater.from(vg.getContext()).inflate(R.layout.cellule_produit_reglage, vg, false);
+                v = LayoutInflater.from(vg.getContext()).inflate(R.layout.cellule_note_accueil, vg, false);
                 break;
             case Accueil:
                 v = LayoutInflater.from(vg.getContext()).inflate(R.layout.cellule_produit_accueil, vg, false);
@@ -58,6 +61,17 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         switch (choixAffichage) {
 
             case Note:
+                holder.displayQuantite.setText("1");
+                holder.displaylibelle.setText(produitbean.getNom());
+                holder.displayTarif.setText(String.valueOf(produitbean.getPrix()));
+                holder.displayMontant.setText("1");
+                holder.displayDeleteProduit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        productAdapterCallBack.clicOnDeleteProduitNote(produitbean);
+                    }
+                });
+
                 break;
             case Accueil:
                 holder.produitAccueil.setText(produitbean.getNom());
@@ -117,7 +131,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         public TextView displaylibelle;
         public TextView displayLot;
         public TextView displayTarif;
+        public TextView displayMontant;
         public Button displayModifyProduit;
+        public TextView displayQuantite;
         public ImageView displayDeleteProduit;
         public View root;
         public Button produitAccueil;
@@ -126,6 +142,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             super(itemView);
             switch (choixAffichage) {
                 case Note:
+                    displayQuantite = (TextView) itemView.findViewById(R.id.quantite_note);
+                    displaylibelle = (TextView) itemView.findViewById(R.id.libelle_note);
+                    displayTarif = (TextView) itemView.findViewById(R.id.prix_u_note);
+                    displayMontant = (TextView) itemView.findViewById(R.id.montant_note);
+                    displayDeleteProduit = (ImageView) itemView.findViewById(R.id.delete_produit_note);
                     break;
                 case Accueil:
                     produitAccueil = (Button) itemView.findViewById(R.id.root_produit_accueil);
@@ -136,7 +157,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     displayTarif = (TextView) itemView.findViewById(R.id.txt_tarif);
                     displayModifyProduit = (Button) itemView.findViewById(R.id.btn_modifiy_prod);
                     displayDeleteProduit = (ImageView) itemView.findViewById(R.id.img_prod);
-                    root = itemView.findViewById(R.id.root_produit);
+                    root = itemView.findViewById(R.id.root_produit); // permet de recupèrer le clic sur le cardview
                     break;
                 case Bilan:
                     break;
@@ -152,6 +173,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         void clicOnDeleteProduit(Produit produit);
 
         void clicOnProduitAcceuil(Produit produit);
+
+        void clicOnDeleteProduitNote(Produit produit);
     }
 }
 

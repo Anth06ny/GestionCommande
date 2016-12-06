@@ -1,17 +1,20 @@
 package com.example.anthony.gestionstock.controller;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
 
@@ -42,20 +45,24 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     private String mParam1;
     private String mParam2;
     private Context context;
-
+    private final int NB_MAX_CATEGORIES = 6;
+    private final int NB_MAX_FAVORIS = 6;
     private View v;
     private Button btn_cancel;
     private Button btn_note;
     private Button btn_off_client;
     private ProductAdapter productAdapter;
+    private ProductAdapter productAdapterNote = null;
     private ArrayList<Categorie> categorieArrayList;
     private ArrayList<Produit> produitArrayList;
     private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerViewProduits;
     private GridLayoutManager layoutManager;
     private ArrayList<Produit> produitArrayListFavoris;
-    private ArrayList<Produit> produits;
+    private ArrayList<Produit> arraylistProduits;
     private ProductAdapter.ProductAdapterCallBack productAdapterCallBack;
+    private RecyclerView recyclerViewNote;
+    private ArrayList<Produit> produitArrayListNote;
 
     /**
      * Use this factory method to create a new instance of
@@ -112,20 +119,44 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
             }
         }
 
-        //On instancie un grid layoutmanager qui prend en parametre le context et le nombre de colonne/ligne
-        layoutManager = new GridLayoutManager(getContext(), 3);
+        //RecyclerView PRODUIT
+        layoutManager = new GridLayoutManager(getContext(), 3);//On instancie un grid layoutmanager qui prend en parametre le context et le nombre de colonne/ligne
+        recyclerViewProduits = (RecyclerView) v.findViewById(R.id.rv_accueilProduit);//on reucpere le recycler view
+        recyclerViewProduits.setLayoutManager(layoutManager);// on passe le layout manager au recyclerview
 
-        //on reucpere le recycler view
-        recyclerViewProduits = (RecyclerView) v.findViewById(R.id.rv_accueilProduit);
-
-        // on passe le layout manager au recyclerview
-        recyclerViewProduits.setLayoutManager(layoutManager);
+        //RecyvclerView NOTE
+        recyclerViewNote = (RecyclerView) v.findViewById(R.id.rv_accueilNote);
+        recyclerViewNote.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recyclerViewNote.setItemAnimator(new DefaultItemAnimator());
 
         btn_cancel = (Button) v.findViewById(R.id.btn_deleteNote);
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //On creer un alert dialog pour confirmer la suppression du produit
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        getContext());
 
+                //On set tous les elements et on display la dialog box
+                alertDialogBuilder.setTitle("Confirmation");
+
+                alertDialogBuilder
+                        .setMessage("Voulez-vous annuler la commande ?");
+
+                alertDialogBuilder.setCancelable(false)
+                        .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                produitArrayListNote.clear();
+                                productAdapterNote.notifyDataSetChanged();
+                                dialog.cancel();
+                            }
+                        }).setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
             }
         });
         btn_note = (Button) v.findViewById(R.id.btn_printNote);
@@ -141,12 +172,11 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
             }
         });
 
-
-
         productAdapterCallBack = this; // Instanciation du CallBack
+        produitArrayListNote = new ArrayList<>(); // Instanciation de la liste
         // Gestion des Boutons de CATEGORIES
-        Button[] buttons = new Button[6];
-        for (int j = 0; j < 6; j++) {
+        Button[] buttons = new Button[NB_MAX_CATEGORIES];
+        for (int j = 0; j < NB_MAX_CATEGORIES; j++) {
             int idBtnCategories = j + 1;
             String buttonId = "btn_cat" + idBtnCategories;
             int resId = getResources().getIdentifier(buttonId, "id", "com.example.anthony.gestionstock");
@@ -157,11 +187,10 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
                 @Override
                 public void onClick(View v) {
 
-                    produits = (ArrayList<Produit>) categorieArrayList.get(finalJ).getProduitList();
-
+                    // rempli l'arrayListe avec les produits de la catégorie
+                    arraylistProduits = (ArrayList<Produit>) categorieArrayList.get(finalJ).getProduitList();
                     // instancie l'adpateur.
-                    productAdapter = new ProductAdapter(ProductAffichageEnum.Accueil, produits, productAdapterCallBack);
-
+                    productAdapter = new ProductAdapter(ProductAffichageEnum.Accueil, arraylistProduits, productAdapterCallBack);
                     // on passe l'adapter au recycler view
                     recyclerViewProduits.setAdapter(productAdapter);
                 }
@@ -172,24 +201,36 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
             buttons[k].setBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(categorieArrayList.get(k).getCouleur())));
             buttons[k].setVisibility(View.VISIBLE);
         }
-        //TODO récupérer les boutons et afficher les favoris
+        //TODO conditions ajout produit dans la note
 
-        Button[] buttonsFavoris = new Button[6];
-        for (int l = 0; l < 6; l++) {
+        //Gestion des boutons favoris
+        Button[] buttonsFavoris = new Button[NB_MAX_FAVORIS]; // création du tableau de bouton
+        for (int l = 0; l < NB_MAX_FAVORIS; l++) {
             int idBtnFavoris = l + 1;
-            String buttonIdFavoris = "btn_prod_favori" + idBtnFavoris;
-            int resIdFavoris = getResources().getIdentifier(buttonIdFavoris, "id", "com.example.anthony.gestionstock");
-            buttonsFavoris[l] = ((Button) v.findViewById(resIdFavoris));
+            String buttonIdFavoris = "btn_prod_favori" + idBtnFavoris; // récupère en String la nomenclature de l'ID
+            int resIdFavoris = getResources().getIdentifier(buttonIdFavoris, "id", "com.example.anthony.gestionstock");// Récupère la ressource R.id.btn_prod_favori+idBtnFavoris
+            buttonsFavoris[l] = ((Button) v.findViewById(resIdFavoris)); // récupère le bouton
             buttonsFavoris[l].setVisibility(View.INVISIBLE);
             final int finalL = l;
             buttonsFavoris[l].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //On ajoute le produit favoris à la liste des produits de la note
+                    produitArrayListNote.add(produitArrayListFavoris.get(finalL));
 
+                    if (productAdapterNote != null) {
+                        productAdapterNote.notifyItemInserted(produitArrayListNote.size() - 1);
+                    }
+                    else {
+                        // On affiche la note dans le recycler
+                        productAdapterNote = new ProductAdapter(ProductAffichageEnum.Note, produitArrayListNote, productAdapterCallBack);
+                        recyclerViewNote.setAdapter(productAdapterNote);
+                    }
                 }
             });
         }
         for (int m = 0; m < produitArrayListFavoris.size(); m++) {
+            // Paramerage de l'affichage des boutons des produits favoris
             buttonsFavoris[m].setText(produitArrayListFavoris.get(m).getNom());
             buttonsFavoris[m].setBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(produitArrayListFavoris.get(m).getCategorie().getCouleur())));
             buttonsFavoris[m].setVisibility(View.VISIBLE);
@@ -270,18 +311,22 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
 
     }
 
-    @Override
     public void clicOnProduitAcceuil(Produit produit) {
-        Toast.makeText(getContext(), "CLIQ PRODUIT", Toast.LENGTH_SHORT).show();
-    }
-
-    public void addNameToButtonCategories(int index, Button button) {
-        if (categorieArrayList.get(index).getNom().length() > 0) {
-            button.setText(categorieArrayList.get(index).getNom());
-            button.setVisibility(View.VISIBLE);
+        // On ajoute le produit sur lequel on clic dans la liste des produits de la note
+        produitArrayListNote.add(produit);
+        if (productAdapterNote != null) {
+            productAdapterNote.notifyItemInserted(produitArrayListNote.size() - 1);
         }
         else {
-            button.setVisibility(View.INVISIBLE);
+            productAdapterNote = new ProductAdapter(ProductAffichageEnum.Note, produitArrayListNote, productAdapterCallBack);
+            recyclerViewNote.setAdapter(productAdapterNote);
         }
+    }
+
+    @Override
+    public void clicOnDeleteProduitNote(Produit produit) {
+        int positionProduitNote = produitArrayListNote.indexOf(produit);
+        produitArrayListNote.remove(positionProduitNote);
+        productAdapterNote.notifyItemRemoved(positionProduitNote);
     }
 }
