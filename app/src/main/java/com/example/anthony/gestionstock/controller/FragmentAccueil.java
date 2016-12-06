@@ -54,12 +54,8 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     private RecyclerView recyclerViewProduits;
     private GridLayoutManager layoutManager;
     private ArrayList<Produit> produitArrayListFavoris;
-    private Button btn_cat1;
-    private Button btn_cat2;
-    private Button btn_cat3;
-    private Button btn_cat4;
-    private Button btn_cat5;
-    private Button btn_cat6;
+    private ArrayList<Produit> produits;
+    private ProductAdapter.ProductAdapterCallBack productAdapterCallBack;
 
     /**
      * Use this factory method to create a new instance of
@@ -109,6 +105,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
 
         produitArrayList = new ArrayList<Produit>(); // Instanciation de la liste de produits
         produitArrayList = (ArrayList<Produit>) ProduitBddManager.getProduit(); // remplissage de la liste de produits
+        produitArrayListFavoris = new ArrayList<>();
         for (int i = 0; i < produitArrayList.size(); i++) {
             if (produitArrayList.get(i).getFavori()) {
                 produitArrayListFavoris.add(produitArrayList.get(i));
@@ -123,12 +120,6 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
 
         // on passe le layout manager au recyclerview
         recyclerViewProduits.setLayoutManager(layoutManager);
-
-        // instancie l'adpateur.
-        productAdapter = new ProductAdapter(ProductAffichageEnum.Accueil, produitArrayList, this);
-
-        // on passe l'adapter au recycler view
-        recyclerViewProduits.setAdapter(productAdapter);
 
         btn_cancel = (Button) v.findViewById(R.id.btn_deleteNote);
         btn_cancel.setOnClickListener(new View.OnClickListener() {
@@ -150,10 +141,14 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
             }
         });
 
+
+
+        productAdapterCallBack = this; // Instanciation du CallBack
         // Gestion des Boutons de CATEGORIES
-        Button[] buttons = new Button[10];
-        for (int j = 1; j <= 6; j++) {
-            String buttonId = "btn_cat" + j;
+        Button[] buttons = new Button[6];
+        for (int j = 0; j < 6; j++) {
+            int idBtnCategories = j + 1;
+            String buttonId = "btn_cat" + idBtnCategories;
             int resId = getResources().getIdentifier(buttonId, "id", "com.example.anthony.gestionstock");
             buttons[j] = ((Button) v.findViewById(resId));
             buttons[j].setVisibility(View.INVISIBLE);
@@ -161,16 +156,44 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
             buttons[j].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(), "Clic " + finalJ, Toast.LENGTH_SHORT).show();
+
+                    produits = (ArrayList<Produit>) categorieArrayList.get(finalJ).getProduitList();
+
+                    // instancie l'adpateur.
+                    productAdapter = new ProductAdapter(ProductAffichageEnum.Accueil, produits, productAdapterCallBack);
+
+                    // on passe l'adapter au recycler view
+                    recyclerViewProduits.setAdapter(productAdapter);
                 }
             });
         }
         for (int k = 0; k < categorieArrayList.size(); k++) {
-            buttons[k + 1].setText(categorieArrayList.get(k).getNom());
-            buttons[k + 1].setBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(categorieArrayList.get(k).getCouleur())));
-            buttons[k + 1].setVisibility(View.VISIBLE);
+            buttons[k].setText(categorieArrayList.get(k).getNom());
+            buttons[k].setBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(categorieArrayList.get(k).getCouleur())));
+            buttons[k].setVisibility(View.VISIBLE);
         }
         //TODO récupérer les boutons et afficher les favoris
+
+        Button[] buttonsFavoris = new Button[6];
+        for (int l = 0; l < 6; l++) {
+            int idBtnFavoris = l + 1;
+            String buttonIdFavoris = "btn_prod_favori" + idBtnFavoris;
+            int resIdFavoris = getResources().getIdentifier(buttonIdFavoris, "id", "com.example.anthony.gestionstock");
+            buttonsFavoris[l] = ((Button) v.findViewById(resIdFavoris));
+            buttonsFavoris[l].setVisibility(View.INVISIBLE);
+            final int finalL = l;
+            buttonsFavoris[l].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
+        for (int m = 0; m < produitArrayListFavoris.size(); m++) {
+            buttonsFavoris[m].setText(produitArrayListFavoris.get(m).getNom());
+            buttonsFavoris[m].setBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(produitArrayListFavoris.get(m).getCategorie().getCouleur())));
+            buttonsFavoris[m].setVisibility(View.VISIBLE);
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -245,6 +268,11 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     @Override
     public void clicOnDeleteProduit(Produit produit) {
 
+    }
+
+    @Override
+    public void clicOnProduitAcceuil(Produit produit) {
+        Toast.makeText(getContext(), "CLIQ PRODUIT", Toast.LENGTH_SHORT).show();
     }
 
     public void addNameToButtonCategories(int index, Button button) {

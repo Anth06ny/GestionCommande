@@ -1,5 +1,6 @@
 package vue;
 
+import android.content.res.ColorStateList;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,6 +61,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 break;
             case Accueil:
                 holder.produitAccueil.setText(produitbean.getNom());
+                holder.produitAccueil.setBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(produitbean.getCategorie().getCouleur())));
+                holder.produitAccueil.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        productAdapterCallBack.clicOnProduitAcceuil(produitbean);
+                    }
+                });
                 break;
             case Reglage:
                 holder.displaylibelle.setText(produitbean.getNom());
@@ -142,6 +150,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         void clicOnProduit(Produit produit);
 
         void clicOnDeleteProduit(Produit produit);
+
+        void clicOnProduitAcceuil(Produit produit);
     }
 }
 

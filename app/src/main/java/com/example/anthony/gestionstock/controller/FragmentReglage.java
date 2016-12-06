@@ -444,4 +444,9 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
+
+    @Override
+    public void clicOnProduitAcceuil(Produit produit) {
+
+    }
 }
