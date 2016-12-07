@@ -1,5 +1,6 @@
 package greendao;
 
+import java.util.List;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -7,6 +8,8 @@ import android.database.sqlite.SQLiteStatement;
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
+import de.greenrobot.dao.query.Query;
+import de.greenrobot.dao.query.QueryBuilder;
 
 import greendao.Consomme;
 
@@ -24,10 +27,13 @@ public class ConsommeDao extends AbstractDao<Consomme, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Quantite = new Property(1, Integer.class, "quantite", false, "QUANTITE");
-        public final static Property Date = new Property(2, java.util.Date.class, "date", false, "DATE");
+        public final static Property Quantite = new Property(1, Long.class, "quantite", false, "QUANTITE");
+        public final static Property Produit = new Property(2, Long.class, "produit", false, "PRODUIT");
+        public final static Property Consomme = new Property(3, Long.class, "consomme", false, "CONSOMME");
     };
 
+    private Query<Consomme> commande_CommandeRefQuery;
+    private Query<Consomme> produit_ProduitRefQuery;
 
     public ConsommeDao(DaoConfig config) {
         super(config);
@@ -43,7 +49,8 @@ public class ConsommeDao extends AbstractDao<Consomme, Long> {
         db.execSQL("CREATE TABLE " + constraint + "'CONSOMME' (" + //
                 "'_id' INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "'QUANTITE' INTEGER," + // 1: quantite
-                "'DATE' INTEGER);"); // 2: date
+                "'PRODUIT' INTEGER," + // 2: produit
+                "'CONSOMME' INTEGER);"); // 3: consomme
     }
 
     /** Drops the underlying database table. */
@@ -62,14 +69,19 @@ public class ConsommeDao extends AbstractDao<Consomme, Long> {
             stmt.bindLong(1, id);
         }
  
-        Integer quantite = entity.getQuantite();
+        Long quantite = entity.getQuantite();
         if (quantite != null) {
             stmt.bindLong(2, quantite);
         }
  
-        java.util.Date date = entity.getDate();
-        if (date != null) {
-            stmt.bindLong(3, date.getTime());
+        Long produit = entity.getProduit();
+        if (produit != null) {
+            stmt.bindLong(3, produit);
+        }
+ 
+        Long consomme = entity.getConsomme();
+        if (consomme != null) {
+            stmt.bindLong(4, consomme);
         }
     }
 
@@ -84,8 +96,9 @@ public class ConsommeDao extends AbstractDao<Consomme, Long> {
     public Consomme readEntity(Cursor cursor, int offset) {
         Consomme entity = new Consomme( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // quantite
-            cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)) // date
+            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // quantite
+            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // produit
+            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3) // consomme
         );
         return entity;
     }
@@ -94,8 +107,9 @@ public class ConsommeDao extends AbstractDao<Consomme, Long> {
     @Override
     public void readEntity(Cursor cursor, Consomme entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setQuantite(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
-        entity.setDate(cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)));
+        entity.setQuantite(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
+        entity.setProduit(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
+        entity.setConsomme(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
      }
     
     /** @inheritdoc */
@@ -121,4 +135,32 @@ public class ConsommeDao extends AbstractDao<Consomme, Long> {
         return true;
     }
     
+    /** Internal query to resolve the "commandeRef" to-many relationship of Commande. */
+    public List<Consomme> _queryCommande_CommandeRef(Long produit) {
+        synchronized (this) {
+            if (commande_CommandeRefQuery == null) {
+                QueryBuilder<Consomme> queryBuilder = queryBuilder();
+                queryBuilder.where(Properties.Produit.eq(null));
+                commande_CommandeRefQuery = queryBuilder.build();
+            }
+        }
+        Query<Consomme> query = commande_CommandeRefQuery.forCurrentThread();
+        query.setParameter(0, produit);
+        return query.list();
+    }
+
+    /** Internal query to resolve the "produitRef" to-many relationship of Produit. */
+    public List<Consomme> _queryProduit_ProduitRef(Long consomme) {
+        synchronized (this) {
+            if (produit_ProduitRefQuery == null) {
+                QueryBuilder<Consomme> queryBuilder = queryBuilder();
+                queryBuilder.where(Properties.Consomme.eq(null));
+                produit_ProduitRefQuery = queryBuilder.build();
+            }
+        }
+        Query<Consomme> query = produit_ProduitRefQuery.forCurrentThread();
+        query.setParameter(0, consomme);
+        return query.list();
+    }
+
 }

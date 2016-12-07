@@ -1,5 +1,6 @@
 package greendao;
 
+import java.util.List;
 import greendao.DaoSession;
 import de.greenrobot.dao.DaoException;
 
@@ -29,6 +30,7 @@ public class Produit {
     private Categorie categorie;
     private Long categorie__resolvedKey;
 
+    private List<Consomme> produitRef;
 
     // KEEP FIELDS - put your custom fields here
     private Boolean isSelected = false;
@@ -139,6 +141,28 @@ public class Produit {
             CategorieID = categorie.getId();
             categorie__resolvedKey = CategorieID;
         }
+    }
+
+    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
+    public List<Consomme> getProduitRef() {
+        if (produitRef == null) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            ConsommeDao targetDao = daoSession.getConsommeDao();
+            List<Consomme> produitRefNew = targetDao._queryProduit_ProduitRef(id);
+            synchronized (this) {
+                if(produitRef == null) {
+                    produitRef = produitRefNew;
+                }
+            }
+        }
+        return produitRef;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    public synchronized void resetProduitRef() {
+        produitRef = null;
     }
 
     /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */

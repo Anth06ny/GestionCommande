@@ -9,7 +9,7 @@ public class MyDaoGenerator {
 
     public static void main(String args[]) throws Exception {
 
-        Schema schema = new Schema(8, "greendao");
+        Schema schema = new Schema(9, "greendao");
 
         Entity categorie = schema.addEntity("Categorie");
         categorie.addIdProperty().autoincrement();
@@ -26,10 +26,24 @@ public class MyDaoGenerator {
         produit.addBooleanProperty("favori");
         produit.setHasKeepSections(true);
 
+        Entity commande = schema.addEntity("Commande");
+        commande.addIdProperty().autoincrement();
+        commande.addDateProperty("date");
+        // ---------------------------- Ajout du code dans la nuit ------------------------------- //
+        //Création de l'entité
         Entity consomme = schema.addEntity("Consomme");
         consomme.addIdProperty().autoincrement();
-        consomme.addIntProperty("quantite");
-        consomme.addDateProperty("date");
+        consomme.addLongProperty("quantite");
+
+        //Récupération des propriétés des ID
+        Property produitId = consomme.addLongProperty("produit").getProperty();
+        Property consommeId = consomme.addLongProperty("consomme").getProperty();
+
+        //Création des liens des propriétés
+        commande.addToMany(consomme, produitId).setName("commandeRef");
+        produit.addToMany(consomme, consommeId).setName("produitRef");
+
+        // ------------------------------Fin Ajout du code dans la nuit -------------------------- //
 
         //Création des clés étrangère et ajout de leur contenu
         Property categorieID = produit.addLongProperty("CategorieID").notNull().getProperty();
