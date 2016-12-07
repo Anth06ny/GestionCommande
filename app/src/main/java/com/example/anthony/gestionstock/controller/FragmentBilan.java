@@ -4,11 +4,23 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.anthony.gestionstock.R;
+
+import java.util.ArrayList;
+
+import greendao.Produit;
+import model.ProduitBddManager;
+import vue.ProductAdapter;
+import vue.ProductAffichageEnum;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +41,17 @@ public class FragmentBilan extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private View v;
+    private RecyclerView recyclerViewBilan;
+    private ProductAdapter productAdapter;
+    private Button btnJour;
+    private Button btnSemaine;
+    private Button btnMois;
+    private Button btnAnnee;
+    private Button btnImprimer;
+    private TextView textViewPrixTotal;
+    private ArrayList<Produit> produitArrayListBilan;
 
     /**
      * Use this factory method to create a new instance of
@@ -65,7 +88,62 @@ public class FragmentBilan extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_bilan, container, false);
+        v = inflater.inflate(R.layout.fragment_bilan, container, false);
+        initUI(v);
+        return v;
+    }
+
+    private void initUI(View v) {
+        btnJour = (Button) v.findViewById(R.id.btn_jour);
+        btnSemaine = (Button) v.findViewById(R.id.btn_semaine);
+        btnMois = (Button) v.findViewById(R.id.btn_mois);
+        btnAnnee = (Button) v.findViewById(R.id.btn_annee);
+        btnImprimer = (Button) v.findViewById(R.id.btn_imprimer_bilan);
+        textViewPrixTotal = (TextView) v.findViewById(R.id.total_valeur);
+
+        produitArrayListBilan = new ArrayList<>();
+        produitArrayListBilan = (ArrayList<Produit>) ProduitBddManager.getProduit();
+        productAdapter = new ProductAdapter(ProductAffichageEnum.Bilan, produitArrayListBilan, null);
+
+        recyclerViewBilan = (RecyclerView) v.findViewById(R.id.rv_bilan);
+        recyclerViewBilan.setAdapter(productAdapter);
+        recyclerViewBilan.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recyclerViewBilan.setItemAnimator(new DefaultItemAnimator());
+
+        btnJour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnSemaine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnMois.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnAnnee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnImprimer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event

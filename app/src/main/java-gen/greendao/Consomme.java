@@ -9,7 +9,7 @@ public class Consomme {
     private Long id;
     private Long quantite;
     private Long produit;
-    private Long consomme;
+    private Long commande;
 
     public Consomme() {
     }
@@ -18,11 +18,11 @@ public class Consomme {
         this.id = id;
     }
 
-    public Consomme(Long id, Long quantite, Long produit, Long consomme) {
+    public Consomme(Long id, Long quantite, Long produit, Long commande) {
         this.id = id;
         this.quantite = quantite;
         this.produit = produit;
-        this.consomme = consomme;
+        this.commande = commande;
     }
 
     public Long getId() {
@@ -49,12 +49,12 @@ public class Consomme {
         this.produit = produit;
     }
 
-    public Long getConsomme() {
-        return consomme;
+    public Long getCommande() {
+        return commande;
     }
 
-    public void setConsomme(Long consomme) {
-        this.consomme = consomme;
+    public void setCommande(Long commande) {
+        this.commande = commande;
     }
 
 }

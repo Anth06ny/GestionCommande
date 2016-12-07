@@ -9,7 +9,7 @@ public class MyDaoGenerator {
 
     public static void main(String args[]) throws Exception {
 
-        Schema schema = new Schema(9, "greendao");
+        Schema schema = new Schema(10, "greendao");
 
         Entity categorie = schema.addEntity("Categorie");
         categorie.addIdProperty().autoincrement();
@@ -37,11 +37,11 @@ public class MyDaoGenerator {
 
         //Récupération des propriétés des ID
         Property produitId = consomme.addLongProperty("produit").getProperty();
-        Property consommeId = consomme.addLongProperty("consomme").getProperty();
+        Property commandeId = consomme.addLongProperty("commande").getProperty();
 
         //Création des liens des propriétés
         commande.addToMany(consomme, produitId).setName("commandeRef");
-        produit.addToMany(consomme, consommeId).setName("produitRef");
+        produit.addToMany(consomme, commandeId).setName("produitRef");
 
         // ------------------------------Fin Ajout du code dans la nuit -------------------------- //
 

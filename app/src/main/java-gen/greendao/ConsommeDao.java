@@ -29,7 +29,7 @@ public class ConsommeDao extends AbstractDao<Consomme, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Quantite = new Property(1, Long.class, "quantite", false, "QUANTITE");
         public final static Property Produit = new Property(2, Long.class, "produit", false, "PRODUIT");
-        public final static Property Consomme = new Property(3, Long.class, "consomme", false, "CONSOMME");
+        public final static Property Commande = new Property(3, Long.class, "commande", false, "COMMANDE");
     };
 
     private Query<Consomme> commande_CommandeRefQuery;
@@ -50,7 +50,7 @@ public class ConsommeDao extends AbstractDao<Consomme, Long> {
                 "'_id' INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "'QUANTITE' INTEGER," + // 1: quantite
                 "'PRODUIT' INTEGER," + // 2: produit
-                "'CONSOMME' INTEGER);"); // 3: consomme
+                "'COMMANDE' INTEGER);"); // 3: commande
     }
 
     /** Drops the underlying database table. */
@@ -79,9 +79,9 @@ public class ConsommeDao extends AbstractDao<Consomme, Long> {
             stmt.bindLong(3, produit);
         }
  
-        Long consomme = entity.getConsomme();
-        if (consomme != null) {
-            stmt.bindLong(4, consomme);
+        Long commande = entity.getCommande();
+        if (commande != null) {
+            stmt.bindLong(4, commande);
         }
     }
 
@@ -98,7 +98,7 @@ public class ConsommeDao extends AbstractDao<Consomme, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // quantite
             cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // produit
-            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3) // consomme
+            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3) // commande
         );
         return entity;
     }
@@ -109,7 +109,7 @@ public class ConsommeDao extends AbstractDao<Consomme, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setQuantite(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
         entity.setProduit(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
-        entity.setConsomme(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
+        entity.setCommande(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
      }
     
     /** @inheritdoc */
@@ -150,16 +150,16 @@ public class ConsommeDao extends AbstractDao<Consomme, Long> {
     }
 
     /** Internal query to resolve the "produitRef" to-many relationship of Produit. */
-    public List<Consomme> _queryProduit_ProduitRef(Long consomme) {
+    public List<Consomme> _queryProduit_ProduitRef(Long commande) {
         synchronized (this) {
             if (produit_ProduitRefQuery == null) {
                 QueryBuilder<Consomme> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.Consomme.eq(null));
+                queryBuilder.where(Properties.Commande.eq(null));
                 produit_ProduitRefQuery = queryBuilder.build();
             }
         }
         Query<Consomme> query = produit_ProduitRefQuery.forCurrentThread();
-        query.setParameter(0, consomme);
+        query.setParameter(0, commande);
         return query.list();
     }
 

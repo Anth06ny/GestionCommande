@@ -99,18 +99,20 @@ public class DialogProduit extends DialogFragment {
                             //Si les id correpondent alors il n'y a pas d'erreur puisqu'on est en train de modifier un produit
                             //Si les id ne correspondent pas alors on informe l'utilisateur que le produit qu'il a saisie existe deja dans la bdd
                             for (int i = 0; i < produitArrayList.size(); i++) {
-                                if (Objects.equals(produit.getNom(), produitArrayList.get(i).getNom()) && !Objects.equals(produit.getId(), produitArrayList.get(i).getId())) {
+                                if (Objects.equals(produit.getNom().toLowerCase(), produitArrayList.get(i).getNom().toLowerCase()) && !Objects.equals(produit.getId(),
+                                        produitArrayList.get
+                                                (i).getId())) {
                                     //Si le nom existe deja et que les id sont different alors on passe un boolean erreur a true
                                     erreur = true;
                                     tag = 1;
                                 }
                             }
                             int countFavori = 0;
-                            for(int j = 0 ; j < produitArrayList.size() ; j++){
-                                if(produitArrayList.get(j).getFavori()){
+                            for (int j = 0; j < produitArrayList.size(); j++) {
+                                if (produitArrayList.get(j).getFavori()) {
                                     countFavori++;
                                 }
-                                if(countFavori == 6){
+                                if (countFavori == 6) {
                                     erreur = true;
                                     tag = 2;
                                 }

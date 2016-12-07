@@ -13,6 +13,7 @@ import com.example.anthony.gestionstock.R;
 
 import java.util.ArrayList;
 
+import greendao.Consomme;
 import greendao.Produit;
 
 /**
@@ -48,7 +49,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 v = LayoutInflater.from(vg.getContext()).inflate(R.layout.cellule_produit_reglage, vg, false);
                 break;
             case Bilan:
-                v = LayoutInflater.from(vg.getContext()).inflate(R.layout.cellule_produit_reglage, vg, false);
+                v = LayoutInflater.from(vg.getContext()).inflate(R.layout.cellule_produit_bilan, vg, false);
                 break;
             case Stock:
                 v = LayoutInflater.from(vg.getContext()).inflate(R.layout.cellule_produit_stock, vg, false);
@@ -64,10 +65,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         switch (choixAffichage) {
 
             case Note:
-                holder.displayQuantite.setText("1");
+                ArrayList<Consomme> consommeArrayList = (ArrayList<Consomme>) produitbean.getProduitRef();
+                int positionNote = -1;
+                float montantLigne = 0;
+                for (int i = 0; i < consommeArrayList.size(); i++) {
+                    if (consommeArrayList.get(i).getCommande() == null) {
+                        positionNote = i;
+                        montantLigne = consommeArrayList.get(i).getQuantite() * produitbean.getPrix();
+                    }
+                }
+                holder.displayQuantite.setText(String.valueOf(consommeArrayList.get(positionNote).getQuantite()));
                 holder.displaylibelle.setText(produitbean.getNom());
                 holder.displayTarif.setText(String.valueOf(produitbean.getPrix()));
-                holder.displayMontant.setText("1");
+                holder.displayMontant.setText(String.valueOf(montantLigne));
                 holder.displayDeleteProduit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -86,6 +96,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     }
                 });
                 break;
+
             case Reglage:
                 holder.displaylibelle.setText(produitbean.getNom());
                 holder.displayTarif.setText(String.valueOf(produitbean.getPrix() + " €")); // A voir par Allan
@@ -120,8 +131,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     }
                 });
                 break;
+
             case Bilan:
+                holder.displaylibelle.setText(produitbean.getNom());
+                holder.displayTarif.setText(String.valueOf(produitbean.getPrix()));
                 break;
+
             case Stock:
                 holder.displaylibelle.setText(produitbean.getNom());
                 holder.displayMin.setOnClickListener(new View.OnClickListener() {
@@ -198,6 +213,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     break;
 
                 case Bilan:
+                    displaylibelle = (TextView) itemView.findViewById(R.id.libelle_bilan);
+                    displayQuantite = (TextView) itemView.findViewById(R.id.quantite_bilan);
+                    displayTarif = (TextView) itemView.findViewById(R.id.prix_u_bilan);
+                    displayMontant = (TextView) itemView.findViewById(R.id.prix_total_ligne_bilan);
                     break;
 
                 case Stock:
