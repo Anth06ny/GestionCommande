@@ -18,8 +18,6 @@ import android.widget.Button;
 
 import com.example.anthony.gestionstock.R;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -29,6 +27,7 @@ import greendao.Consomme;
 import greendao.Produit;
 import model.CategorieBddManager;
 import model.CommandeBddManager;
+import model.ConsommeBddManager;
 import model.ProduitBddManager;
 import vue.ProductAdapter;
 import vue.ProductAffichageEnum;
@@ -68,6 +67,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     private ProductAdapter.ProductAdapterCallBack productAdapterCallBack;
     private RecyclerView recyclerViewNote;
     private ArrayList<Produit> produitArrayListNote;
+    private ArrayList<Commande> commandeArrayList;
 
     /**
      * Use this factory method to create a new instance of
@@ -184,10 +184,24 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
             @Override
             public void onClick(View v) {
                 Commande commande = new Commande();
-                DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-                String date = df.format(Calendar.getInstance().getTime());
+
+                //TODO formattage date
+              /*DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                String date = df.format(Calendar.getInstance().getTime());*/
                 commande.setDate(Calendar.getInstance().getTime());
                 CommandeBddManager.insertOrUpdate(commande);
+
+                commandeArrayList = (ArrayList<Commande>) CommandeBddManager.getCommande();
+                int positionCommande = commandeArrayList.indexOf(commande);
+
+                for (int i = 0; i < produitArrayListNote.size(); i++) {
+                    for (int j = 0; i < produitArrayListNote.get(i).getProduitRef().size(); j++) {
+                        if (produitArrayListNote.get(i).getProduitRef().get(j) == null) {
+                            produitArrayListNote.get(i).getProduitRef().get(j).setCommande(commandeArrayList.get(positionCommande).getId());
+                            ConsommeBddManager.insertOrUpdate(produitArrayListNote.get(i).getProduitRef().get(j));
+                        }
+                    }
+                }
             }
         });
 
