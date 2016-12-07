@@ -183,25 +183,49 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         btn_off_client.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Commande commande = new Commande();
+                final Commande commande = new Commande();
 
-                //TODO formattage date
+                //On creer un alert dialog pour confirmer la suppression du produit
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        getContext());
+
+                //On set tous les elements et on display la dialog box
+                alertDialogBuilder.setTitle("Confirmation");
+
+                alertDialogBuilder
+                        .setMessage("Voulez-vous terminer et valider la commande ?");
+
+                alertDialogBuilder.setCancelable(false)
+                        .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //TODO formattage date
               /*DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
                 String date = df.format(Calendar.getInstance().getTime());*/
-                commande.setDate(Calendar.getInstance().getTime());
-                CommandeBddManager.insertOrUpdate(commande);
+                                commande.setDate(Calendar.getInstance().getTime());
+                                CommandeBddManager.insertOrUpdate(commande);
 
-                commandeArrayList = (ArrayList<Commande>) CommandeBddManager.getCommande();
-                int positionCommande = commandeArrayList.indexOf(commande);
+                                commandeArrayList = (ArrayList<Commande>) CommandeBddManager.getCommande();
+                                int positionCommande = commandeArrayList.indexOf(commande);
 
-                for (int i = 0; i < produitArrayListNote.size(); i++) {
-                    for (int j = 0; i < produitArrayListNote.get(i).getProduitRef().size(); j++) {
-                        if (produitArrayListNote.get(i).getProduitRef().get(j) == null) {
-                            produitArrayListNote.get(i).getProduitRef().get(j).setCommande(commandeArrayList.get(positionCommande).getId());
-                            ConsommeBddManager.insertOrUpdate(produitArrayListNote.get(i).getProduitRef().get(j));
-                        }
+                                for (int i = 0; i < produitArrayListNote.size(); i++) {
+                                    for (int j = 0; j < produitArrayListNote.get(i).getProduitRef().size(); j++) {
+                                        if (produitArrayListNote.get(i).getProduitRef().get(j).getCommande() == null) {
+                                            produitArrayListNote.get(i).getProduitRef().get(j).setCommande(commandeArrayList.get(positionCommande).getId());
+                                            ConsommeBddManager.insertOrUpdate(produitArrayListNote.get(i).getProduitRef().get(j));
+                                        }
+                                    }
+                                }
+                                produitArrayListNote.clear();
+                                productAdapterNote.notifyDataSetChanged();
+                                dialog.cancel();
+                            }
+                        }).setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
                     }
-                }
+                });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
             }
         });
 

@@ -61,6 +61,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(final ProductAdapter.ViewHolder holder, int position) {
+
         final Produit produitbean = getProduitArrayList.get(position);
         switch (choixAffichage) {
 
