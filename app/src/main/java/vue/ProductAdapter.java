@@ -25,6 +25,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     private ArrayList<Produit> getProduitArrayList = new ArrayList<>();
     private View v;
     private ProductAdapterCallBack productAdapterCallBack;
+    private ArrayList<Long> idCommandes;
+    private Produit produitbean;
+    private String quantiteTest;
 
     // -------------------------------- CONSTRUCTOR -------------------------------------------------- //
     public ProductAdapter(ProductAffichageEnum choixAffichage, ArrayList<Produit> getProduitArrayList, ProductAdapterCallBack productAdapterCallBack) {
@@ -62,7 +65,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     @Override
     public void onBindViewHolder(final ProductAdapter.ViewHolder holder, int position) {
 
-        final Produit produitbean = getProduitArrayList.get(position);
+        produitbean = getProduitArrayList.get(position);
         switch (choixAffichage) {
 
             case Note:
@@ -136,6 +139,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             case Bilan:
                 holder.displaylibelle.setText(produitbean.getNom());
                 holder.displayTarif.setText(String.valueOf(produitbean.getPrix()));
+
+                if (quantiteTest != null) {
+                    holder.displayQuantite.setText(quantiteTest);
+                }
+
                 break;
 
             case Stock:
@@ -253,5 +261,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         void clicOnMaxStock(Produit produit);
     }
+
+    /*@Override
+    public void onSelectCommande(ArrayList<Long> idCommandes) {
+        ArrayList<Consomme> consommeArrayListBilan = (ArrayList<Consomme>) produitbean.getProduitRef();
+
+        for (int i = 0; i < consommeArrayListBilan.size(); i++) {
+            for (int j = 0; j < idCommandes.size(); j++) {
+                if (Objects.equals(consommeArrayListBilan.get(i).getCommande(), idCommandes.get(j))) {
+                    quantiteTest = String.valueOf(consommeArrayListBilan.get(i).getQuantite());
+                    // holder.displayQuantite.setText(String.valueOf(consommeArrayListBilan.get(i).getQuantite()));
+                }
+            }
+        }
+    }*/
 }
 

@@ -26,18 +26,11 @@ import greendao.Commande;
 import greendao.Consomme;
 import greendao.Produit;
 import model.CommandeBddManager;
+import model.ConsommeBddManager;
 import model.ProduitBddManager;
 import vue.ProductAdapter;
 import vue.ProductAffichageEnum;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FragmentBilan.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FragmentBilan#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FragmentBilan extends Fragment implements DatePickerFragment.DatePickerFragmentCallBack {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -68,6 +61,7 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
     private ArrayList<Commande> commandeArrayList;
     private ArrayList<Commande> commandeArrayListSelected;
     private ArrayList<Produit> produitArrayListSelected;
+    private ArrayList<Long> idCommandes;
 
     /**
      * Use this factory method to create a new instance of
@@ -103,6 +97,7 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_bilan, container, false);
         initUI(v);
@@ -237,7 +232,6 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
     public void onSelectDate(Date date) {
         String fDate = new SimpleDateFormat("dd/MM/yyyy").format(date);
         commandeArrayListSelected = new ArrayList<>();
-        produitArrayListSelected = new ArrayList<>();
         switch (choixDatePicker) {
             case 0:
                 editDateDebut.setText(fDate);
@@ -246,18 +240,21 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
                 editDateFin.setText(fDate);
                 break;
             case 2:
+
                 editDateDebut.setText(fDate);
                 editDateFin.setText(fDate);
 
+                produitArrayListSelected = new ArrayList<>();
                 for (int i = 0; i < commandeArrayList.size(); i++) {
                     if (Objects.equals(new SimpleDateFormat("dd/MM/yyyy").format(commandeArrayList.get(i).getDate()), fDate)) {
-                        commandeArrayListSelected.add(commandeArrayList.get(i));
-                        ArrayList<Consomme> consommeArrayList = (ArrayList<Consomme>) commandeArrayList.get(i).getCommandeRef();
+                        ArrayList<Consomme> consommeArrayList = (ArrayList<Consomme>) ConsommeBddManager.getConsomme();
                         for (int j = 0; j < consommeArrayList.size(); j++) {
-                            long produitId = commandeArrayList.get(i).getCommandeRef().get(j).getProduit();
-                            for (int k = 0; k < produitArrayListBilan.size(); k++) {
-                                if (produitArrayListBilan.get(k).getId() == produitId) {
-                                    produitArrayListSelected.add(produitArrayListBilan.get(k));
+                            if (Objects.equals(consommeArrayList.get(j).getCommande(), commandeArrayList.get(i).getId())) {
+                                long produitId = consommeArrayList.get(j).getProduit();
+                                for (int k = 0; k < produitArrayListBilan.size(); k++) {
+                                    if (produitArrayListBilan.get(k).getId() == produitId) {
+                                        produitArrayListSelected.add(produitArrayListBilan.get(k));
+                                    }
                                 }
                             }
                         }
@@ -270,7 +267,6 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
                 break;
             case 3:
                 editDateDebut.setText(fDate);
-                editDateFin.setText(fDate);
                 String fDateJour = new SimpleDateFormat("dd").format(date);
                 String fDateMoisSelect = new SimpleDateFormat("MM").format(date);
                 String fDateAnneeSelectSemaine = new SimpleDateFormat("yyyy").format(date);
@@ -307,9 +303,47 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
                     }
                 }
                 else {
-
+                    if (calculSemaine > 29) {
+                        int reste = calculSemaine - 30;
+                        String resteFormat = "0" + String.valueOf(reste);
+                        String mois = String.valueOf(Integer.valueOf(fDateMoisSelect) + 1);
+                        editDateFin.setText(resteFormat + "/" + mois + "/" + fDateAnneeSelectSemaine);
+                    }
+                    else {
+                        editDateFin.setText(calculSemaine + "/" + fDateMoisSelect + "/" + fDateAnneeSelectSemaine);
+                    }
                 }
 
+                produitArrayListSelected = new ArrayList<>();
+                idCommandes = new ArrayList<>();
+                String compteurJour = fDateJour;
+                while (Integer.valueOf(compteurJour) != calculSemaine) {
+                    for (int i = 0; i < commandeArrayList.size(); i++) {
+                        String dateTmp = compteurJour + "/" + fDateMoisSelect + "/" + fDateAnneeSelectSemaine;
+                        if (Objects.equals(new SimpleDateFormat("dd/MM/yyyy").format(commandeArrayList.get(i).getDate()), dateTmp)) {
+                            ArrayList<Consomme> consommeArrayList = (ArrayList<Consomme>) ConsommeBddManager.getConsomme();
+                            idCommandes.add(consommeArrayList.get(i).getId());
+                            for (int j = 0; j < consommeArrayList.size(); j++) {
+                                if (Objects.equals(consommeArrayList.get(j).getCommande(), commandeArrayList.get(i).getId())) {
+                                    long produitId = consommeArrayList.get(j).getProduit();
+                                    for (int k = 0; k < produitArrayListBilan.size(); k++) {
+                                        if (produitArrayListBilan.get(k).getId() == produitId) {
+                                            produitArrayListSelected.add(produitArrayListBilan.get(k));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    compteurJour = String.valueOf(Integer.valueOf(compteurJour) + 1);
+                    if (Integer.valueOf(compteurJour) < 10) {
+                        compteurJour = "0" + compteurJour;
+                    }
+                }
+
+                productAdapter = new ProductAdapter(ProductAffichageEnum.Bilan, produitArrayListSelected, null);
+                recyclerViewBilan.setAdapter(productAdapter);
+                productAdapter.notifyDataSetChanged();
                 break;
             case 4:
                 String fDateMois = new SimpleDateFormat("MM").format(date);
