@@ -124,7 +124,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     @Override
                     public void onClick(View v) {
                         if (productAdapterCallBack != null) {
-                            productAdapterCallBack.clicOnModifyProduit(produitbean);
+                            productAdapterCallBack.clicOnModifyOrInsertProduit(produitbean);
                         }
                     }
                 });
@@ -243,7 +243,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     }
 
     public interface ProductAdapterCallBack {
-        void clicOnModifyProduit(Produit produit);
+        void clicOnModifyOrInsertProduit(Produit produit);
 
         void clicOnProduit(Produit produit);
 

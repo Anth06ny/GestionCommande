@@ -67,7 +67,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 if (categoryAdapterCallBack != null) {
-                    categoryAdapterCallBack.clicOnModifyCategory(categoriebean);
+                    categoryAdapterCallBack.clicOnModifyOrInsertCategory(categoriebean);
                 }
             }
         });
@@ -104,7 +104,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     public interface CategoryAdapterCallBack {
 
-        void clicOnModifyCategory(Categorie categorie);
+        void clicOnModifyOrInsertCategory(Categorie categorie);
 
         void clicOnCategory(Categorie categorie);
 

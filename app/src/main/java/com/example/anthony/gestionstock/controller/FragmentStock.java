@@ -166,7 +166,7 @@ public class FragmentStock extends Fragment implements ProductAdapter.ProductAda
     }
 
     @Override
-    public void clicOnModifyProduit(Produit produit) {
+    public void clicOnModifyOrInsertProduit(Produit produit) {
 
     }
 

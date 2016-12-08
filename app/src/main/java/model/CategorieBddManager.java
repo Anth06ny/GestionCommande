@@ -6,6 +6,7 @@ import java.util.List;
 
 import greendao.Categorie;
 import greendao.CategorieDao;
+import greendao.Produit;
 
 /**
  * Created by Axel legué on 25/11/2016.
@@ -32,6 +33,12 @@ public class CategorieBddManager {
     }
 
     public static void deleteCategorie(Categorie categorie) {
+
+        //On fait une boucle pour supprimer de la liste et de la bdd tous les produits de cette categorie
+        for (Produit produit : categorie.getProduitList()) {
+            ProduitBddManager.deleteProduit(produit);
+        }
+
         MyApplication.getDaoSession().getCategorieDao().delete(categorie);
     }
 

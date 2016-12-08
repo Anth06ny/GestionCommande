@@ -369,7 +369,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     }
 
     @Override
-    public void clicOnModifyProduit(Produit produit) {
+    public void clicOnModifyOrInsertProduit(Produit produit) {
 
     }
 
