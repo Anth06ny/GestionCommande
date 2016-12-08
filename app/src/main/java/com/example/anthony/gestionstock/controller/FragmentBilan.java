@@ -15,9 +15,17 @@ import android.widget.TextView;
 
 import com.example.anthony.gestionstock.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Objects;
 
+import greendao.Commande;
+import greendao.Consomme;
 import greendao.Produit;
+import model.CommandeBddManager;
 import model.ProduitBddManager;
 import vue.ProductAdapter;
 import vue.ProductAffichageEnum;
@@ -30,7 +38,7 @@ import vue.ProductAffichageEnum;
  * Use the {@link FragmentBilan#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentBilan extends Fragment {
+public class FragmentBilan extends Fragment implements DatePickerFragment.DatePickerFragmentCallBack {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -52,6 +60,14 @@ public class FragmentBilan extends Fragment {
     private Button btnImprimer;
     private TextView textViewPrixTotal;
     private ArrayList<Produit> produitArrayListBilan;
+    private TextView editDateDebut;
+    private TextView editDateFin;
+    private DatePickerFragment.DatePickerFragmentCallBack datePickerFragmentCallBack;
+    private int choixDatePicker;
+    private final int MOIS_FEVRIER = 02;
+    private ArrayList<Commande> commandeArrayList;
+    private ArrayList<Commande> commandeArrayListSelected;
+    private ArrayList<Produit> produitArrayListSelected;
 
     /**
      * Use this factory method to create a new instance of
@@ -100,6 +116,8 @@ public class FragmentBilan extends Fragment {
         btnAnnee = (Button) v.findViewById(R.id.btn_annee);
         btnImprimer = (Button) v.findViewById(R.id.btn_imprimer_bilan);
         textViewPrixTotal = (TextView) v.findViewById(R.id.total_valeur);
+        editDateDebut = (TextView) v.findViewById(R.id.champ_date_debut);
+        editDateFin = (TextView) v.findViewById(R.id.champ_date_fin);
 
         produitArrayListBilan = new ArrayList<>();
         produitArrayListBilan = (ArrayList<Produit>) ProduitBddManager.getProduit();
@@ -109,32 +127,45 @@ public class FragmentBilan extends Fragment {
         recyclerViewBilan.setAdapter(productAdapter);
         recyclerViewBilan.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerViewBilan.setItemAnimator(new DefaultItemAnimator());
+        datePickerFragmentCallBack = this;
 
+        //Initalisation des champs à la date du jour.
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        String date = df.format(Calendar.getInstance().getTime());
+        editDateDebut.setText(date);
+        editDateFin.setText(date);
+
+        commandeArrayList = new ArrayList<>();
+        commandeArrayList = (ArrayList<Commande>) CommandeBddManager.getCommande();
         btnJour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                choixDatePicker = 2;
+                launchDatePicker();
             }
         });
 
         btnSemaine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                choixDatePicker = 3;
+                launchDatePicker();
             }
         });
 
         btnMois.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                choixDatePicker = 4;
+                launchDatePicker();
             }
         });
 
         btnAnnee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                choixDatePicker = 5;
+                launchDatePicker();
             }
         });
 
@@ -142,6 +173,22 @@ public class FragmentBilan extends Fragment {
             @Override
             public void onClick(View v) {
 
+            }
+        });
+
+        editDateDebut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                choixDatePicker = 0;
+                launchDatePicker();
+            }
+        });
+
+        editDateFin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                choixDatePicker = 1;
+                launchDatePicker();
             }
         });
     }
@@ -184,5 +231,115 @@ public class FragmentBilan extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onSelectDate(Date date) {
+        String fDate = new SimpleDateFormat("dd/MM/yyyy").format(date);
+        commandeArrayListSelected = new ArrayList<>();
+        produitArrayListSelected = new ArrayList<>();
+        switch (choixDatePicker) {
+            case 0:
+                editDateDebut.setText(fDate);
+                break;
+            case 1:
+                editDateFin.setText(fDate);
+                break;
+            case 2:
+                editDateDebut.setText(fDate);
+                editDateFin.setText(fDate);
+
+                for (int i = 0; i < commandeArrayList.size(); i++) {
+                    if (Objects.equals(new SimpleDateFormat("dd/MM/yyyy").format(commandeArrayList.get(i).getDate()), fDate)) {
+                        commandeArrayListSelected.add(commandeArrayList.get(i));
+                        ArrayList<Consomme> consommeArrayList = (ArrayList<Consomme>) commandeArrayList.get(i).getCommandeRef();
+                        for (int j = 0; j < consommeArrayList.size(); j++) {
+                            long produitId = commandeArrayList.get(i).getCommandeRef().get(j).getProduit();
+                            for (int k = 0; k < produitArrayListBilan.size(); k++) {
+                                if (produitArrayListBilan.get(k).getId() == produitId) {
+                                    produitArrayListSelected.add(produitArrayListBilan.get(k));
+                                }
+                            }
+                        }
+                    }
+                }
+                productAdapter = new ProductAdapter(ProductAffichageEnum.Bilan, produitArrayListSelected, null);
+                recyclerViewBilan.setAdapter(productAdapter);
+                productAdapter.notifyDataSetChanged();
+
+                break;
+            case 3:
+                editDateDebut.setText(fDate);
+                editDateFin.setText(fDate);
+                String fDateJour = new SimpleDateFormat("dd").format(date);
+                String fDateMoisSelect = new SimpleDateFormat("MM").format(date);
+                String fDateAnneeSelectSemaine = new SimpleDateFormat("yyyy").format(date);
+
+                int calculSemaine = Integer.valueOf(fDateJour) + 6;
+                if (Integer.valueOf(fDateMoisSelect) != MOIS_FEVRIER) {
+                    if (Integer.valueOf(fDateMoisSelect) % 2 == 0) {
+                        if (calculSemaine > 30) {
+                            int reste = calculSemaine - 31;
+                            String resteFormat = "0" + String.valueOf(reste);
+                            if (Integer.valueOf(fDateMoisSelect) == 12) {
+                                String annee = String.valueOf(Integer.valueOf(fDateAnneeSelectSemaine) + 1);
+
+                                editDateFin.setText(resteFormat + "/01/" + annee);
+                            }
+                            else {
+                                String mois = String.valueOf(Integer.valueOf(fDateMoisSelect) + 1);
+                                editDateFin.setText(resteFormat + "/" + mois + "/" + fDateAnneeSelectSemaine);
+                            }
+                        }
+                        else {
+                            editDateFin.setText(calculSemaine + "/" + fDateMoisSelect + "/" + fDateAnneeSelectSemaine);
+                        }
+                    }
+                    else {
+                        if (calculSemaine > 31) {
+                            int reste = calculSemaine - 30;
+                            String resteFormat = "0" + String.valueOf(reste);
+                            editDateFin.setText(resteFormat + "/" + fDateMoisSelect + "/" + fDateAnneeSelectSemaine);
+                        }
+                        else {
+                            editDateFin.setText(calculSemaine + "/" + fDateMoisSelect + "/" + fDateAnneeSelectSemaine);
+                        }
+                    }
+                }
+                else {
+
+                }
+
+                break;
+            case 4:
+                String fDateMois = new SimpleDateFormat("MM").format(date);
+                String fDateAnnee = new SimpleDateFormat("yyyy").format(date);
+
+                editDateDebut.setText("01/" + fDateMois + "/" + fDateAnnee);
+
+                if (Integer.valueOf(fDateMois) != MOIS_FEVRIER) {
+                    if (Integer.valueOf(fDateMois) % 2 == 0) {
+                        editDateFin.setText("30/" + fDateMois + "/" + fDateAnnee);
+                    }
+                    else {
+                        editDateFin.setText("31/" + fDateMois + "/" + fDateAnnee);
+                    }
+                }
+                else {
+                    editDateFin.setText("29/" + fDateMois + "/" + fDateAnnee);
+                }
+                break;
+            case 5:
+                String fDateSelectAnnee = new SimpleDateFormat("yyyy").format(date);
+                editDateDebut.setText(String.format("01/01/%s", fDateSelectAnnee));
+                editDateFin.setText(String.format("31/12/%s", fDateSelectAnnee));
+                break;
+        }
+    }
+
+    public void launchDatePicker() {
+        DatePickerFragment datePickerFragment = new DatePickerFragment();
+        datePickerFragment.setDatePickerFragmentCallBack(datePickerFragmentCallBack);
+        datePickerFragment.show(getFragmentManager(), "Date fin");
     }
 }

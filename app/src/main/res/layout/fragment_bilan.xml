@@ -21,12 +21,12 @@
                 android:layout_weight="1"
                 android:text="Début"/>
 
-            <EditText
+            <TextView
                 android:id="@+id/champ_date_debut"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
-            </EditText>
+            </TextView>
 
             <TextView
                 android:id="@+id/date_fin"
@@ -35,12 +35,12 @@
                 android:layout_weight="1"
                 android:text="Fin"/>
 
-            <EditText
+            <TextView
                 android:id="@+id/champ_date_fin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
-            </EditText>
+            </TextView>
 
             <Button
                 android:id="@+id/btn_jour"
