@@ -19,51 +19,54 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
-                android:text="CATÉGORIES"/>
-
             <LinearLayout
-                android:id="@+id/sousTitreCat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="40dp"
-                    android:layout_weight="2"
-                    android:text="LIBELLÉ"
-                    tools:layout_marginLeft="10dp"/>
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="@dimen/margin_15"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:layout_weight="1"
+                    android:gravity="fill_vertical"
+                    android:text="Catégories"
+                    android:textSize="@dimen/font_10"
+                    android:textStyle="bold"/>
 
                 <Button
                     android:id="@+id/btn_addCategorie"
-                    android:layout_width="90dp"
+                    style="@style/button_reglage"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="40dp"
-                    android:layout_weight="2"
-                    android:text="Ajouter une catégorie"
-                    />
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_marginRight="@dimen/margin_15"
+                    android:text="Ajouter "/>
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_categorie"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="10dp">
+                android:layout_marginLeft="10dp"
+                tools:listitem="@layout/cellule_category">
 
             </android.support.v7.widget.RecyclerView>
 
 
         </LinearLayout>
+
+        <View
+            android:id="@+id/textView3"
+            android:layout_width="@dimen/margin_2"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:layout_marginRight="@dimen/margin_5"
+            android:background="#e6e2e2"
+            android:text="New Text"/>
 
         <LinearLayout
             android:id="@+id/layoutProduit"
@@ -71,14 +74,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:text="PRODUITS"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -91,7 +86,9 @@
                     android:layout_gravity="center"
                     android:layout_weight="10"
                     android:paddingLeft="10dp"
-                    android:text="LIBELLÉ"/>
+                    android:text="Produits"
+                    android:textSize="@dimen/font_10"
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -99,7 +96,8 @@
                     android:layout_gravity="center"
                     android:layout_weight="10"
                     android:paddingLeft="27dp"
-                    android:text="TARIF"/>
+                    android:text="Tarif"
+                    android:textSize="@dimen/font_10"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -107,23 +105,24 @@
                     android:layout_gravity="center"
                     android:layout_weight="10"
                     android:paddingLeft="30dp"
-                    android:text="LOT"/>
+                    android:text="Lot"
+                    android:textSize="@dimen/font_10"/>
 
                 <Button
                     android:id="@+id/btn_addProduit"
+                    style="@style/button_reglage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:text="Ajouter un produit"
-                    android:textAlignment="center"/>
+                    android:layout_marginRight="@dimen/margin_15"
+                    android:text="Ajouter"
+                    />
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_produit"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                tools:listitem="@layout/cellule_produit_reglage">
             </android.support.v7.widget.RecyclerView>
 
         </LinearLayout>

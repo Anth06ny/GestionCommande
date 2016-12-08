@@ -106,6 +106,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     private void initUI(View v) {
 
         categorieList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
+
         categoryAdapter = new CategoryAdapter(categorieList, this);
         recyclerViewCategories = (RecyclerView) v.findViewById(R.id.rv_categorie);
         recyclerViewCategories.setAdapter(categoryAdapter);
@@ -265,7 +266,11 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         //Au clic sur une categorie on recupere la liste de produit qui lui est associer
 
         produitList.clear();
+
+        categorie.resetProduitList();
+        MyApplication.getDaoSession().clear();
         produitList.addAll(categorie.getProduitList());
+        productAdapter.notifyDataSetChanged();
 
         // les autres categories a false pour display seulement les boutons de la categorie choisie
         Categorie oldCategorieATrue = null;
@@ -279,12 +284,13 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         categorie.setSelected(true);
 
         //On recharge le recycle view
-
-        productAdapter.notifyDataSetChanged();
         if (oldCategorieATrue != null) {
             categoryAdapter.notifyItemChanged(categorieList.indexOf(oldCategorieATrue));
         }
         categoryAdapter.notifyItemChanged(categorieList.indexOf(categorie));
+
+        //TODO delete
+        categoryAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -338,30 +344,34 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         newFragment.setDialogProduitCallBack(new DialogProduit.DialogProduitCallBack() {
             @Override
             public void dialogProduitClicOnValider() {
-                Categorie categorieSelected = null;
+                Categorie categorieSelected = null; //catégorie séléctionnée
+                Categorie categorieToInsertProduit = null;//Catégorie ou on va inserer le produit
                 for (int i = 0; i < categorieList.size(); i++) {
                     if (categorieList.get(i).getId() == finalProduit.getCategorieID()) {
+                        categorieToInsertProduit = categorieList.get(i);
+                    }
+                    if (categorieList.get(i).isSelected()) {
                         categorieSelected = categorieList.get(i);
-                        break;
                     }
                 }
-                if (categorieSelected == null) {
+                if (categorieToInsertProduit == null) {
                     Toast.makeText(getContext(), "Erreur à l'insertion du produit, categorie non trouvé", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     //une insertion
                     if (finalProduit.getId() == null) {
                         ProduitBddManager.insertOrUpdate(finalProduit);
-                        categorieSelected.resetProduitList();
-                        produitList.add(finalProduit);
-                        productAdapter.notifyItemInserted(produitList.size() - 1);
+                        if (categorieSelected != null && categorieSelected.getId() == finalProduit.getCategorieID()) {
+                            produitList.add(finalProduit);
+                            productAdapter.notifyItemInserted(produitList.size() - 1);
+                        }
                     }
                     else {
                         //une modification
                         ProduitBddManager.insertOrUpdate(finalProduit);
-                        categorieSelected.resetProduitList();
                         productAdapter.notifyItemChanged(produitList.indexOf(finalProduit));
                     }
+                    categorieToInsertProduit.resetProduitList();
                 }
             }
 
@@ -418,6 +428,8 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         if (oldProduitATrue != null) {
             productAdapter.notifyItemChanged(produitList.indexOf(oldProduitATrue));
         }
+        //TODO delete
+        productAdapter.notifyDataSetChanged();
     }
 
     @Override

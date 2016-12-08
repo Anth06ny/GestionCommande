@@ -58,13 +58,11 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     private ProductAdapter productAdapter;
     private ProductAdapter productAdapterNote;
     private ArrayList<Categorie> categorieArrayList;
-    private ArrayList<Produit> produitArrayList;
     private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerViewProduits;
     private GridLayoutManager layoutManager;
     private ArrayList<Produit> produitArrayListFavoris;
     private ArrayList<Produit> arraylistProduits;
-    private ProductAdapter.ProductAdapterCallBack productAdapterCallBack;
     private RecyclerView recyclerViewNote;
     private ArrayList<Produit> produitArrayListNote;
     private ArrayList<Commande> commandeArrayList;
@@ -115,14 +113,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         //Remplissage de la liste
         categorieArrayList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
 
-        produitArrayList = new ArrayList<>(); // Instanciation de la liste de produits
-        produitArrayList = (ArrayList<Produit>) ProduitBddManager.getProduit(); // remplissage de la liste de produits
-        produitArrayListFavoris = new ArrayList<>();
-        for (int i = 0; i < produitArrayList.size(); i++) {
-            if (produitArrayList.get(i).getFavori()) {
-                produitArrayListFavoris.add(produitArrayList.get(i));
-            }
-        }
+        produitArrayListFavoris = (ArrayList<Produit>) ProduitBddManager.getProduitFavoris(); // remplissage de la liste de produits
 
         //RecyclerView PRODUIT
         layoutManager = new GridLayoutManager(getContext(), 3);//On instancie un grid layoutmanager qui prend en parametre le context et le nombre de colonne/ligne
@@ -229,7 +220,6 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
             }
         });
 
-        productAdapterCallBack = this; // Instanciation du CallBack
         produitArrayListNote = new ArrayList<>(); // Instanciation de la liste
         // Gestion des Boutons de CATEGORIES
         Button[] buttons = new Button[NB_MAX_CATEGORIES];
@@ -247,7 +237,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
                     // rempli l'arrayListe avec les produits de la catégorie
                     arraylistProduits = (ArrayList<Produit>) categorieArrayList.get(finalJ).getProduitList();
                     // instancie l'adpateur.
-                    productAdapter = new ProductAdapter(ProductAffichageEnum.Accueil, arraylistProduits, productAdapterCallBack);
+                    productAdapter = new ProductAdapter(ProductAffichageEnum.Accueil, arraylistProduits, FragmentAccueil.this);
                     // on passe l'adapter au recycler view
                     recyclerViewProduits.setAdapter(productAdapter);
                 }
@@ -309,7 +299,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
                     else {
                         // On affiche la note dans le recycler
                         produitArrayListNote.add(produitArrayListFavoris.get(finalL));
-                        productAdapterNote = new ProductAdapter(ProductAffichageEnum.Note, produitArrayListNote, productAdapterCallBack);
+                        productAdapterNote = new ProductAdapter(ProductAffichageEnum.Note, produitArrayListNote, FragmentAccueil.this);
                         recyclerViewNote.setAdapter(productAdapterNote);
                     }
                 }
@@ -353,7 +343,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
@@ -418,7 +408,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         }
         else {
             produitArrayListNote.add(produit);
-            productAdapterNote = new ProductAdapter(ProductAffichageEnum.Note, produitArrayListNote, productAdapterCallBack);
+            productAdapterNote = new ProductAdapter(ProductAffichageEnum.Note, produitArrayListNote, this);
             recyclerViewNote.setAdapter(productAdapterNote);
         }
     }

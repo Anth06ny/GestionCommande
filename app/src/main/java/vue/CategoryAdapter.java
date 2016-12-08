@@ -13,8 +13,6 @@ import com.example.anthony.gestionstock.R;
 import java.util.ArrayList;
 
 import greendao.Categorie;
-import greendao.Produit;
-import model.CategorieBddManager;
 
 /**
  * Created by Axel legué on 23/11/2016.
@@ -22,11 +20,6 @@ import model.CategorieBddManager;
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
     private ArrayList<Categorie> category_bean;
     private CategoryAdapterCallBack categoryAdapterCallBack;
-    private ArrayList<Produit> produit_bean;
-    private ProductAdapter productAdapter;
-    private RecyclerView getRecyclerViewProduits;
-
-    private CategorieBddManager categorieBddManager;
 
     public CategoryAdapter(ArrayList<Categorie> category_bean, CategoryAdapterCallBack categoryAdapterCallBack) {
         this.category_bean = category_bean;

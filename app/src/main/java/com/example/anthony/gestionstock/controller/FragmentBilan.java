@@ -218,7 +218,7 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
@@ -375,5 +375,12 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
         DatePickerFragment datePickerFragment = new DatePickerFragment();
         datePickerFragment.setDatePickerFragmentCallBack(datePickerFragmentCallBack);
         datePickerFragment.show(getFragmentManager(), "Date fin");
+    }
+
+    public static Date add7(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_MONTH, 7);
+        return calendar.getTime();
     }
 }

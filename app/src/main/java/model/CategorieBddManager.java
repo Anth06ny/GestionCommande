@@ -17,6 +17,7 @@ public class CategorieBddManager {
     // ------------------------------------ '' SQL QUERY Functions ''' -------------------------------- //
 
     public static List<Categorie> getCategories() {
+        MyApplication.getDaoSession().clear();
         return MyApplication.getDaoSession().getCategorieDao().loadAll();
     }
 

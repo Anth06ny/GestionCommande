@@ -22,11 +22,10 @@ import greendao.Produit;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
     private ProductAffichageEnum choixAffichage;
-    private ArrayList<Produit> getProduitArrayList = new ArrayList<>();
+    private ArrayList<Produit> getProduitArrayList;
     private View v;
     private ProductAdapterCallBack productAdapterCallBack;
     private ArrayList<Long> idCommandes;
-    private Produit produitbean;
     private String quantiteTest;
 
     // -------------------------------- CONSTRUCTOR -------------------------------------------------- //
@@ -65,7 +64,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     @Override
     public void onBindViewHolder(final ProductAdapter.ViewHolder holder, int position) {
 
-        produitbean = getProduitArrayList.get(position);
+        final Produit produitbean = getProduitArrayList.get(position);
         switch (choixAffichage) {
 
             case Note:
