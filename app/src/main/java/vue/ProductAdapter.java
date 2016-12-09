@@ -84,7 +84,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 holder.displayDeleteProduit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        productAdapterCallBack.clicOnDeleteProduitNote(produitbean);
+                        productAdapterCallBack.clicOnDeleteProduit(produitbean);
                     }
                 });
 
@@ -95,7 +95,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 holder.produitAccueil.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        productAdapterCallBack.clicOnProduitAcceuil(produitbean);
+                        productAdapterCallBack.clicOnProduit(produitbean);
                     }
                 });
                 break;
@@ -247,10 +247,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         void clicOnProduit(Produit produit);
 
         void clicOnDeleteProduit(Produit produit);
-
-        void clicOnProduitAcceuil(Produit produit);
-
-        void clicOnDeleteProduitNote(Produit produit);
 
         void clicOnMinStock(Produit produit);
 

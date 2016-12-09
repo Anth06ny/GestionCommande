@@ -181,16 +181,6 @@ public class FragmentStock extends Fragment implements ProductAdapter.ProductAda
     }
 
     @Override
-    public void clicOnProduitAcceuil(Produit produit) {
-
-    }
-
-    @Override
-    public void clicOnDeleteProduitNote(Produit produit) {
-
-    }
-
-    @Override
     public void clicOnMinStock(Produit produit) {
         Toast.makeText(this.getContext(), "Min", Toast.LENGTH_SHORT).show();
     }

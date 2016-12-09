@@ -365,15 +365,6 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
 
     @Override
     public void clicOnProduit(Produit produit) {
-
-    }
-
-    @Override
-    public void clicOnDeleteProduit(Produit produit) {
-
-    }
-
-    public void clicOnProduitAcceuil(Produit produit) {
         ArrayList<Consomme> consommeArrayList = (ArrayList<Consomme>) produit.getProduitRef(); /* getProduitRef renvoi une liste de
                     consomme par produit */
 
@@ -414,7 +405,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     }
 
     @Override
-    public void clicOnDeleteProduitNote(Produit produit) {
+    public void clicOnDeleteProduit(Produit produit) {
         for (int i = 0; i < produit.getProduitRef().size(); i++) {
             if (produit.getProduitRef().get(i).getCommande() == null) {
                 produit.getProduitRef().get(i).setQuantite((long) 0);

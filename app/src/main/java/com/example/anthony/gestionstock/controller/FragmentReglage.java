@@ -463,15 +463,6 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         alertDialog.show();
     }
 
-    @Override
-    public void clicOnProduitAcceuil(Produit produit) {
-
-    }
-
-    @Override
-    public void clicOnDeleteProduitNote(Produit produit) {
-
-    }
 
     @Override
     public void clicOnMinStock(Produit produit) {

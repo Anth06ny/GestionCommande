@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,10 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
     private ArrayList<Commande> commandeArrayList;
     private ArrayList<Commande> commandeArrayListSelected;
     private ArrayList<Produit> produitArrayListSelected;
+    private ArrayList<Consomme> consommeArrayList;
     private ArrayList<Long> idCommandes;
+    private Date dateDebutSemaine;
+    private Date dateFinSemaine;
 
     /**
      * Use this factory method to create a new instance of
@@ -144,7 +148,7 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
             @Override
             public void onClick(View v) {
                 choixDatePicker = 3;
-                launchDatePicker();
+                onSelectDate(null);
             }
         });
 
@@ -230,7 +234,12 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
 
     @Override
     public void onSelectDate(Date date) {
+
+        if (date == null) {
+            date = Calendar.getInstance().getTime();
+        }
         String fDate = new SimpleDateFormat("dd/MM/yyyy").format(date);
+
         commandeArrayListSelected = new ArrayList<>();
         switch (choixDatePicker) {
             case 0:
@@ -266,80 +275,47 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
 
                 break;
             case 3:
-                editDateDebut.setText(fDate);
-                String fDateJour = new SimpleDateFormat("dd").format(date);
-                String fDateMoisSelect = new SimpleDateFormat("MM").format(date);
-                String fDateAnneeSelectSemaine = new SimpleDateFormat("yyyy").format(date);
 
-                int calculSemaine = Integer.valueOf(fDateJour) + 6;
-                if (Integer.valueOf(fDateMoisSelect) != MOIS_FEVRIER) {
-                    if (Integer.valueOf(fDateMoisSelect) % 2 == 0) {
-                        if (calculSemaine > 30) {
-                            int reste = calculSemaine - 31;
-                            String resteFormat = "0" + String.valueOf(reste);
-                            if (Integer.valueOf(fDateMoisSelect) == 12) {
-                                String annee = String.valueOf(Integer.valueOf(fDateAnneeSelectSemaine) + 1);
-
-                                editDateFin.setText(resteFormat + "/01/" + annee);
-                            }
-                            else {
-                                String mois = String.valueOf(Integer.valueOf(fDateMoisSelect) + 1);
-                                editDateFin.setText(resteFormat + "/" + mois + "/" + fDateAnneeSelectSemaine);
-                            }
-                        }
-                        else {
-                            editDateFin.setText(calculSemaine + "/" + fDateMoisSelect + "/" + fDateAnneeSelectSemaine);
-                        }
-                    }
-                    else {
-                        if (calculSemaine > 31) {
-                            int reste = calculSemaine - 30;
-                            String resteFormat = "0" + String.valueOf(reste);
-                            editDateFin.setText(resteFormat + "/" + fDateMoisSelect + "/" + fDateAnneeSelectSemaine);
-                        }
-                        else {
-                            editDateFin.setText(calculSemaine + "/" + fDateMoisSelect + "/" + fDateAnneeSelectSemaine);
-                        }
-                    }
-                }
-                else {
-                    if (calculSemaine > 29) {
-                        int reste = calculSemaine - 30;
-                        String resteFormat = "0" + String.valueOf(reste);
-                        String mois = String.valueOf(Integer.valueOf(fDateMoisSelect) + 1);
-                        editDateFin.setText(resteFormat + "/" + mois + "/" + fDateAnneeSelectSemaine);
-                    }
-                    else {
-                        editDateFin.setText(calculSemaine + "/" + fDateMoisSelect + "/" + fDateAnneeSelectSemaine);
-                    }
-                }
-
+                commandeArrayListSelected = new ArrayList<>();
+                ArrayList<Date> dateArrayList = getSemaine(date);
+                dateDebutSemaine = new Date();
+                dateDebutSemaine = dateArrayList.get(0);
+                dateFinSemaine = new Date();
+                dateDebutSemaine = dateArrayList.get(dateArrayList.size() - 1);
                 produitArrayListSelected = new ArrayList<>();
-                idCommandes = new ArrayList<>();
-                String compteurJour = fDateJour;
-                while (Integer.valueOf(compteurJour) != calculSemaine) {
-                    for (int i = 0; i < commandeArrayList.size(); i++) {
-                        String dateTmp = compteurJour + "/" + fDateMoisSelect + "/" + fDateAnneeSelectSemaine;
-                        if (Objects.equals(new SimpleDateFormat("dd/MM/yyyy").format(commandeArrayList.get(i).getDate()), dateTmp)) {
-                            ArrayList<Consomme> consommeArrayList = (ArrayList<Consomme>) ConsommeBddManager.getConsomme();
-                            idCommandes.add(consommeArrayList.get(i).getId());
-                            for (int j = 0; j < consommeArrayList.size(); j++) {
-                                if (Objects.equals(consommeArrayList.get(j).getCommande(), commandeArrayList.get(i).getId())) {
-                                    long produitId = consommeArrayList.get(j).getProduit();
-                                    for (int k = 0; k < produitArrayListBilan.size(); k++) {
-                                        if (produitArrayListBilan.get(k).getId() == produitId) {
-                                            produitArrayListSelected.add(produitArrayListBilan.get(k));
-                                        }
-                                    }
+
+                consommeArrayList = (ArrayList<Consomme>) ConsommeBddManager.getConsomme();
+
+                commandeArrayListSelected = (ArrayList<Commande>) CommandeBddManager.getCommandeBetweenDate(dateDebutSemaine, dateFinSemaine);
+                for (int i = 0; i < consommeArrayList.size(); i++) {
+                    for (int j = 0; j < commandeArrayList.size(); j++) {
+                        if (consommeArrayList.get(i).getCommande() == commandeArrayList.get(j).getId()) {
+                            Long produitId = consommeArrayList.get(i).getProduit();
+                            for (int k = 0; k < produitArrayListBilan.size(); k++) {
+                                if (produitArrayListBilan.get(k).getId() == produitId) {
+                                    produitArrayListSelected.add(produitArrayListBilan.get(k));
                                 }
                             }
                         }
                     }
-                    compteurJour = String.valueOf(Integer.valueOf(compteurJour) + 1);
-                    if (Integer.valueOf(compteurJour) < 10) {
-                        compteurJour = "0" + compteurJour;
+                }
+
+                /*
+                ArrayList<Consomme> consommeArrayList = (ArrayList<Consomme>) ConsommeBddManager.getConsomme();
+
+                for (int i = 0; i < dateArrayList.size(); i++) {
+                    for (int j = 0; j < commandeArrayList.size(); j++) {
+                        if (Objects.equals(new SimpleDateFormat("dd/MM/yyyy").format(commandeArrayList.get(j).getDate()), new SimpleDateFormat("dd/MM/yyyy").format
+                                (dateArrayList.get(i)))) {
+                            commandeArrayListSelected.add(commandeArrayList.get(j));
+                        }
                     }
                 }
+                for (int k = 0; k < commandeArrayListSelected.size(); k++) {
+                    if (consommeArrayList.get(k).getCommande() == commandeArrayListSelected.get(k).getId()) {
+                        consommeArrayList.get(k).getProduit();
+                    }
+                }*/
 
                 productAdapter = new ProductAdapter(ProductAffichageEnum.Bilan, produitArrayListSelected, null);
                 recyclerViewBilan.setAdapter(productAdapter);
@@ -377,10 +353,27 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
         datePickerFragment.show(getFragmentManager(), "Date fin");
     }
 
-    public static Date add7(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.DAY_OF_MONTH, 7);
-        return calendar.getTime();
+    public static ArrayList<Date> getSemaine(Date date) {
+        ArrayList<Date> dateArrayList = new ArrayList<>();
+        String annee = new SimpleDateFormat("yyyy").format(date);
+        Calendar c = Calendar.getInstance();
+
+        c.setTime(date);
+        int weekNo = c.get(Calendar.WEEK_OF_YEAR);
+        c.set(Calendar.WEEK_OF_YEAR, weekNo);
+
+        c.clear();
+
+        c.set(Calendar.WEEK_OF_YEAR, weekNo);
+        c.set(Calendar.YEAR, Integer.valueOf(annee));
+
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE dd/MM/yyyy");
+        c.add(Calendar.DATE, 0);
+        for (int i = 0; i < 7; i++) {
+            c.add(Calendar.DATE, 1);
+            dateArrayList.add(c.getTime());
+            Log.v("TAGtest", String.valueOf(c.getTime()));
+        }
+        return dateArrayList;
     }
 }

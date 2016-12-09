@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import greendao.DaoMaster;
 import greendao.DaoSession;
+import model.CategorieBddManager;
 import model.MaBaseSQLite;
 
 /**
@@ -23,7 +24,7 @@ public class MyApplication extends Application {
         super.onCreate();
         setupDatabase();
 
-        if (MyApplication.DEBUG || daoSession.getCategorieDao().count() == 0) {
+        if (MyApplication.DEBUG && CategorieBddManager.getCategories().size() == 0) {
             MaBaseSQLite.fillBase(this);
         }
 
