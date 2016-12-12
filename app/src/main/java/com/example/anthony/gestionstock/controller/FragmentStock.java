@@ -88,7 +88,6 @@ public class FragmentStock extends Fragment {
         v = inflater.inflate(R.layout.fragment_stock, container, false);
         initUI(v);
         return v;
-
     }
 
     private void initUI(View v) {
