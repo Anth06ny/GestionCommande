@@ -119,7 +119,7 @@ public class FragmentStock extends Fragment implements ProductAdapter.ProductAda
         produitArrayListStock = new ArrayList<>();
         produitArrayListStock = (ArrayList<Produit>) ProduitBddManager.getProduit();
 
-        productAdapter = new ProductAdapter(ProductAffichageEnum.Stock, produitArrayListStock, this);
+        productAdapter = new ProductAdapter(ProductAffichageEnum.Stock, produitArrayListStock, null, this);
         recyclerViewStock.setAdapter(productAdapter);
         recyclerViewStock.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerViewStock.setItemAnimator(new DefaultItemAnimator());

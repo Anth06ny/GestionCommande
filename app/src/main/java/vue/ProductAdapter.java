@@ -12,9 +12,11 @@ import android.widget.TextView;
 import com.example.anthony.gestionstock.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import greendao.Consomme;
 import greendao.Produit;
+import model.ProduitBddManager;
 
 /**
  * Created by Axel legué on 23/11/2016.
@@ -27,12 +29,17 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     private ProductAdapterCallBack productAdapterCallBack;
     private ArrayList<Long> idCommandes;
     private String quantiteTest;
+    private HashMap<Produit, Long> quantiteHashMap;
+    private ArrayList<Produit> produitArrayListAll;
 
     // -------------------------------- CONSTRUCTOR -------------------------------------------------- //
-    public ProductAdapter(ProductAffichageEnum choixAffichage, ArrayList<Produit> getProduitArrayList, ProductAdapterCallBack productAdapterCallBack) {
+    public ProductAdapter(ProductAffichageEnum choixAffichage, ArrayList<Produit> getProduitArrayList, HashMap<Produit, Long> quantiteHashMap,
+                          ProductAdapterCallBack
+                                  productAdapterCallBack) {
         this.choixAffichage = choixAffichage;
         this.getProduitArrayList = getProduitArrayList;
         this.productAdapterCallBack = productAdapterCallBack;
+        this.quantiteHashMap = quantiteHashMap;
     }
 
     // --------------------------------  END CONSTRUCTOR -------------------------------------------------- //
@@ -65,6 +72,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public void onBindViewHolder(final ProductAdapter.ViewHolder holder, int position) {
 
         final Produit produitbean = getProduitArrayList.get(position);
+        produitArrayListAll = (ArrayList<Produit>) ProduitBddManager.getProduit();
         switch (choixAffichage) {
 
             case Note:
@@ -138,9 +146,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             case Bilan:
                 holder.displaylibelle.setText(produitbean.getNom());
                 holder.displayTarif.setText(String.valueOf(produitbean.getPrix()));
-
-                if (quantiteTest != null) {
-                    holder.displayQuantite.setText(quantiteTest);
+                if (quantiteHashMap != null) {
+                    holder.displayQuantite.setText(String.valueOf(quantiteHashMap.get(produitbean)));
+                    holder.displayMontant.setText(String.valueOf((quantiteHashMap.get(produitbean) * produitbean.getPrix())));
                 }
 
                 break;
