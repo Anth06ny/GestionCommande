@@ -299,24 +299,6 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
                         }
                     }
                 }
-
-                /*
-                ArrayList<Consomme> consommeArrayList = (ArrayList<Consomme>) ConsommeBddManager.getConsomme();
-
-                for (int i = 0; i < dateArrayList.size(); i++) {
-                    for (int j = 0; j < commandeArrayList.size(); j++) {
-                        if (Objects.equals(new SimpleDateFormat("dd/MM/yyyy").format(commandeArrayList.get(j).getDate()), new SimpleDateFormat("dd/MM/yyyy").format
-                                (dateArrayList.get(i)))) {
-                            commandeArrayListSelected.add(commandeArrayList.get(j));
-                        }
-                    }
-                }
-                for (int k = 0; k < commandeArrayListSelected.size(); k++) {
-                    if (consommeArrayList.get(k).getCommande() == commandeArrayListSelected.get(k).getId()) {
-                        consommeArrayList.get(k).getProduit();
-                    }
-                }*/
-
                 productAdapter = new ProductAdapter(ProductAffichageEnum.Bilan, produitArrayListSelected, null);
                 recyclerViewBilan.setAdapter(productAdapter);
                 productAdapter.notifyDataSetChanged();
