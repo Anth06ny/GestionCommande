@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.anthony.gestionstock.R;
+import com.example.anthony.gestionstock.controller.FragmentStock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ import model.ProduitBddManager;
 /**
  * Created by Axel legué on 23/11/2016.
  */
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> implements FragmentStock.FragmentStockCallBack {
 
     private ProductAffichageEnum choixAffichage;
     private ArrayList<Produit> getProduitArrayList;
@@ -31,6 +32,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     private String quantiteTest;
     private HashMap<Produit, Long> quantiteHashMap;
     private ArrayList<Produit> produitArrayListAll;
+    private Boolean mettreZero = false;
+    private Boolean mettreMax = false;
 
     // -------------------------------- CONSTRUCTOR -------------------------------------------------- //
     public ProductAdapter(ProductAffichageEnum choixAffichage, ArrayList<Produit> getProduitArrayList, HashMap<Produit, Long> quantiteHashMap,
@@ -155,27 +158,52 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
             case Stock:
                 holder.displaylibelle.setText(produitbean.getNom());
+                if (produitbean.getConsommation() != null) {
+                    holder.displayQuantite.setText(String.valueOf(produitbean.getConsommation()));
+                    holder.displayLot.setText(String.valueOf(produitbean.getConsommation() / produitbean.getLot()));
+                }
+                else {
+                    holder.displayQuantite.setText("0");
+                    holder.displayLot.setText("0");
+                }
+                holder.displayLotRecommande.setText("0");
+                if (mettreZero) {
+                    holder.displayLotRecommande.setText("0");
+                }
+                if (mettreMax) {
+                    holder.displayLotRecommande.setText(holder.displayLot.getText());
+                }
                 holder.displayMin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        holder.displayLotRecommande.setText("0");
                         productAdapterCallBack.clicOnMinStock(produitbean);
                     }
                 });
                 holder.displayRemove.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (Integer.valueOf(String.valueOf(holder.displayLotRecommande.getText())) > 0) {
+                            holder.displayLotRecommande.setText(String.valueOf(Integer.valueOf((String) holder.displayLotRecommande.getText()) - 1));
+                        }
+
                         productAdapterCallBack.clicOnRemoveStock(produitbean);
                     }
                 });
                 holder.displayAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (Integer.valueOf(String.valueOf(holder.displayLotRecommande.getText())) < Integer.valueOf(String.valueOf(holder.displayLot.getText()))) {
+                            holder.displayLotRecommande.setText(String.valueOf(Integer.valueOf((String) holder.displayLotRecommande.getText()) + 1));
+                        }
                         productAdapterCallBack.clicOnAddStock(produitbean);
                     }
                 });
                 holder.displayMax.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        holder.displayLotRecommande.setText(holder.displayLot.getText());
                         productAdapterCallBack.clicOnMaxStock(produitbean);
                     }
                 });
@@ -263,6 +291,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         void clicOnAddStock(Produit produit);
 
         void clicOnMaxStock(Produit produit);
+    }
+
+    @Override
+    public void clicOnMettreZero() {
+        mettreZero = true;
+        mettreMax = false;
+    }
+
+    @Override
+    public void clicOnMettreMax() {
+        mettreZero = false;
+        mettreMax = true;
     }
 
     /*@Override

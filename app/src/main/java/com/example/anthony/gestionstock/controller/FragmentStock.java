@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
 
@@ -30,7 +29,7 @@ import vue.ProductAffichageEnum;
  * Use the {@link FragmentStock#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentStock extends Fragment implements ProductAdapter.ProductAdapterCallBack {
+public class FragmentStock extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -48,6 +47,7 @@ public class FragmentStock extends Fragment implements ProductAdapter.ProductAda
     private RecyclerView recyclerViewStock;
     private ProductAdapter productAdapter;
     private ArrayList<Produit> produitArrayListStock;
+    FragmentStockCallBack fragmentStockCallBack;
 
     /**
      * Use this factory method to create a new instance of
@@ -95,18 +95,19 @@ public class FragmentStock extends Fragment implements ProductAdapter.ProductAda
         btnMettreMax = (Button) v.findViewById(R.id.btn_mettre_max);
         btnValiderStock = (Button) v.findViewById(R.id.btn_valider_stock);
         recyclerViewStock = (RecyclerView) v.findViewById(R.id.rv_stock);
-
         btnMettreZero.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                fragmentStockCallBack.clicOnMettreZero();
+                productAdapter.notifyDataSetChanged();
             }
         });
 
         btnMettreMax.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                fragmentStockCallBack.clicOnMettreMax();
+                productAdapter.notifyDataSetChanged();
             }
         });
 
@@ -119,7 +120,7 @@ public class FragmentStock extends Fragment implements ProductAdapter.ProductAda
         produitArrayListStock = new ArrayList<>();
         produitArrayListStock = (ArrayList<Produit>) ProduitBddManager.getProduit();
 
-        productAdapter = new ProductAdapter(ProductAffichageEnum.Stock, produitArrayListStock, null, this);
+        productAdapter = new ProductAdapter(ProductAffichageEnum.Stock, produitArrayListStock, null, null);
         recyclerViewStock.setAdapter(productAdapter);
         recyclerViewStock.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerViewStock.setItemAnimator(new DefaultItemAnimator());
@@ -165,38 +166,9 @@ public class FragmentStock extends Fragment implements ProductAdapter.ProductAda
         void onFragmentInteraction(Uri uri);
     }
 
-    @Override
-    public void clicOnModifyOrInsertProduit(Produit produit) {
+    public interface FragmentStockCallBack {
+        void clicOnMettreZero();
 
-    }
-
-    @Override
-    public void clicOnProduit(Produit produit) {
-
-    }
-
-    @Override
-    public void clicOnDeleteProduit(Produit produit) {
-
-    }
-
-    @Override
-    public void clicOnMinStock(Produit produit) {
-        Toast.makeText(this.getContext(), "Min", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void clicOnRemoveStock(Produit produit) {
-        Toast.makeText(this.getContext(), "Remove", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void clicOnAddStock(Produit produit) {
-        Toast.makeText(this.getContext(), "Add", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void clicOnMaxStock(Produit produit) {
-        Toast.makeText(this.getContext(), "Max", Toast.LENGTH_SHORT).show();
+        void clicOnMettreMax();
     }
 }

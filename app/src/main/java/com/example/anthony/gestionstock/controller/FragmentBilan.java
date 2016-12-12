@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.anthony.gestionstock.R;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -129,13 +130,13 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
 
         produitArrayListBilan = new ArrayList<>();
         produitArrayListBilan = (ArrayList<Produit>) ProduitBddManager.getProduit();
-        productAdapter = new ProductAdapter(ProductAffichageEnum.Bilan, produitArrayListBilan, null, null);
 
         recyclerViewBilan = (RecyclerView) v.findViewById(R.id.rv_bilan);
-        recyclerViewBilan.setAdapter(productAdapter);
         recyclerViewBilan.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerViewBilan.setItemAnimator(new DefaultItemAnimator());
         datePickerFragmentCallBack = this;
+
+        affichageBilan(Calendar.getInstance().getTime(), Calendar.getInstance().getTime());
 
         //Initalisation des champs à la date du jour.
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -254,86 +255,65 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
         produitArrayListSelected = new ArrayList<>();
         switch (choixDatePicker) {
             case 0:
-                editDateDebut.setText(fDate);
-                quantiteHashMap.clear();
-                commandeArrayListSelected = new ArrayList<>();
-
-                dateDebut = new Date();
-                dateDebut = date;
-                dateFin = new Date();
-                String fDateFin = (String) editDateFin.getText();
-                String decoupeDate[] = fDateFin.split("/");
-                Calendar cFin = Calendar.getInstance();
-                cFin.set(Calendar.DAY_OF_MONTH, Integer.parseInt(decoupeDate[0]));
-                cFin.set(Calendar.MONTH, Integer.parseInt(decoupeDate[1]));
-                cFin.set(Calendar.YEAR, Integer.parseInt(decoupeDate[2]));
-                dateFin = cFin.getTime();
-                produitArrayListSelected = new ArrayList<>();
-
-                commandeArrayListSelected = (ArrayList<Commande>) CommandeBddManager.getCommandeBetweenDate(dateDebut, dateFin);
-                affichageBilan(commandeArrayListSelected);
-                if (dateDebut.after(dateFin)) {
-                    Toast.makeText(getContext(), "La date de début est supérieur à la date de fin.", Toast.LENGTH_SHORT).show();
+                String dateTypageString = (String) editDateFin.getText();
+                //Format de date à choisir
+                SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
+                Date dateFin = null;
+                try {
+                    dateFin = dt.parse(dateTypageString);
+                }
+                catch (ParseException e) {
+                    e.printStackTrace();
                 }
 
+                affichageBilan(date, dateFin);
                 break;
+
             case 1:
-                editDateFin.setText(fDate);
+                String dateTypageString2 = (String) editDateDebut.getText();
+                //Format de date à choisir
+                SimpleDateFormat dtDebut = new SimpleDateFormat("dd/MM/yyyy");
+                Date dateDebut = null;
+                try {
+                    dateDebut = dtDebut.parse(dateTypageString2);
+                }
+                catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                affichageBilan(dateDebut, date);
                 break;
+
             case 2:
-
-                editDateDebut.setText(fDate);
-                editDateFin.setText(fDate);
-
-                produitArrayListSelected = new ArrayList<>();
-                quantiteHashMap.clear();
-                commandeArrayListSelected = (ArrayList<Commande>) CommandeBddManager.getCommandeBetweenDate(date, date);
-
-                affichageBilan(commandeArrayListSelected);
-
+                affichageBilan(date, date);
                 break;
+
             case 3:
-                quantiteHashMap.clear();
-                commandeArrayListSelected = new ArrayList<>();
                 ArrayList<Date> dateArrayListSemaine = getSemaine(date);
                 dateDebutSemaine = new Date();
                 dateDebutSemaine = dateArrayListSemaine.get(0);
                 dateFinSemaine = new Date();
                 dateFinSemaine = dateArrayListSemaine.get(dateArrayListSemaine.size() - 1);
-                produitArrayListSelected = new ArrayList<>();
 
-                commandeArrayListSelected = (ArrayList<Commande>) CommandeBddManager.getCommandeBetweenDate(dateDebutSemaine, dateFinSemaine);
-                affichageBilan(commandeArrayListSelected);
+                affichageBilan(dateDebutSemaine, dateFinSemaine);
 
                 break;
-
             case 4:
-                quantiteHashMap.clear();
-                commandeArrayListSelected = new ArrayList<>();
                 ArrayList<Date> dateArrayListMois = getMois(date);
                 dateDebutMois = new Date();
                 dateDebutMois = dateArrayListMois.get(0);
                 dateFinMois = new Date();
                 dateFinMois = dateArrayListMois.get(dateArrayListMois.size() - 1);
-                produitArrayListSelected = new ArrayList<>();
-
-                commandeArrayListSelected = (ArrayList<Commande>) CommandeBddManager.getCommandeBetweenDate(dateDebutMois, dateFinMois);
-                affichageBilan(commandeArrayListSelected);
+                affichageBilan(dateDebutMois, dateFinMois);
 
                 break;
             case 5:
-                quantiteHashMap.clear();
-                commandeArrayListSelected = new ArrayList<>();
                 ArrayList<Date> dateArrayListAnnee = getAnnee(date);
                 dateDebutAnnee = new Date();
                 dateDebutAnnee = dateArrayListAnnee.get(0);
                 dateFinAnnee = new Date();
                 dateFinAnnee = dateArrayListAnnee.get(dateArrayListAnnee.size() - 1);
-                produitArrayListSelected = new ArrayList<>();
 
-                commandeArrayListSelected = (ArrayList<Commande>) CommandeBddManager.getCommandeBetweenDate(dateDebutAnnee, dateFinAnnee);
-                affichageBilan(commandeArrayListSelected);
-
+                affichageBilan(dateDebutAnnee, dateFinAnnee);
                 break;
         }
     }
@@ -398,7 +378,17 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
         return dateArrayList;
     }
 
-    public void affichageBilan(ArrayList<Commande> commandeArrayListSelected) {
+    public void affichageBilan(Date dateDebut, Date dateFin) {
+
+        commandeArrayListSelected = new ArrayList<>();
+        commandeArrayListSelected = (ArrayList<Commande>) CommandeBddManager.getCommandeBetweenDate(dateDebut, dateFin);
+        String fDateDebut = new SimpleDateFormat("dd/MM/yyyy").format(dateDebut);
+        String fDateFin = new SimpleDateFormat("dd/MM/yyyy").format(dateFin);
+        editDateDebut.setText(fDateDebut);
+        editDateFin.setText(fDateFin);
+        if (dateDebut.after(dateFin)) {
+            Toast.makeText(getContext(), "La date de début est supérieur à la date de fin.", Toast.LENGTH_SHORT).show();
+        }
 
         float montantTotal = 0;
         ArrayList<Produit> produitArrayListSelected = new ArrayList<>();
