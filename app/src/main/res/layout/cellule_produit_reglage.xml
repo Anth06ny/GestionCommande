@@ -36,17 +36,16 @@
                 />
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/textView5"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="Lot : "
-                    android:id="@+id/textView5"
-                    android:layout_weight="0"
                     android:textSize="@dimen/font_12"
                     android:textStyle="bold"/>
 
@@ -54,7 +53,6 @@
                     android:id="@+id/txt_lot"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="0"
                     android:text="Lot"
                     android:textSize="@dimen/font_12"/>
             </LinearLayout>
@@ -70,7 +68,7 @@
             android:text="Tarif"
             android:textSize="@dimen/font_12"/>
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_modifiy_prod"
             style="@style/button_reglage"
             android:layout_width="wrap_content"

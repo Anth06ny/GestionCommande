@@ -4,17 +4,19 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
+
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -23,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Objects;
 
 import greendao.Commande;
 import greendao.Consomme;
@@ -49,11 +50,11 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
     private View v;
     private RecyclerView recyclerViewBilan;
     private ProductAdapter productAdapter;
-    private Button btnJour;
-    private Button btnSemaine;
-    private Button btnMois;
-    private Button btnAnnee;
-    private Button btnImprimer;
+    private AppCompatButton btnJour;
+    private AppCompatButton btnSemaine;
+    private AppCompatButton btnMois;
+    private AppCompatButton btnAnnee;
+    private AppCompatButton btnImprimer;
     private TextView textViewPrixTotal;
     private ArrayList<Produit> produitArrayListBilan;
     private TextView editDateDebut;
@@ -119,11 +120,11 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
     }
 
     private void initUI(View v) {
-        btnJour = (Button) v.findViewById(R.id.btn_jour);
-        btnSemaine = (Button) v.findViewById(R.id.btn_semaine);
-        btnMois = (Button) v.findViewById(R.id.btn_mois);
-        btnAnnee = (Button) v.findViewById(R.id.btn_annee);
-        btnImprimer = (Button) v.findViewById(R.id.btn_imprimer_bilan);
+        btnJour = (AppCompatButton) v.findViewById(R.id.btn_jour);
+        btnSemaine = (AppCompatButton) v.findViewById(R.id.btn_semaine);
+        btnMois = (AppCompatButton) v.findViewById(R.id.btn_mois);
+        btnAnnee = (AppCompatButton) v.findViewById(R.id.btn_annee);
+        btnImprimer = (AppCompatButton) v.findViewById(R.id.btn_imprimer_bilan);
         textViewPrixTotal = (TextView) v.findViewById(R.id.total_valeur);
         editDateDebut = (TextView) v.findViewById(R.id.champ_date_debut);
         editDateFin = (TextView) v.findViewById(R.id.champ_date_fin);
@@ -340,7 +341,7 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
         c.set(Calendar.YEAR, Integer.valueOf(annee));
 
         SimpleDateFormat formatter = new SimpleDateFormat("EEE dd/MM/yyyy");
-        if (Objects.equals(jour, "lun.")) {
+        if ("lun.".equalsIgnoreCase(jour)) {
             c.add(Calendar.DATE, -1);
         }
         else {
@@ -397,10 +398,10 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
         for (int i = 0; i < commandeArrayListSelected.size(); i++) {
             ArrayList<Consomme> consommeArrayList = (ArrayList<Consomme>) ConsommeBddManager.getConsomme();
             for (int j = 0; j < consommeArrayList.size(); j++) {
-                if (Objects.equals(consommeArrayList.get(j).getCommande(), commandeArrayListSelected.get(i).getId())) {
+                if (ObjectUtils.equals(consommeArrayList.get(j).getCommande(), commandeArrayListSelected.get(i).getId())) {
                     Long produitId = consommeArrayList.get(j).getProduit();
                     for (int k = 0; k < produitArrayListBilan.size(); k++) {
-                        if (Objects.equals(produitArrayListBilan.get(k).getId(), produitId)) {
+                        if (ObjectUtils.equals(produitArrayListBilan.get(k).getId(), produitId)) {
                             if (!quantiteHashMap.containsKey(produitArrayListBilan.get(k))) {
                                 quantiteHashMap.put(produitArrayListBilan.get(k), consommeArrayList.get(j).getQuantite());
                                 produitArrayListSelected.add(produitArrayListBilan.get(k));

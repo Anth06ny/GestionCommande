@@ -42,28 +42,28 @@
                 android:layout_weight="1">
             </TextView>
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_jour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Jour"/>
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_semaine"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Semaine"/>
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_mois"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Mois"/>
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_annee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
                 android:text="50.00€"
                 android:textAlignment="textStart"/>
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_imprimer_bilan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

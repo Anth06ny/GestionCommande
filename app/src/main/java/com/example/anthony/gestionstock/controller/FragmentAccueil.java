@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +16,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.example.anthony.gestionstock.R;
 
@@ -53,9 +53,9 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     private final int NB_MAX_CATEGORIES = 6;
     private final int NB_MAX_FAVORIS = 6;
     private View v;
-    private Button btn_cancel;
-    private Button btn_note;
-    private Button btn_off_client;
+    private AppCompatButton btn_cancel;
+    private AppCompatButton btn_note;
+    private AppCompatButton btn_off_client;
     private ProductAdapter productAdapter;
     private ProductAdapter productAdapterNote;
     private ArrayList<Categorie> categorieArrayList;
@@ -126,7 +126,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         recyclerViewNote.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerViewNote.setItemAnimator(new DefaultItemAnimator());
 
-        btn_cancel = (Button) v.findViewById(R.id.btn_deleteNote);
+        btn_cancel = (AppCompatButton) v.findViewById(R.id.btn_deleteNote);
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,13 +165,13 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
                 alertDialog.show();
             }
         });
-        btn_note = (Button) v.findViewById(R.id.btn_printNote);
+        btn_note = (AppCompatButton) v.findViewById(R.id.btn_printNote);
         btn_note.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             }
         });
-        btn_off_client = (Button) v.findViewById(R.id.btn_offClient);
+        btn_off_client = (AppCompatButton) v.findViewById(R.id.btn_offClient);
         btn_off_client.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -227,12 +227,12 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
 
         produitArrayListNote = new ArrayList<>(); // Instanciation de la liste
         // Gestion des Boutons de CATEGORIES
-        Button[] buttons = new Button[NB_MAX_CATEGORIES];
+        AppCompatButton[] buttons = new AppCompatButton[NB_MAX_CATEGORIES];
         for (int j = 0; j < NB_MAX_CATEGORIES; j++) {
             int idBtnCategories = j + 1;
             String buttonId = "btn_cat" + idBtnCategories;
             int resId = getResources().getIdentifier(buttonId, "id", "com.example.anthony.gestionstock");
-            buttons[j] = ((Button) v.findViewById(resId));
+            buttons[j] = ((AppCompatButton) v.findViewById(resId));
             buttons[j].setVisibility(View.INVISIBLE);
             final int finalJ = j;
             buttons[j].setOnClickListener(new View.OnClickListener() {
@@ -250,18 +250,20 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         }
         for (int k = 0; k < categorieArrayList.size(); k++) {
             buttons[k].setText(categorieArrayList.get(k).getNom());
-            buttons[k].setBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(categorieArrayList.get(k).getCouleur())));
+            //TODO modif Anthony à tester
+            buttons[k].setSupportBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(categorieArrayList.get(k).getCouleur())));
+            //TODO fin modif
             buttons[k].setVisibility(View.VISIBLE);
         }
         //TODO conditions ajout produit dans la note
 
         //Gestion des boutons favoris
-        Button[] buttonsFavoris = new Button[NB_MAX_FAVORIS]; // création du tableau de bouton
+        AppCompatButton[] buttonsFavoris = new AppCompatButton[NB_MAX_FAVORIS]; // création du tableau de bouton
         for (int l = 0; l < NB_MAX_FAVORIS; l++) {
             int idBtnFavoris = l + 1;
             String buttonIdFavoris = "btn_prod_favori" + idBtnFavoris; // récupère en String la nomenclature de l'ID
             int resIdFavoris = getResources().getIdentifier(buttonIdFavoris, "id", "com.example.anthony.gestionstock");// Récupère la ressource R.id.btn_prod_favori+idBtnFavoris
-            buttonsFavoris[l] = ((Button) v.findViewById(resIdFavoris)); // récupère le bouton
+            buttonsFavoris[l] = ((AppCompatButton) v.findViewById(resIdFavoris)); // récupère le bouton
             buttonsFavoris[l].setVisibility(View.INVISIBLE);
             final int finalL = l;
             buttonsFavoris[l].setOnClickListener(new View.OnClickListener() {
@@ -313,7 +315,9 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         for (int m = 0; m < produitArrayListFavoris.size(); m++) {
             // Paramerage de l'affichage des boutons des produits favoris
             buttonsFavoris[m].setText(produitArrayListFavoris.get(m).getNom());
-            buttonsFavoris[m].setBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(produitArrayListFavoris.get(m).getCategorie().getCouleur())));
+            //TODO modif Anthony à tester
+            buttonsFavoris[m].setSupportBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(produitArrayListFavoris.get(m).getCategorie().getCouleur())));
+            //TODO fin modif
             buttonsFavoris[m].setVisibility(View.VISIBLE);
         }
     }

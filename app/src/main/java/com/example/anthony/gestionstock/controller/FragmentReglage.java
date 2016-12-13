@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,8 +41,8 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private Button btnAddCategorie;
-    private Button btnAddProduit;
+    private AppCompatButton btnAddCategorie;
+    private AppCompatButton btnAddProduit;
     private static final String tag = "fragment";
     private CategoryAdapter categoryAdapter;
     private ArrayList<Categorie> categorieList;
@@ -122,7 +123,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         recyclerViewProduits.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerViewProduits.setItemAnimator(new DefaultItemAnimator());
 
-        btnAddProduit = (Button) v.findViewById(R.id.btn_addProduit);
+        btnAddProduit = (AppCompatButton) v.findViewById(R.id.btn_addProduit);
         btnAddProduit.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -132,7 +133,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
             }
         });
 
-        btnAddCategorie = (Button) v.findViewById(R.id.btn_addCategorie);
+        btnAddCategorie = (AppCompatButton) v.findViewById(R.id.btn_addCategorie);
 
         btnAddCategorie.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,11 +1,11 @@
 package vue;
 
 import android.content.res.ColorStateList;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -106,7 +106,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 break;
             case Accueil:
                 holder.produitAccueil.setText(produitbean.getNom());
-                holder.produitAccueil.setBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(produitbean.getCategorie().getCouleur())));
+                holder.produitAccueil.setSupportBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(produitbean.getCategorie().getCouleur())));
                 holder.produitAccueil.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -245,11 +245,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         public TextView displayLot;
         public TextView displayTarif;
         public TextView displayMontant;
-        public Button displayModifyProduit;
+        public AppCompatButton displayModifyProduit;
         public TextView displayQuantite;
         public ImageView displayDeleteProduit;
         public View root;
-        public Button produitAccueil;
+        public AppCompatButton produitAccueil;
         public TextView displayMin;
         public TextView displayMax;
         public TextView displayLotRecommande;
@@ -268,14 +268,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     break;
 
                 case Accueil:
-                    produitAccueil = (Button) itemView.findViewById(R.id.root_produit_accueil);
+                    produitAccueil = (AppCompatButton) itemView.findViewById(R.id.root_produit_accueil);
                     break;
 
                 case Reglage:
                     displaylibelle = (TextView) itemView.findViewById(R.id.txt_produit);
                     displayLot = (TextView) itemView.findViewById(R.id.txt_lot);
                     displayTarif = (TextView) itemView.findViewById(R.id.txt_tarif);
-                    displayModifyProduit = (Button) itemView.findViewById(R.id.btn_modifiy_prod);
+                    displayModifyProduit = (AppCompatButton) itemView.findViewById(R.id.btn_modifiy_prod);
                     displayDeleteProduit = (ImageView) itemView.findViewById(R.id.img_prod);
                     root = itemView.findViewById(R.id.root_produit); // permet de recupèrer le clic sur le cardview
                     break;

@@ -1,10 +1,10 @@
 package vue;
 
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -81,7 +81,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView displayCategory;
         public ImageView displayColor;
-        public Button displayModifyCategory;
+        public AppCompatButton displayModifyCategory;
         public ImageView displayDelete;
         public View root;
 
@@ -89,7 +89,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             super(itemView);
             displayCategory = (TextView) itemView.findViewById(R.id.txt_category);
             displayColor = (ImageView) itemView.findViewById(R.id.txt_color);
-            displayModifyCategory = (Button) itemView.findViewById(R.id.btn_modifiy_cat);
+            displayModifyCategory = (AppCompatButton) itemView.findViewById(R.id.btn_modifiy_cat);
             displayDelete = (ImageView) itemView.findViewById(R.id.img_cat);
             root = itemView.findViewById(R.id.root);
         }

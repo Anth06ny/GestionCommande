@@ -6,9 +6,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -16,8 +16,9 @@ import com.example.anthony.gestionstock.R;
 import com.turkialkhateeb.materialcolorpicker.ColorChooserDialog;
 import com.turkialkhateeb.materialcolorpicker.ColorListener;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
-import java.util.Objects;
 
 import greendao.Categorie;
 import model.CategorieBddManager;
@@ -28,7 +29,7 @@ import model.CategorieBddManager;
 
 public class DialogCategorie extends DialogFragment {
 
-    private Button btnChoisirCouleur;
+    private AppCompatButton btnChoisirCouleur;
     private int couleurChoisi;
     private TextView box;
     private Categorie categorie;
@@ -46,7 +47,7 @@ public class DialogCategorie extends DialogFragment {
 
         //Recuperation des elements graphique de la dialog box
         box = (TextView) alertDialogView.findViewById(R.id.boxCouleur);
-        btnChoisirCouleur = (Button) alertDialogView.findViewById(R.id.btnChoisirCouleur);
+        btnChoisirCouleur = (android.support.v7.widget.AppCompatButton) alertDialogView.findViewById(R.id.btnChoisirCouleur);
         edit_nomCategorie = (EditText) alertDialogView.findViewById(R.id.nomCategorie);
 
         //Si on est en modification on va rentrer par defaut les valeurs de la categorie selectionner
@@ -79,9 +80,8 @@ public class DialogCategorie extends DialogFragment {
                                         //Si les id correpondent alors il n'y a pas d'erreur puisqu'on est en train de modifier une categorie
                                         //Si les id ne correspondent pas alors on informe l'utilisateur que la categorie qu'il a saisie existe deja dans la bdd
                                         for (int i = 0; i < categorieArrayList.size(); i++) {
-                                            if (Objects.equals(categorie.getNom().toLowerCase(), categorieArrayList.get(i).getNom().toLowerCase()) && !Objects.equals(categorie
-                                                            .getId(),
-                                                    categorieArrayList.get(i).getId())) {
+
+                                            if (StringUtils.equalsIgnoreCase(categorie.getNom(), categorieArrayList.get(i).getNom()) && categorie.getId() != categorieArrayList.get(i).getId()) {
                                                 //Si le nom existe deja et que les id sont different alors on passe un boolean erreur a true
                                                 erreur = true;
                                                 tag = 1;
@@ -96,8 +96,8 @@ public class DialogCategorie extends DialogFragment {
                                             //Si les id ne correspondent pas alors on informe l'utilisateur que la couleur qu'il a choisie est deja utiliser pour une
                                             // autre categorie dans la bdd
                                             for (int i = 0; i < categorieArrayList.size(); i++) {
-                                                if (Objects.equals(categorie.getCouleur(), categorieArrayList.get(i).getCouleur()) && !Objects.equals(categorie.getId(),
-                                                        categorieArrayList.get(i).getId())) {
+                                                if (StringUtils.equalsIgnoreCase(categorie.getCouleur(), categorieArrayList.get(i).getCouleur()) && categorie.getId() !=
+                                                        categorieArrayList.get(i).getId()) {
                                                     //Si la couleur est deja utiliser et que les id sont different alors on passe un boolean erreur a true
                                                     erreur = true;
                                                     tag = 2;

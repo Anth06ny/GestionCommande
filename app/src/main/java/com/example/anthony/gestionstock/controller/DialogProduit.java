@@ -16,9 +16,10 @@ import android.widget.SpinnerAdapter;
 
 import com.example.anthony.gestionstock.R;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import greendao.Categorie;
 import greendao.Produit;
@@ -99,9 +100,9 @@ public class DialogProduit extends DialogFragment {
                             //Si les id correpondent alors il n'y a pas d'erreur puisqu'on est en train de modifier un produit
                             //Si les id ne correspondent pas alors on informe l'utilisateur que le produit qu'il a saisie existe deja dans la bdd
                             for (int i = 0; i < produitArrayList.size(); i++) {
-                                if (Objects.equals(produit.getNom().toLowerCase(), produitArrayList.get(i).getNom().toLowerCase()) && !Objects.equals(produit.getId(),
+                                if (StringUtils.equalsIgnoreCase(produit.getNom().toLowerCase(), produitArrayList.get(i).getNom().toLowerCase()) && produit.getId() !=
                                         produitArrayList.get
-                                                (i).getId())) {
+                                                (i).getId()) {
                                     //Si le nom existe deja et que les id sont different alors on passe un boolean erreur a true
                                     erreur = true;
                                     tag = 1;

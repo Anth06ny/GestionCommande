@@ -68,19 +68,19 @@
             android:layout_gravity="right"
             android:orientation="horizontal">
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_mettre_zero"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mettre à zéro"/>
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_mettre_max"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mettre à Max"/>
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_valider_stock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -37,7 +37,7 @@
             android:textStyle="bold"
             android:layout_marginLeft="@dimen/margin_5"/>
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_modifiy_cat"
             style="@style/button_reglage"
             android:layout_width="wrap_content"

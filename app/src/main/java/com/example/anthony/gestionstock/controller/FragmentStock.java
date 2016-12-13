@@ -4,13 +4,13 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.example.anthony.gestionstock.R;
 
@@ -41,9 +41,9 @@ public class FragmentStock extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private View v;
-    private Button btnMettreZero;
-    private Button btnMettreMax;
-    private Button btnValiderStock;
+    private AppCompatButton btnMettreZero;
+    private AppCompatButton btnMettreMax;
+    private AppCompatButton btnValiderStock;
     private RecyclerView recyclerViewStock;
     private ProductAdapter productAdapter;
     private ArrayList<Produit> produitArrayListStock;
@@ -90,9 +90,9 @@ public class FragmentStock extends Fragment {
     }
 
     private void initUI(View v) {
-        btnMettreZero = (Button) v.findViewById(R.id.btn_mettre_zero);
-        btnMettreMax = (Button) v.findViewById(R.id.btn_mettre_max);
-        btnValiderStock = (Button) v.findViewById(R.id.btn_valider_stock);
+        btnMettreZero = (AppCompatButton) v.findViewById(R.id.btn_mettre_zero);
+        btnMettreMax = (AppCompatButton) v.findViewById(R.id.btn_mettre_max);
+        btnValiderStock = (AppCompatButton) v.findViewById(R.id.btn_valider_stock);
         recyclerViewStock = (RecyclerView) v.findViewById(R.id.rv_stock);
         btnMettreZero.setOnClickListener(new View.OnClickListener() {
             @Override

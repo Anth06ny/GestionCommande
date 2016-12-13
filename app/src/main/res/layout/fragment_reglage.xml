@@ -35,7 +35,7 @@
                     android:textSize="@dimen/font_16"
                     android:textStyle="bold"/>
 
-                <Button
+                <android.support.v7.widget.AppCompatButton
                     android:id="@+id/btn_addCategorie"
                     style="@style/button_reglage"
                     android:layout_width="wrap_content"
@@ -92,7 +92,7 @@
                         android:textSize="@dimen/font_16"
                         android:textStyle="bold"/>
 
-                    <Button
+                    <android.support.v7.widget.AppCompatButton
                         android:id="@+id/btn_addProduit"
                         style="@style/button_reglage"
                         android:layout_width="wrap_content"
