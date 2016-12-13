@@ -8,12 +8,12 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
@@ -116,11 +116,11 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
 
         produitList = new ArrayList<>();
         //On creer l'adapteur et on set le recycler view des produits avec la liste de produits qui correpondent a la categorie choisie
-        productAdapter = new ProductAdapter(ProductAffichageEnum.Reglage, produitList,null, this, false, false);
+        productAdapter = new ProductAdapter(ProductAffichageEnum.Reglage, produitList, null, this, false, false);
 
         recyclerViewProduits = (RecyclerView) v.findViewById(R.id.rv_produit);
         recyclerViewProduits.setAdapter(productAdapter);
-        recyclerViewProduits.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recyclerViewProduits.setLayoutManager(new GridLayoutManager(this.getContext(), 2));
         recyclerViewProduits.setItemAnimator(new DefaultItemAnimator());
 
         btnAddProduit = (AppCompatButton) v.findViewById(R.id.btn_addProduit);
@@ -463,7 +463,6 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
-
 
     @Override
     public void clicOnMinStock(Produit produit) {

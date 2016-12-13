@@ -16,7 +16,7 @@
             android:id="@+id/layoutCategorie"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:orientation="vertical">
 
             <LinearLayout
@@ -32,7 +32,7 @@
                     android:gravity="center"
                     android:text="Catégories"
                     android:textIsSelectable="false"
-                    android:textSize="@dimen/font_16"
+                    android:textSize="@dimen/font_18"
                     android:textStyle="bold"/>
 
                 <android.support.v7.widget.AppCompatButton
@@ -89,7 +89,7 @@
                         android:gravity="center"
                         android:paddingLeft="10dp"
                         android:text="Produits"
-                        android:textSize="@dimen/font_16"
+                        android:textSize="@dimen/font_18"
                         android:textStyle="bold"/>
 
                     <android.support.v7.widget.AppCompatButton

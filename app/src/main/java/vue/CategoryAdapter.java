@@ -92,6 +92,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             displayModifyCategory = (AppCompatButton) itemView.findViewById(R.id.btn_modifiy_cat);
             displayDelete = (ImageView) itemView.findViewById(R.id.img_cat);
             root = itemView.findViewById(R.id.root);
+
+            displayDelete.setColorFilter(displayDelete.getResources().getColor(R.color.red));
         }
     }
 

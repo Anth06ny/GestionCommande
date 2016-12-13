@@ -42,6 +42,7 @@
         android:textAlignment="center"/>
 
     <ImageView
+        android:background="?android:selectableItemBackground"
         android:id="@+id/delete_produit_note"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

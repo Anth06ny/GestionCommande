@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="7dp">
+    android:layout_margin="@dimen/margin_5">
 
     <LinearLayout
         android:id="@+id/root_produit"
@@ -12,8 +12,7 @@
         android:background="?android:selectableItemBackground"
         android:orientation="horizontal"
         android:paddingBottom="@dimen/margin_5"
-        android:paddingLeft="@dimen/margin_10"
-        android:paddingRight="@dimen/margin_10"
+        android:paddingLeft="@dimen/margin_5"
         android:paddingTop="@dimen/margin_5">
 
         <LinearLayout
@@ -80,8 +79,8 @@
             android:id="@+id/img_prod"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/margin_5"
-            android:layout_marginRight="@dimen/margin_5"
+            android:adjustViewBounds="true"
+            android:background="?android:selectableItemBackground"
             android:padding="@dimen/margin_5"
             android:src="@drawable/ic_delete_forever_black_48dp"/>
     </LinearLayout>

@@ -265,6 +265,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     displayTarif = (TextView) itemView.findViewById(R.id.prix_u_note);
                     displayMontant = (TextView) itemView.findViewById(R.id.montant_note);
                     displayDeleteProduit = (ImageView) itemView.findViewById(R.id.delete_produit_note);
+                    displayDeleteProduit.setColorFilter(displayDeleteProduit.getResources().getColor(R.color.red));
                     break;
 
                 case Accueil:
@@ -277,6 +278,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     displayTarif = (TextView) itemView.findViewById(R.id.txt_tarif);
                     displayModifyProduit = (AppCompatButton) itemView.findViewById(R.id.btn_modifiy_prod);
                     displayDeleteProduit = (ImageView) itemView.findViewById(R.id.img_prod);
+                    displayDeleteProduit.setColorFilter(displayDeleteProduit.getResources().getColor(R.color.red));
                     root = itemView.findViewById(R.id.root_produit); // permet de recupèrer le clic sur le cardview
                     break;
 
