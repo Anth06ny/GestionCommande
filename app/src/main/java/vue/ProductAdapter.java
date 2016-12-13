@@ -10,10 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.anthony.gestionstock.R;
-import com.example.anthony.gestionstock.controller.FragmentStock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import greendao.Consomme;
 import greendao.Produit;
@@ -22,7 +22,7 @@ import model.ProduitBddManager;
 /**
  * Created by Axel legué on 23/11/2016.
  */
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> implements FragmentStock.FragmentStockCallBack {
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
     private ProductAffichageEnum choixAffichage;
     private ArrayList<Produit> getProduitArrayList;
@@ -34,15 +34,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     private ArrayList<Produit> produitArrayListAll;
     private Boolean mettreZero = false;
     private Boolean mettreMax = false;
+    private HashMap<Produit, Integer> lotRecommandeHashMap = new HashMap<>();
 
     // -------------------------------- CONSTRUCTOR -------------------------------------------------- //
     public ProductAdapter(ProductAffichageEnum choixAffichage, ArrayList<Produit> getProduitArrayList, HashMap<Produit, Long> quantiteHashMap,
                           ProductAdapterCallBack
-                                  productAdapterCallBack) {
+                                  productAdapterCallBack, Boolean mettreZero, Boolean mettreMax) {
         this.choixAffichage = choixAffichage;
         this.getProduitArrayList = getProduitArrayList;
         this.productAdapterCallBack = productAdapterCallBack;
         this.quantiteHashMap = quantiteHashMap;
+        this.mettreZero = mettreZero;
+        this.mettreMax = mettreMax;
     }
 
     // --------------------------------  END CONSTRUCTOR -------------------------------------------------- //
@@ -76,6 +79,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         final Produit produitbean = getProduitArrayList.get(position);
         produitArrayListAll = (ArrayList<Produit>) ProduitBddManager.getProduit();
+
         switch (choixAffichage) {
 
             case Note:
@@ -157,6 +161,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 break;
 
             case Stock:
+
+                if (!lotRecommandeHashMap.containsKey(produitbean)) {
+                    int lotRecommande = 0;
+                    lotRecommandeHashMap.put(produitbean, lotRecommande);
+                }
+
                 holder.displaylibelle.setText(produitbean.getNom());
                 if (produitbean.getConsommation() != null) {
                     holder.displayQuantite.setText(String.valueOf(produitbean.getConsommation()));
@@ -166,45 +176,59 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     holder.displayQuantite.setText("0");
                     holder.displayLot.setText("0");
                 }
-                holder.displayLotRecommande.setText("0");
+                holder.displayLotRecommande.setText(String.valueOf(lotRecommandeHashMap.get(produitbean)));
                 if (mettreZero) {
-                    holder.displayLotRecommande.setText("0");
+                    for (Map.Entry entry : lotRecommandeHashMap.entrySet()) {
+                        int lotRecommande = 0;
+                        lotRecommandeHashMap.put((Produit) entry.getKey(), lotRecommande);
+                    }
+                    holder.displayLotRecommande.setText(String.valueOf(lotRecommandeHashMap.get(produitbean)));
                 }
                 if (mettreMax) {
+                    for (Map.Entry entry : lotRecommandeHashMap.entrySet()) {
+                        int positionProduitHash = getProduitArrayList.indexOf(entry.getKey());
+                        int lotRecommande = getProduitArrayList.get(positionProduitHash).getConsommation() / getProduitArrayList.get(positionProduitHash).getLot();
+                        lotRecommandeHashMap.put((Produit) entry.getKey(), lotRecommande);
+                    }
                     holder.displayLotRecommande.setText(holder.displayLot.getText());
                 }
                 holder.displayMin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        holder.displayLotRecommande.setText("0");
-                        productAdapterCallBack.clicOnMinStock(produitbean);
+                        int lotRecommande = 0;
+                        lotRecommandeHashMap.put(produitbean, lotRecommande);
+                        holder.displayLotRecommande.setText(String.valueOf(lotRecommandeHashMap.get(produitbean)));
                     }
                 });
                 holder.displayRemove.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (Integer.valueOf(String.valueOf(holder.displayLotRecommande.getText())) > 0) {
-                            holder.displayLotRecommande.setText(String.valueOf(Integer.valueOf((String) holder.displayLotRecommande.getText()) - 1));
+                            int lotRecommande = 0;
+                            lotRecommande = lotRecommandeHashMap.get(produitbean) - 1;
+                            lotRecommandeHashMap.put(produitbean, lotRecommande);
+                            holder.displayLotRecommande.setText(String.valueOf(lotRecommandeHashMap.get(produitbean)));
                         }
-
-                        productAdapterCallBack.clicOnRemoveStock(produitbean);
                     }
                 });
                 holder.displayAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (Integer.valueOf(String.valueOf(holder.displayLotRecommande.getText())) < Integer.valueOf(String.valueOf(holder.displayLot.getText()))) {
-                            holder.displayLotRecommande.setText(String.valueOf(Integer.valueOf((String) holder.displayLotRecommande.getText()) + 1));
+                            int lotRecommande;
+                            lotRecommande = lotRecommandeHashMap.get(produitbean) + 1;
+                            lotRecommandeHashMap.put(produitbean, lotRecommande);
+                            holder.displayLotRecommande.setText(String.valueOf(lotRecommandeHashMap.get(produitbean)));
                         }
-                        productAdapterCallBack.clicOnAddStock(produitbean);
                     }
                 });
                 holder.displayMax.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        holder.displayLotRecommande.setText(holder.displayLot.getText());
-                        productAdapterCallBack.clicOnMaxStock(produitbean);
+                        int lotRecommande = 0;
+                        lotRecommande = Integer.valueOf((String) holder.displayLot.getText());
+                        lotRecommandeHashMap.put(produitbean, lotRecommande);
+                        holder.displayLotRecommande.setText(String.valueOf(lotRecommandeHashMap.get(produitbean)));
                     }
                 });
                 break;
@@ -292,31 +316,5 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         void clicOnMaxStock(Produit produit);
     }
-
-    @Override
-    public void clicOnMettreZero() {
-        mettreZero = true;
-        mettreMax = false;
-    }
-
-    @Override
-    public void clicOnMettreMax() {
-        mettreZero = false;
-        mettreMax = true;
-    }
-
-    /*@Override
-    public void onSelectCommande(ArrayList<Long> idCommandes) {
-        ArrayList<Consomme> consommeArrayListBilan = (ArrayList<Consomme>) produitbean.getProduitRef();
-
-        for (int i = 0; i < consommeArrayListBilan.size(); i++) {
-            for (int j = 0; j < idCommandes.size(); j++) {
-                if (Objects.equals(consommeArrayListBilan.get(i).getCommande(), idCommandes.get(j))) {
-                    quantiteTest = String.valueOf(consommeArrayListBilan.get(i).getQuantite());
-                    // holder.displayQuantite.setText(String.valueOf(consommeArrayListBilan.get(i).getQuantite()));
-                }
-            }
-        }
-    }*/
 }
 

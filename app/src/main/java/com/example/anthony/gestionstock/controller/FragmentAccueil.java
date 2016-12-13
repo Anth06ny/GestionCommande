@@ -242,7 +242,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
                     // rempli l'arrayListe avec les produits de la catégorie
                     arraylistProduits = (ArrayList<Produit>) categorieArrayList.get(finalJ).getProduitList();
                     // instancie l'adpateur.
-                    productAdapter = new ProductAdapter(ProductAffichageEnum.Accueil, arraylistProduits, null, FragmentAccueil.this);
+                    productAdapter = new ProductAdapter(ProductAffichageEnum.Accueil, arraylistProduits, null, FragmentAccueil.this, false, false);
                     // on passe l'adapter au recycler view
                     recyclerViewProduits.setAdapter(productAdapter);
                 }
@@ -304,7 +304,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
                     else {
                         // On affiche la note dans le recycler
                         produitArrayListNote.add(produitArrayListFavoris.get(finalL));
-                        productAdapterNote = new ProductAdapter(ProductAffichageEnum.Note, produitArrayListNote, null, FragmentAccueil.this);
+                        productAdapterNote = new ProductAdapter(ProductAffichageEnum.Note, produitArrayListNote, null, FragmentAccueil.this, false, false);
                         recyclerViewNote.setAdapter(productAdapterNote);
                     }
                 }
@@ -404,7 +404,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         }
         else {
             produitArrayListNote.add(produit);
-            productAdapterNote = new ProductAdapter(ProductAffichageEnum.Note, produitArrayListNote, null, this);
+            productAdapterNote = new ProductAdapter(ProductAffichageEnum.Note, produitArrayListNote, null, this, false, false);
             recyclerViewNote.setAdapter(productAdapterNote);
         }
     }

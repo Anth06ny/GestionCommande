@@ -23,6 +23,11 @@ public class ProduitBddManager {
         return MyApplication.getDaoSession().getProduitDao().queryBuilder().where(ProduitDao.Properties.Favori.eq(true)).list();
     }
 
+    public static List<Produit> getProduitConsommation() {
+        return MyApplication.getDaoSession().getProduitDao().queryBuilder().where(ProduitDao.Properties.Consommation.notEq(0), ProduitDao.Properties.Consommation
+                .isNotNull()).list();
+    }
+
     public static Produit getProduitFromName(String name) {
         return MyApplication.getDaoSession().getProduitDao().queryBuilder().where(ProduitDao.Properties.Nom.eq(name)).unique();
     }
