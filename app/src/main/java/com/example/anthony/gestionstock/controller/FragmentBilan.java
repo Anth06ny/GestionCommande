@@ -325,6 +325,7 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
         datePickerFragment.show(getFragmentManager(), "Date fin");
     }
 
+    //TODO faire ne sorte que la semaine commence tout le temps le LUNDI
     public static ArrayList<Date> getSemaine(Date date) {
         ArrayList<Date> dateArrayList = new ArrayList<>();
         String annee = new SimpleDateFormat("yyyy").format(date);

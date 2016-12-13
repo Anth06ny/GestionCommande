@@ -109,13 +109,15 @@ public class DialogProduit extends DialogFragment {
                                 }
                             }
                             int countFavori = 0;
-                            for (int j = 0; j < produitArrayList.size(); j++) {
-                                if (produitArrayList.get(j).getFavori()) {
-                                    countFavori++;
-                                }
-                                if (countFavori == 6) {
-                                    erreur = true;
-                                    tag = 2;
+                            if (checkBoxFavori.isChecked()) {
+                                for (int j = 0; j < produitArrayList.size(); j++) {
+                                    if (produitArrayList.get(j).getFavori()) {
+                                        countFavori++;
+                                    }
+                                    if (countFavori == 6) {
+                                        erreur = true;
+                                        tag = 2;
+                                    }
                                 }
                             }
                             //Si le boolean erreur est a false alors on peut recupere les donnees saisie par l'utilisateur et les envoyer grace au callback a la

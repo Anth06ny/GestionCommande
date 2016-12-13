@@ -143,17 +143,20 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
                 alertDialogBuilder.setCancelable(false)
                         .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                for (int i = 0; i < produitArrayListNote.size(); i++) {
-                                    for (int j = 0; j < produitArrayListNote.get(i).getProduitRef().size(); j++) {
-                                        //Si Id commande est null, alors on se situe sur la commande en cours
-                                        if (produitArrayListNote.get(i).getProduitRef().get(j).getCommande() == null) {
-                                            produitArrayListNote.get(i).getProduitRef().get(j).setQuantite((long) 0);
+                                if (produitArrayListNote.size() > 0) {
+                                    for (int i = 0; i < produitArrayListNote.size(); i++) {
+                                        for (int j = 0; j < produitArrayListNote.get(i).getProduitRef().size(); j++) {
+                                            //Si Id commande est null, alors on se situe sur la commande en cours
+                                            if (produitArrayListNote.get(i).getProduitRef().get(j).getCommande() == null) {
+                                                produitArrayListNote.get(i).getProduitRef().get(j).setQuantite((long) 0);
+                                            }
                                         }
                                     }
+                                    produitArrayListNote.clear();
+                                    productAdapterNote.notifyDataSetChanged();
                                 }
-
-                                produitArrayListNote.clear();
-                                productAdapterNote.notifyDataSetChanged();
+                                else {
+                                }
                                 dialog.cancel();
                             }
                         }).setNegativeButton("Non", new DialogInterface.OnClickListener() {
@@ -423,25 +426,5 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         int positionProduitNote = produitArrayListNote.indexOf(produit);
         produitArrayListNote.remove(positionProduitNote);
         productAdapterNote.notifyItemRemoved(positionProduitNote);
-    }
-
-    @Override
-    public void clicOnMinStock(Produit produit) {
-
-    }
-
-    @Override
-    public void clicOnRemoveStock(Produit produit) {
-
-    }
-
-    @Override
-    public void clicOnAddStock(Produit produit) {
-
-    }
-
-    @Override
-    public void clicOnMaxStock(Produit produit) {
-
     }
 }

@@ -3,20 +3,20 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/Accueil"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Réglage"/>
+            android:title="Accueil"/>
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/Stock"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Stock"/>
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/Bilan"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Accueil"/>
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
             android:title="Bilan"/>
+        <item
+            android:id="@+id/Reglage"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Réglages"/>
     </group>
 </menu>

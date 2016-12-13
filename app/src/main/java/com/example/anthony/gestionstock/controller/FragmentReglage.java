@@ -463,24 +463,4 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
-
-    @Override
-    public void clicOnMinStock(Produit produit) {
-
-    }
-
-    @Override
-    public void clicOnRemoveStock(Produit produit) {
-
-    }
-
-    @Override
-    public void clicOnAddStock(Produit produit) {
-
-    }
-
-    @Override
-    public void clicOnMaxStock(Produit produit) {
-
-    }
 }
