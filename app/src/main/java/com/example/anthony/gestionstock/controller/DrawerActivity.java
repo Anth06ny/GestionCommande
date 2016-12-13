@@ -26,11 +26,11 @@ public class DrawerActivity extends AppCompatActivity
         setContentView(R.layout.activity_reglage);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        //TODO voir pour premiere execution de l'application
         // A modifier ///////////////////////////////////////////////////////////////////////////////
         Fragment fragment = null;
         Class fragmentClass;
-        fragmentClass = FragmentReglage.class;
+        fragmentClass = FragmentAccueil.class;
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         }
@@ -98,17 +98,17 @@ public class DrawerActivity extends AppCompatActivity
         Fragment fragment = null;
         Class fragmentClass = null;
 
-        if (id == R.id.nav_camera) {
-            fragmentClass = FragmentReglage.class;
-        }
-        else if (id == R.id.nav_gallery) {
-            fragmentClass = FragmentStock.class;
-        }
-        else if (id == R.id.nav_slideshow) {
+        if (id == R.id.Accueil) {
             fragmentClass = FragmentAccueil.class;
         }
-        else if (id == R.id.nav_manage) {
+        else if (id == R.id.Stock) {
+            fragmentClass = FragmentStock.class;
+        }
+        else if (id == R.id.Bilan) {
             fragmentClass = FragmentBilan.class;
+        }
+        else if (id == R.id.Reglage) {
+            fragmentClass = FragmentReglage.class;
         }
         try {
             fragment = (Fragment) fragmentClass.newInstance();

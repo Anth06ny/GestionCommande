@@ -117,8 +117,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
             case Reglage:
                 holder.displaylibelle.setText(produitbean.getNom());
-                holder.displayTarif.setText(String.valueOf(produitbean.getPrix() + " €")); // A voir par Allan
-                holder.displayLot.setText(String.valueOf(produitbean.getLot())); // A voir par Allan
+                holder.displayTarif.setText(String.valueOf(produitbean.getPrix() + " €"));
+                holder.displayLot.setText(String.valueOf(produitbean.getLot()));
 
                 if (produitbean.isSelected()) {
                     holder.displayModifyProduit.setVisibility(View.VISIBLE);
@@ -309,14 +309,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         void clicOnProduit(Produit produit);
 
         void clicOnDeleteProduit(Produit produit);
-
-        void clicOnMinStock(Produit produit);
-
-        void clicOnRemoveStock(Produit produit);
-
-        void clicOnAddStock(Produit produit);
-
-        void clicOnMaxStock(Produit produit);
     }
 }
 
