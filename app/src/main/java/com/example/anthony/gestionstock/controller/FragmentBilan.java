@@ -423,7 +423,7 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
         }
         textViewPrixTotal.setText(String.valueOf(montantTotal));
 
-        productAdapter = new ProductAdapter(ProductAffichageEnum.Bilan, produitArrayListSelected, quantiteHashMap, null);
+        productAdapter = new ProductAdapter(ProductAffichageEnum.Bilan, produitArrayListSelected, quantiteHashMap, null, false, false);
         recyclerViewBilan.setAdapter(productAdapter);
         productAdapter.notifyDataSetChanged();
     }

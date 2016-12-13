@@ -47,7 +47,6 @@ public class FragmentStock extends Fragment {
     private RecyclerView recyclerViewStock;
     private ProductAdapter productAdapter;
     private ArrayList<Produit> produitArrayListStock;
-    FragmentStockCallBack fragmentStockCallBack;
 
     /**
      * Use this factory method to create a new instance of
@@ -98,7 +97,8 @@ public class FragmentStock extends Fragment {
         btnMettreZero.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentStockCallBack.clicOnMettreZero();
+                productAdapter = new ProductAdapter(ProductAffichageEnum.Stock, produitArrayListStock, null, null, true, false);
+                recyclerViewStock.setAdapter(productAdapter);
                 productAdapter.notifyDataSetChanged();
             }
         });
@@ -106,7 +106,8 @@ public class FragmentStock extends Fragment {
         btnMettreMax.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentStockCallBack.clicOnMettreMax();
+                productAdapter = new ProductAdapter(ProductAffichageEnum.Stock, produitArrayListStock, null, null, false, true);
+                recyclerViewStock.setAdapter(productAdapter);
                 productAdapter.notifyDataSetChanged();
             }
         });
@@ -118,9 +119,9 @@ public class FragmentStock extends Fragment {
             }
         });
         produitArrayListStock = new ArrayList<>();
-        produitArrayListStock = (ArrayList<Produit>) ProduitBddManager.getProduit();
+        produitArrayListStock = (ArrayList<Produit>) ProduitBddManager.getProduitConsommation();
 
-        productAdapter = new ProductAdapter(ProductAffichageEnum.Stock, produitArrayListStock, null, null);
+        productAdapter = new ProductAdapter(ProductAffichageEnum.Stock, produitArrayListStock, null, null, false, false);
         recyclerViewStock.setAdapter(productAdapter);
         recyclerViewStock.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerViewStock.setItemAnimator(new DefaultItemAnimator());
@@ -164,11 +165,5 @@ public class FragmentStock extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    public interface FragmentStockCallBack {
-        void clicOnMettreZero();
-
-        void clicOnMettreMax();
     }
 }
