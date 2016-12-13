@@ -3,7 +3,12 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#ff4081</color>
-    <color name="red">#F6402C</color>
+    <color name="red">#b71c1c</color>
+
+    <color name="selected_cellule_bg">#eceff1</color>
+    <color name="unselected_cellule_bg">#ffffff</color>
+
+
     <color name="pink">#EB1460</color>
     <color name="purple">#9C1AB1</color>
     <color name="deep_purple">#6633B9</color>
