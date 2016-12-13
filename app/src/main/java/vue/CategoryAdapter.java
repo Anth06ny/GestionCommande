@@ -37,7 +37,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         final Categorie categoriebean = category_bean.get(position);
 
         holder.displayCategory.setText(categoriebean.getNom());
-        holder.displayColor.setBackgroundColor(Integer.parseInt(categoriebean.getCouleur()));
+        holder.displayColor.setColorFilter(Integer.parseInt(categoriebean.getCouleur()));
         holder.displayModifyCategory.setVisibility(View.INVISIBLE);
         holder.displayDelete.setVisibility(View.INVISIBLE);
 
@@ -80,7 +80,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView displayCategory;
-        public TextView displayColor;
+        public ImageView displayColor;
         public Button displayModifyCategory;
         public ImageView displayDelete;
         public View root;
@@ -88,7 +88,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         public ViewHolder(View itemView) {
             super(itemView);
             displayCategory = (TextView) itemView.findViewById(R.id.txt_category);
-            displayColor = (TextView) itemView.findViewById(R.id.txt_color);
+            displayColor = (ImageView) itemView.findViewById(R.id.txt_color);
             displayModifyCategory = (Button) itemView.findViewById(R.id.btn_modifiy_cat);
             displayDelete = (ImageView) itemView.findViewById(R.id.img_cat);
             root = itemView.findViewById(R.id.root);

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="7dp"
+    android:layout_margin="@dimen/margin_5"
     >
 
     <LinearLayout
@@ -12,33 +12,36 @@
         android:layout_height="wrap_content"
         android:background="?android:selectableItemBackground"
         android:orientation="horizontal"
-        android:textAlignment="center">
+        android:paddingBottom="@dimen/margin_5"
+        android:paddingRight="@dimen/margin_10"
+        android:textAlignment="center"
+        android:paddingTop="@dimen/margin_5"
+        android:paddingLeft="@dimen/margin_10">
 
-        <TextView
-            android:id="@+id/txt_category"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Bar"
-            android:textAllCaps="false"
-            android:layout_marginLeft="@dimen/margin_10"
-            android:textSize="@dimen/font_12"/>
-
-        <TextView
+        <ImageView
             android:id="@+id/txt_color"
             android:layout_width="@dimen/standard_height"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/margin_5"
-            android:layout_marginTop="@dimen/margin_5"
-            android:background="#c72727"/>
+            android:src="@drawable/circle_bg"
+            android:padding="@dimen/margin_5"/>
+
+        <TextView
+            android:id="@+id/txt_category"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Bar"
+            android:textAllCaps="false"
+            android:textSize="@dimen/font_12"
+            android:textStyle="bold"
+            android:layout_marginLeft="@dimen/margin_5"/>
 
         <Button
             android:id="@+id/btn_modifiy_cat"
             style="@style/button_reglage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_10"
             android:text="Modifier"
             android:visibility="visible"/>
 
@@ -46,12 +49,10 @@
             android:id="@+id/img_cat"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/margin_10"
-            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:padding="@dimen/margin_5"
             android:src="@drawable/ic_delete_forever_black_48dp"
-            android:visibility="visible"
-            android:padding="@dimen/margin_2"/>
+            />
 
 
     </LinearLayout>

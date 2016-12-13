@@ -26,15 +26,13 @@
 
                 <TextView
                     android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="@dimen/margin_15"
-                    android:layout_marginTop="@dimen/margin_5"
                     android:layout_weight="1"
-                    android:gravity="fill_vertical"
+                    android:gravity="center"
                     android:text="Catégories"
-                    android:textSize="@dimen/font_10"
+                    android:textIsSelectable="false"
+                    android:textSize="@dimen/font_16"
                     android:textStyle="bold"/>
 
                 <Button
@@ -42,7 +40,6 @@
                     style="@style/button_reglage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|right"
                     android:layout_marginRight="@dimen/margin_15"
                     android:text="Ajouter "/>
             </LinearLayout>
@@ -78,44 +75,33 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="10"
-                    android:paddingLeft="10dp"
-                    android:text="Produits"
-                    android:textSize="@dimen/font_10"
-                    android:textStyle="bold"/>
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="10"
-                    android:paddingLeft="27dp"
-                    android:text="Tarif"
-                    android:textSize="@dimen/font_10"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:paddingLeft="10dp"
+                        android:text="Produits"
+                        android:textSize="@dimen/font_16"
+                        android:textStyle="bold"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="10"
-                    android:paddingLeft="30dp"
-                    android:text="Lot"
-                    android:textSize="@dimen/font_10"/>
+                    <Button
+                        android:id="@+id/btn_addProduit"
+                        style="@style/button_reglage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/margin_15"
+                        android:text="Ajouter"
+                        />
+                </LinearLayout>
 
-                <Button
-                    android:id="@+id/btn_addProduit"
-                    style="@style/button_reglage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/margin_15"
-                    android:text="Ajouter"
-                    />
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
