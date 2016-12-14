@@ -7,6 +7,8 @@
     <dimen name="color_area">30dp</dimen>
 
     <dimen name="standard_height">50dp</dimen>
+    <!-- 5* standard_height -->
+    <dimen name="color_picker_width">400dp</dimen>
 
     <!-- dimension du text * 1.5 -->
     <dimen name="font_6">9sp</dimen>

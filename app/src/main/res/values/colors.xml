@@ -7,6 +7,7 @@
 
     <color name="selected_cellule_bg">#eceff1</color>
     <color name="unselected_cellule_bg">#ffffff</color>
+    <color name="product_color">#607d8b</color>
 
 
     <color name="pink">#EB1460</color>

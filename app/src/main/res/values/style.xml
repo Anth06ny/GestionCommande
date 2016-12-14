@@ -8,7 +8,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorButtonNormal">@color/colorAccent</item>
-
+        <item name="android:colorActivatedHighlight">@color/selected_cellule_bg</item>
+        <item name="colorControlHighlight">@color/selected_cellule_bg</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -30,6 +31,14 @@
 
     <style name="button_reglage" parent="bouton">
         <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="color_picker_bt">
+        <item name="android:layout_margin">@dimen/margin_5</item>
+        <item name="android:src">@drawable/circle_bg</item>
+        <item name="android:layout_width">@dimen/standard_height</item>
+        <item name="android:layout_height">@dimen/standard_height</item>
+        <item name="android:background">?android:selectableItemBackground</item>
     </style>
 
 

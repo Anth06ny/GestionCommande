@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+    <android.support.v7.widget.GridLayout
+        android:id="@+id/grid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="@dimen/margin_20"
+        app:columnCount="5"
+        app:orientation="horizontal"
+        app:rowCount="4">
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/b1"
+            style="@style/color_picker_bt"
+            />
+
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/b2"
+            style="@style/color_picker_bt"/>
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/b3"
+            style="@style/color_picker_bt"/>
+
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/b4"
+            style="@style/color_picker_bt"/>
+
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/b5"
+            style="@style/color_picker_bt"/>
+
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/b6"
+            style="@style/color_picker_bt"/>
+
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/b7"
+            style="@style/color_picker_bt"/>
+
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/b8"
+            style="@style/color_picker_bt"/>
+
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/b9"
+            style="@style/color_picker_bt"/>
+
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/b10"
+            style="@style/color_picker_bt"/>
+
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/b11"
+            style="@style/color_picker_bt"/>
+
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/b12"
+            style="@style/color_picker_bt"/>
+
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/b13"
+            style="@style/color_picker_bt"/>
+
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/b14"
+            style="@style/color_picker_bt"/>
+
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/b15"
+            style="@style/color_picker_bt"/>
+
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/b16"
+            style="@style/color_picker_bt"/>
+
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/b17"
+            style="@style/color_picker_bt"/>
+
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/b18"
+            style="@style/color_picker_bt"/>
+
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/b19"
+            style="@style/color_picker_bt"/>
+
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/b20"
+            style="@style/color_picker_bt"/>
+
+
+    </android.support.v7.widget.GridLayout>
+</RelativeLayout>

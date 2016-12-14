@@ -37,8 +37,9 @@
             android:gravity="center_vertical"
             android:text="Bar"
             android:textAllCaps="false"
-            android:textSize="@dimen/font_12"
-            android:textStyle="bold"/>
+            android:textSize="@dimen/font_14"
+            android:textStyle="bold"
+            android:textColor="@color/product_color"/>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_modifiy_cat"

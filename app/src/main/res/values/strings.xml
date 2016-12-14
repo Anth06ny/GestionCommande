@@ -10,4 +10,19 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="valider">Valider</string>
+    <string name="annuler">Annuler</string>
+
+    <!-- Dialog Categorie -->
+    <string name="dialog_categorie_title_new">Nouvelle catégorie</string>
+    <string name="dialog_categorie_title_edit">Modifier la catégorie</string>
+    <string name="dialog_categorie_name_libelle">Nom </string>
+    <string name="dialog_categorie_name_hint">Nom de la catégorie</string>
+    <string name="dialog_categorie_color_libelle">Couleur</string>
+
+    <!-- Dialog ColorPicker -->
+    <string name="dialog_colorpicker_title">Séléctionnez une couleur</string>
+
+
 </resources>
