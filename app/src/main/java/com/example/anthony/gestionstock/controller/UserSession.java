@@ -1,7 +1,6 @@
 package com.example.anthony.gestionstock.controller;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 
 import java.util.HashMap;
@@ -47,19 +46,6 @@ public class UserSession {
         editor.commit();
     }
 
-    public Boolean checkLogin() {
-        if (!this.isUserLoggedIn()) {
-
-            Intent i = new Intent(context, FragmentLogin.class);
-
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(i);
-            return true;
-        }
-        return false;
-    }
-
     /**
      * Get stored session data
      */
@@ -71,24 +57,6 @@ public class UserSession {
         user.put(KEY_PASSWORD, preferences.getString(KEY_PASSWORD, null));
         // return user
         return user;
-    }
-
-    /**
-     * Clear session details
-     */
-    public void logoutUser() {
-        editor.clear();
-        editor.commit();
-
-        Intent i = new Intent(context, DrawerActivity.class);
-        // Closing all the Activities
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        // Add new Flag to start new Activity
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        // Staring Login Activity
-        context.startActivity(i);
     }
 
     // Check for login
