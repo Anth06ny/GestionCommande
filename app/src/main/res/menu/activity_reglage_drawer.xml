@@ -19,9 +19,5 @@
             android:icon="@drawable/ic_menu_manage"
             android:title="Réglages"/>
 
-        <item
-            android:id="@+id/AdminInfo"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Admin"/>
     </group>
 </menu>

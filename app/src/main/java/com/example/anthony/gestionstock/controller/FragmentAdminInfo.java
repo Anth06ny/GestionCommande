@@ -89,7 +89,7 @@ public class FragmentAdminInfo extends Fragment {
         password = (EditText) v.findViewById(R.id.mot_de_passe);
         btn_conection = (Button) v.findViewById(R.id.btn_conection_admin);
 
-        sharedPreferences = getContext().getSharedPreferences("Admin", 0);
+        sharedPreferences = getActivity().getSharedPreferences("Admin", 0);
         editor = sharedPreferences.edit();
 
         btn_conection.setOnClickListener(new View.OnClickListener() {
@@ -100,10 +100,10 @@ public class FragmentAdminInfo extends Fragment {
                 String mdp = password.getText().toString();
 
                 if (userName.getText().length() <= 0) {
-                    Toast.makeText(getContext(), "Entrez le nom", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Entrez le nom", Toast.LENGTH_SHORT).show();
                 }
                 else if (password.getText().length() <= 0) {
-                    Toast.makeText(getContext(), "Entrez le Mot de passe", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Entrez le Mot de passe", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     editor.putString("Name", name);
@@ -112,9 +112,11 @@ public class FragmentAdminInfo extends Fragment {
                 }
 
                 fragmentLogin = new FragmentLogin();
-                getActivity().getFragmentManager().beginTransaction()
 
-                        .replace(R.id.login_info, fragmentLogin, FRAGMENT_LOGIN)
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        //TODO lancer un autre fragment
+                        .replace(R.id.flContent, fragmentLogin, "string")
                         .addToBackStack(null)
                         .commit();
                 /*Intent ob = new Intent(getContext(), Login.class);

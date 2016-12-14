@@ -1,7 +1,6 @@
 package com.example.anthony.gestionstock.controller;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -43,6 +42,10 @@ public class FragmentLogin extends Fragment {
     private SharedPreferences sharedPreferences;
     private UserSession userSession;
     private View v;
+    private FragmentReglage fragmentReglage;
+
+    public static final String KEY_NAME = "Name";
+    public static final String KEY_PASSWORD = "MotDePasse";
 
     /**
      * Use this factory method to create a new instance of
@@ -89,7 +92,8 @@ public class FragmentLogin extends Fragment {
         username = (EditText) v.findViewById(R.id.user_name);
         password = (EditText) v.findViewById(R.id.mot_de_passe);
         btn_login = (Button) v.findViewById(R.id.btn_conection_admin);
-        userSession = new UserSession();
+        sharedPreferences = getActivity().getSharedPreferences(PREFER_NAME, Context.MODE_PRIVATE);
+        userSession = new UserSession(getContext());
         //TODO modifier avec session
         Toast.makeText(getContext(), "User Login Status" + userSession.isUserLoggedIn(), Toast.LENGTH_SHORT).show();
 
@@ -104,20 +108,23 @@ public class FragmentLogin extends Fragment {
                     String uPsw = null;
 
                     if (sharedPreferences.contains("Name")) {
-                        uName = sharedPreferences.getString("Name", "");
+                        uName = userSession.getUserDetails().get(KEY_NAME);
                     }
                     if (sharedPreferences.contains("MotDePasse")) {
-                        uPsw = sharedPreferences.getString("MotDePasse", "");
+                        uPsw = userSession.getUserDetails().get(KEY_PASSWORD);
                     }
 
                     if (nomUtilisateur.equals(uName) && motdepasse.equals((uPsw))) {
                         userSession.createUserLoginSession(uName, uPsw);
 
-                        Intent i = new Intent(getContext(), DrawerActivity.class);
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        fragmentReglage = new FragmentReglage();
 
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(i);
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                //TODO lancer un autre fragment
+                                .replace(R.id.flContent, fragmentReglage, "string")
+                                .addToBackStack(null)
+                                .commit();
                     }
                     else {
                         // username / password doesn't match&
