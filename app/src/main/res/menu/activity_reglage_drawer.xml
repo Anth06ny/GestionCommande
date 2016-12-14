@@ -18,5 +18,6 @@
             android:id="@+id/Reglage"
             android:icon="@drawable/ic_menu_manage"
             android:title="Réglages"/>
+
     </group>
 </menu>

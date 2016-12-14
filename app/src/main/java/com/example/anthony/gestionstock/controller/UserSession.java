@@ -23,17 +23,26 @@ public class UserSession {
     public static final String KEY_NAME = "Name";
     public static final String KEY_PASSWORD = "MotDePasse";
 
+    private static final String USER_LOGIN = "Ad";
+    private static final String USER_PASSWORD = "1234";
+
+    public UserSession(Context context) {
+        this.context = context;
+        preferences = context.getSharedPreferences(PREFER_NAME, PRIVATE_MODE);
+        editor = preferences.edit();
+    }
+
     public void createUserLoginSession(String uName, String uPsw) {
         editor.putBoolean(IS_USER_LOGIN, true);
-        editor.putString(KEY_NAME, uName);
-        editor.putString(KEY_PASSWORD, uPsw);
+        editor.putString(KEY_NAME, USER_LOGIN);
+        editor.putString(KEY_PASSWORD, USER_PASSWORD);
         editor.commit();
     }
 
     public Boolean checkLogin() {
         if (!this.isUserLoggedIn()) {
 
-            Intent i = new Intent(context, Login.class);
+            Intent i = new Intent(context, FragmentLogin.class);
 
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -47,6 +56,7 @@ public class UserSession {
         HashMap<String, String> user = new HashMap<>();
 
         user.put(KEY_NAME, preferences.getString(KEY_NAME, null));
+        user.put(KEY_PASSWORD, preferences.getString(KEY_PASSWORD, null));
         return user;
     }
 
