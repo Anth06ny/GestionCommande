@@ -2,6 +2,7 @@ package vue;
 
 import android.content.res.ColorStateList;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -123,10 +124,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 if (produitbean.isSelected()) {
                     holder.displayModifyProduit.setVisibility(View.VISIBLE);
                     holder.displayDeleteProduit.setVisibility(View.VISIBLE);
+                    holder.cv_bg.setCardBackgroundColor(holder.cv_bg.getResources().getColor(R.color.selected_cellule_bg));
                 }
                 else {
                     holder.displayModifyProduit.setVisibility(View.INVISIBLE);
                     holder.displayDeleteProduit.setVisibility(View.INVISIBLE);
+                    holder.cv_bg.setCardBackgroundColor(holder.cv_bg.getResources().getColor(R.color.unselected_cellule_bg));
                 }
                 holder.root.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -255,9 +258,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         public TextView displayLotRecommande;
         public ImageView displayRemove;
         public ImageView displayAdd;
+        public CardView cv_bg;
 
         public ViewHolder(View itemView) {
             super(itemView);
+
             switch (choixAffichage) {
                 case Note:
                     displayQuantite = (TextView) itemView.findViewById(R.id.quantite_note);
@@ -280,6 +285,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     displayDeleteProduit = (ImageView) itemView.findViewById(R.id.img_prod);
                     displayDeleteProduit.setColorFilter(displayDeleteProduit.getResources().getColor(R.color.red));
                     root = itemView.findViewById(R.id.root_produit); // permet de recupèrer le clic sur le cardview
+                    cv_bg = (CardView) itemView.findViewById(R.id.cv_bg);
                     break;
 
                 case Bilan:
