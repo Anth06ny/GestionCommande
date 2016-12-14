@@ -2,6 +2,8 @@ package com.example.anthony.gestionstock.controller;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -48,9 +50,16 @@ public class DialogProduit extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final LayoutInflater inflater = getActivity().getLayoutInflater();
         final View alertDialogView = inflater.inflate(R.layout.dialog_produit, null);
+
+        //Je récupère l'icon des ressources et je la change de couleur
+        Drawable icon = getResources().getDrawable(R.drawable.ic_note_add_black_48dp);
+        icon.setColorFilter(getResources().getColor(R.color.colorPrimaryDark), PorterDuff.Mode.SRC_IN);
+        builder.setIcon(icon);
+        builder.setTitle(produit.getId() == null ? R.string.dialog_categorie_title_new : R.string.dialog_categorie_title_edit);
 
         //Initialisation de la liste de catégories
         listCategories = new ArrayList<>();
@@ -86,13 +95,13 @@ public class DialogProduit extends DialogFragment {
         }
         //On build la dialog box avec la vue personaliser + l'ajout des boutons positifs et négatif
         builder.setView(alertDialogView)
-                .setPositiveButton("Envoyer", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.valider, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
                         int tag = 0;
                         Boolean erreur = false;
                         //On verifie que les edit text de la dialog produit ne sont pas vide
-                        if (editNom.getText().length() != 0 && editPrix.getText().length() != 0 && editLot.getText().length() != 0) {
+                        if (StringUtils.isNotBlank(editNom.getText())) {
                             produit.setNom(editNom.getText().toString());
 
                             //On verifie que le nom du produit saisie dans l'edit ne correpond a aucun autre produit de la base de donnees
@@ -140,10 +149,7 @@ public class DialogProduit extends DialogFragment {
                         }
                     }
                 })
-                .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                });
+                .setNegativeButton(R.string.annuler, null);
 
         //recupère l'élément graphique de l'adapteur et le switch entre celui du layout du dialogue.
         editCategorie = (Spinner) alertDialogView.findViewById(R.id.editCategorieProduit);
@@ -161,6 +167,12 @@ public class DialogProduit extends DialogFragment {
         });
 
         return builder.create();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getDialog().getWindow().setBackgroundDrawableResource(R.color.bg_color);
     }
 
     public interface DialogProduitCallBack {

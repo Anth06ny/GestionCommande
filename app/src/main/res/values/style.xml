@@ -41,5 +41,15 @@
         <item name="android:background">?android:selectableItemBackground</item>
     </style>
 
+    <!-- ##################  -->
+    <!-- Dialog -->
+    <!-- ################## -->
+    <style name="dialog_text_libelle">
+        <item name="android:textSize">@dimen/font_14</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">@dimen/standard_height</item>
+        <item name="android:layout_height">@dimen/standard_height</item>
+        <item name="android:background">?android:selectableItemBackground</item>
+    </style>
 
 </resources>

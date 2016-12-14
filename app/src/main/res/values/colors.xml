@@ -5,6 +5,7 @@
     <color name="colorAccent">#ff4081</color>
     <color name="red">#b71c1c</color>
 
+    <color name="bg_color">#FAFAFA</color>
     <color name="selected_cellule_bg">#eceff1</color>
     <color name="unselected_cellule_bg">#ffffff</color>
     <color name="product_color">#607d8b</color>

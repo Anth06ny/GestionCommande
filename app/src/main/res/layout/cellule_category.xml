@@ -24,7 +24,7 @@
         <ImageView
             android:id="@+id/txt_color"
             android:layout_width="@dimen/standard_height"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/standard_height"
             android:padding="@dimen/margin_5"
             android:src="@drawable/circle_bg"/>
 
@@ -37,9 +37,9 @@
             android:gravity="center_vertical"
             android:text="Bar"
             android:textAllCaps="false"
+            android:textColor="@color/product_color"
             android:textSize="@dimen/font_14"
-            android:textStyle="bold"
-            android:textColor="@color/product_color"/>
+            android:textStyle="bold"/>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_modifiy_cat"

@@ -21,6 +21,11 @@
     <string name="dialog_categorie_name_hint">Nom de la catégorie</string>
     <string name="dialog_categorie_color_libelle">Couleur</string>
 
+    <!-- Dialog Produit -->
+    <string name="dialog_produit_title_new">Nouveau produit</string>
+    <string name="dialog_produit_title_edit">Modifier le produit</string>
+
+
     <!-- Dialog ColorPicker -->
     <string name="dialog_colorpicker_title">Séléctionnez une couleur</string>
 

@@ -2,14 +2,13 @@ package com.example.anthony.gestionstock.controller;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatImageButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -30,7 +29,7 @@ import vue.material_color_picker.ColorChooserDialog;
 
 public class DialogCategorie extends DialogFragment {
 
-    private AppCompatButton btnChoisirCouleur;
+    private AppCompatImageButton btnChoisirCouleur;
     private int couleurChoisi;
     private Categorie categorie;
     private EditText edit_nomCategorie;
@@ -46,7 +45,7 @@ public class DialogCategorie extends DialogFragment {
         final View alertDialogView = inflater.inflate(R.layout.dialog_categorie, null);
 
         //Recuperation des elements graphique de la dialog box
-        btnChoisirCouleur = (android.support.v7.widget.AppCompatButton) alertDialogView.findViewById(R.id.btnChoisirCouleur);
+        btnChoisirCouleur = (AppCompatImageButton) alertDialogView.findViewById(R.id.btnChoisirCouleur);
         edit_nomCategorie = (EditText) alertDialogView.findViewById(R.id.nomCategorie);
 
         //Si on est en modification on va rentrer par defaut les valeurs de la categorie selectionner
@@ -55,7 +54,7 @@ public class DialogCategorie extends DialogFragment {
         }
 
         if (categorie.getCouleur() != null) {
-            btnChoisirCouleur.setSupportBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(categorie.getCouleur())));
+            btnChoisirCouleur.setColorFilter(Integer.parseInt(categorie.getCouleur()), PorterDuff.Mode.SRC_IN);
         }
 
         //Je récupère l'icon des ressources et je la change de couleur
@@ -169,7 +168,7 @@ public class DialogCategorie extends DialogFragment {
                                                              couleurChoisi = color;
 
                                                              //On display la couleur choisie sur la dialog box precedente
-                                                             btnChoisirCouleur.setSupportBackgroundTintList(ColorStateList.valueOf(couleurChoisi));
+                                                             btnChoisirCouleur.setColorFilter(couleurChoisi, PorterDuff.Mode.SRC_IN);
 
                                                              //On termine le picker color et on retourne sur la dialog box precedente
                                                              dialog.dismiss();

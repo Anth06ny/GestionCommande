@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.anthony.gestionstock.R;
@@ -52,8 +53,13 @@ public class SpinnerAdapter extends BaseAdapter implements android.widget.Spinne
         else {
             spinView = convertView;
         }
-        TextView t1 = (TextView) spinView.findViewById(R.id.field1);
-        t1.setText(listCategories.get(position).getNom());
+        Categorie categorie = listCategories.get(position);
+
+        TextView tv_categorie = (TextView) spinView.findViewById(R.id.tv_categorie);
+        ImageView iv_color = (ImageView) spinView.findViewById(R.id.iv_color);
+
+        tv_categorie.setText(categorie.getNom());
+        iv_color.setColorFilter(Integer.parseInt(categorie.getCouleur()));
         return spinView;
     }
 }
