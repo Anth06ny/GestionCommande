@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,19 +34,19 @@ public class FragmentLogin extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private View v;
+    private FragmentReglage fragmentReglage;
 
+    // Shared preference
     private static final String PREFER_NAME = "Admin";
-
     private Button btn_login;
     private EditText username;
     private EditText password;
     private SharedPreferences sharedPreferences;
     private UserSession userSession;
-    private View v;
-    private FragmentReglage fragmentReglage;
 
-    public static final String KEY_NAME = "Name";
-    public static final String KEY_PASSWORD = "MotDePasse";
+   /* public static final String KEY_NAME = "Name";
+    public static final String KEY_PASSWORD = "MotDePasse";*/
 
     /**
      * Use this factory method to create a new instance of
@@ -94,53 +95,74 @@ public class FragmentLogin extends Fragment {
         btn_login = (Button) v.findViewById(R.id.btn_conection_admin);
         sharedPreferences = getActivity().getSharedPreferences(PREFER_NAME, Context.MODE_PRIVATE);
         userSession = new UserSession(getContext());
-        //TODO modifier avec session
-        Toast.makeText(getContext(), "User Login Status" + userSession.isUserLoggedIn(), Toast.LENGTH_SHORT).show();
 
-        btn_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String nomUtilisateur = username.getText().toString();
-                String motdepasse = password.getText().toString();
+        if (userSession.isUserLoggedIn()) {
+            //fragmentReglage = new FragmentReglage();
+            //lancer un autre fragment
+            /*getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.flContent, fragmentReglage, "string")
+                    .addToBackStack(null)
+                    .commit();*/
+            Log.v("tag", "true");
+        }
+        if (userSession.checkLogin()) {
+            Log.v("tag2", "true");
+        }
 
-                if (nomUtilisateur.trim().length() > 0 && motdepasse.trim().length() > 0) {
-                    String uName = null;
-                    String uPsw = null;
+        btn_login.setOnClickListener(new View.OnClickListener()
 
-                    if (sharedPreferences.contains("Name")) {
-                        uName = userSession.getUserDetails().get(KEY_NAME);
-                    }
-                    if (sharedPreferences.contains("MotDePasse")) {
-                        uPsw = userSession.getUserDetails().get(KEY_PASSWORD);
-                    }
+                                     {
+                                         @Override
+                                         public void onClick(View v) {
+                                             // Get username, password from EditText
+                                             String nomUtilisateur = username.getText().toString();
+                                             String motdepasse = password.getText().toString();
 
-                    if (nomUtilisateur.equals(uName) && motdepasse.equals((uPsw))) {
-                        userSession.createUserLoginSession(uName, uPsw);
+                                             // Validate if username, password is filled
+                                             if (nomUtilisateur.trim().length() > 0 && motdepasse.trim().length() > 0) {
+                                                 String uName = null;
+                                                 String uPsw = null;
 
-                        fragmentReglage = new FragmentReglage();
+                                                 if (sharedPreferences.contains("Name")) {
+                                                     uName = sharedPreferences.getString("Name", "");
+                                                 }
+                                                 if (sharedPreferences.contains("MotDePasse")) {
+                                                     uPsw = sharedPreferences.getString("MotDePasse", "");
+                                                 }
 
-                        getActivity().getSupportFragmentManager()
-                                .beginTransaction()
-                                //TODO lancer un autre fragment
-                                .replace(R.id.flContent, fragmentReglage, "string")
-                                .addToBackStack(null)
-                                .commit();
-                    }
-                    else {
-                        // username / password doesn't match&
-                        Toast.makeText(getContext(),
-                                "Username/Password is incorrect",
-                                Toast.LENGTH_LONG).show();
-                    }
-                }
-                else {
-                    // user didn't entered username or password
-                    Toast.makeText(getContext(),
-                            "Please enter username and password",
-                            Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+                    /*Log.v("tag2", userSession.getUserDetails().get(KEY_NAME));
+                    Log.v("tag3", userSession.getUserDetails().get(KEY_PASSWORD));
+                    Log.v("tag4", uName);
+                    Log.v("tag5", uPsw);*/
+                                                 if (nomUtilisateur.equals(uName) && motdepasse.equals((uPsw))) {
+                                                     userSession.createUserLoginSession(uName, uPsw);
+                                                     // Starting Fragment Reglages
+                                                     fragmentReglage = new FragmentReglage();
+                                                     //lancer un autre fragment
+                                                     getActivity().getSupportFragmentManager()
+                                                             .beginTransaction()
+                                                             .replace(R.id.flContent, fragmentReglage, "string")
+                                                             .addToBackStack(null)
+                                                             .commit();
+                                                 }
+                                                 else {
+                                                     // username / password doesn't match&
+                                                     Toast.makeText(getContext(),
+                                                             "Username/Password is incorrect",
+                                                             Toast.LENGTH_LONG).show();
+                                                 }
+                                             }
+                                             else {
+                                                 // user didn't entered username or password
+                                                 Toast.makeText(getContext(),
+                                                         "Please enter username and password",
+                                                         Toast.LENGTH_LONG).show();
+                                             }
+                                         }
+                                     }
+
+                                    );
     }
 
     // TODO: Rename method, update argument and hook method into UI event

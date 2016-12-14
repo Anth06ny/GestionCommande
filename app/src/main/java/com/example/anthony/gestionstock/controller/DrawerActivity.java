@@ -1,5 +1,7 @@
 package com.example.anthony.gestionstock.controller;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -133,6 +135,14 @@ public class DrawerActivity extends AppCompatActivity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+    }
 
+    @Override
+    protected void onStop() {
+        SharedPreferences sharedpreferences = getSharedPreferences(UserSession.PREFER_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.clear();
+        editor.commit();
+        super.onStop();
     }
 }

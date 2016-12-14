@@ -51,7 +51,6 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
 
     private ProductAdapter productAdapter;
     private RecyclerView recyclerViewProduits;
-
     private View v;
 
     // TODO: Rename and change types of parameters
@@ -166,7 +165,6 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     @Override
     public void onDetach() {
         super.onDetach();
-
         mListener = null;
     }
 

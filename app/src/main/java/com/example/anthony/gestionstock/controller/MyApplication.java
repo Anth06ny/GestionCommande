@@ -18,6 +18,7 @@ public class MyApplication extends Application {
     public final static boolean DEBUG = true;
 
     private static DaoSession daoSession;
+    private UserSession userSession;
 
     @Override
     public void onCreate() {
@@ -43,4 +44,5 @@ public class MyApplication extends Application {
     public static DaoSession getDaoSession() {
         return daoSession;
     }
+
 }
