@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
 
@@ -48,11 +49,9 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+
     private final int NB_MAX_CATEGORIES = 6;
     private final int NB_MAX_FAVORIS = 6;
-    private View v;
     private AppCompatButton btn_cancel;
     private AppCompatButton btn_note;
     private AppCompatButton btn_off_client;
@@ -61,7 +60,6 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     private ArrayList<Categorie> categorieArrayList;
     private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerViewProduits;
-    private GridLayoutManager layoutManager;
     private ArrayList<Produit> produitArrayListFavoris;
     private ArrayList<Produit> arraylistProduits;
     private RecyclerView recyclerViewNote;
@@ -91,144 +89,41 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_accueil, container, false);
+        View v = inflater.inflate(R.layout.fragment_accueil, container, false);
         initUI(v);
         return v;
     }
 
     private void initUI(View v) {
         //Création de la liste de catégories
-        categorieArrayList = new ArrayList<>();
         //Remplissage de la liste
         categorieArrayList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
-
         produitArrayListFavoris = (ArrayList<Produit>) ProduitBddManager.getProduitFavoris(); // remplissage de la liste de produits
 
         //RecyclerView PRODUIT
-        layoutManager = new GridLayoutManager(getContext(), 3);//On instancie un grid layoutmanager qui prend en parametre le context et le nombre de colonne/ligne
+        //On instancie un grid layoutmanager qui prend en parametre le context et le nombre de colonne/ligne
         recyclerViewProduits = (RecyclerView) v.findViewById(R.id.rv_accueilProduit);//on reucpere le recycler view
-        recyclerViewProduits.setLayoutManager(layoutManager);// on passe le layout manager au recyclerview
+        recyclerViewProduits.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        recyclerViewProduits.setItemAnimator(new DefaultItemAnimator());
 
         //RecyvclerView NOTE
         recyclerViewNote = (RecyclerView) v.findViewById(R.id.rv_accueilNote);
-        recyclerViewNote.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recyclerViewNote.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewNote.setItemAnimator(new DefaultItemAnimator());
 
         btn_cancel = (AppCompatButton) v.findViewById(R.id.btn_deleteNote);
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //On creer un alert dialog pour confirmer la suppression du produit
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        getContext());
-
-                //On set tous les elements et on display la dialog box
-                alertDialogBuilder.setTitle("Confirmation");
-
-                alertDialogBuilder
-                        .setMessage("Voulez-vous annuler la commande ?");
-
-                alertDialogBuilder.setCancelable(false)
-                        .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                if (produitArrayListNote.size() > 0) {
-                                    for (int i = 0; i < produitArrayListNote.size(); i++) {
-                                        for (int j = 0; j < produitArrayListNote.get(i).getProduitRef().size(); j++) {
-                                            //Si Id commande est null, alors on se situe sur la commande en cours
-                                            if (produitArrayListNote.get(i).getProduitRef().get(j).getCommande() == null) {
-                                                produitArrayListNote.get(i).getProduitRef().get(j).setQuantite((long) 0);
-                                            }
-                                        }
-                                    }
-                                    produitArrayListNote.clear();
-                                    productAdapterNote.notifyDataSetChanged();
-                                }
-                                else {
-                                }
-                                dialog.cancel();
-                            }
-                        }).setNegativeButton("Non", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
-            }
-        });
         btn_note = (AppCompatButton) v.findViewById(R.id.btn_printNote);
-        btn_note.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
         btn_off_client = (AppCompatButton) v.findViewById(R.id.btn_offClient);
-        btn_off_client.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Commande commande = new Commande();
 
-                //On creer un alert dialog pour confirmer la suppression du produit
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        getContext());
-
-                //On set tous les elements et on display la dialog box
-                alertDialogBuilder.setTitle("Confirmation");
-
-                alertDialogBuilder
-                        .setMessage("Voulez-vous terminer et valider la commande ?");
-
-                alertDialogBuilder.setCancelable(false)
-                        .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //TODO formattage date
-              /*DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-                String date = df.format(Calendar.getInstance().getTime());*/
-                                commande.setDate(Calendar.getInstance().getTime());
-                                CommandeBddManager.insertOrUpdate(commande);
-
-                                commandeArrayList = (ArrayList<Commande>) CommandeBddManager.getCommande();
-                                int positionCommande = commandeArrayList.indexOf(commande);
-
-                                for (int i = 0; i < produitArrayListNote.size(); i++) {
-                                    for (int j = 0; j < produitArrayListNote.get(i).getProduitRef().size(); j++) {
-                                        if (produitArrayListNote.get(i).getProduitRef().get(j).getCommande() == null) {
-                                            produitArrayListNote.get(i).getProduitRef().get(j).setCommande(commandeArrayList.get(positionCommande).getId());
-                                            produitArrayListNote.get(i).setConsommation((int) (produitArrayListNote.get(i).getConsommation() + produitArrayListNote.get
-                                                    (i).getProduitRef().get(j).getQuantite()));
-                                            Log.v("TagNote", String.valueOf(produitArrayListNote.get(i).getConsommation()));
-                                            ProduitBddManager.insertOrUpdate(produitArrayListNote.get(i));
-                                            ConsommeBddManager.insertOrUpdate(produitArrayListNote.get(i).getProduitRef().get(j));
-                                        }
-                                    }
-                                }
-                                produitArrayListNote.clear();
-                                productAdapterNote.notifyDataSetChanged();
-                                dialog.cancel();
-                            }
-                        }).setNegativeButton("Non", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
-            }
-        });
+        btn_note.setOnClickListener(this);
+        btn_cancel.setOnClickListener(this);
+        btn_off_client.setOnClickListener(this);
 
         produitArrayListNote = new ArrayList<>(); // Instanciation de la liste
+
         // Gestion des Boutons de CATEGORIES
         AppCompatButton[] buttons = new AppCompatButton[NB_MAX_CATEGORIES];
         for (int j = 0; j < NB_MAX_CATEGORIES; j++) {
@@ -367,7 +262,82 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
 
     @Override
     public void onClick(View v) {
+        if (v == btn_cancel) {
+            deleteNote();
+        }
+        else if (v == btn_off_client) {
+            validationCommande();
+        }
+        else if (v == btn_note) {
+            Toast.makeText(getContext(), "Non implémenté", Toast.LENGTH_SHORT).show();
+        }
+    }
 
+    public void deleteNote() {
+        //On creer un alert dialog pour confirmer la suppression du produit
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getContext());
+
+        //On set tous les elements et on display la dialog box
+        alertDialogBuilder.setTitle("Confirmation");
+        alertDialogBuilder.setMessage("Annuler la commande ?");
+        alertDialogBuilder.setCancelable(true)
+                .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        produitArrayListNote.clear();
+                        productAdapterNote.notifyDataSetChanged();
+                    }
+                }).setNegativeButton("Non", null).create().show();
+    }
+
+    public void validationCommande() {
+        final Commande commande = new Commande();
+
+        //On creer un alert dialog pour confirmer la suppression du produit
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getContext());
+
+        //On set tous les elements et on display la dialog box
+        alertDialogBuilder.setTitle("Confirmation");
+
+        alertDialogBuilder
+                .setMessage("Voulez-vous terminer et valider la commande ?");
+
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //TODO formattage date
+              /*DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                String date = df.format(Calendar.getInstance().getTime());*/
+                        commande.setDate(Calendar.getInstance().getTime());
+                        CommandeBddManager.insertOrUpdate(commande);
+
+                        commandeArrayList = (ArrayList<Commande>) CommandeBddManager.getCommande();
+                        int positionCommande = commandeArrayList.indexOf(commande);
+
+                        for (int i = 0; i < produitArrayListNote.size(); i++) {
+                            for (int j = 0; j < produitArrayListNote.get(i).getProduitRef().size(); j++) {
+                                if (produitArrayListNote.get(i).getProduitRef().get(j).getCommande() == null) {
+                                    produitArrayListNote.get(i).getProduitRef().get(j).setCommande(commandeArrayList.get(positionCommande).getId());
+                                    produitArrayListNote.get(i).setConsommation((int) (produitArrayListNote.get(i).getConsommation() + produitArrayListNote.get
+                                            (i).getProduitRef().get(j).getQuantite()));
+                                    Log.v("TagNote", String.valueOf(produitArrayListNote.get(i).getConsommation()));
+                                    ProduitBddManager.insertOrUpdate(produitArrayListNote.get(i));
+                                    ConsommeBddManager.insertOrUpdate(produitArrayListNote.get(i).getProduitRef().get(j));
+                                }
+                            }
+                        }
+                        produitArrayListNote.clear();
+                        productAdapterNote.notifyDataSetChanged();
+                        dialog.cancel();
+                    }
+                }).setNegativeButton("Non", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     @Override

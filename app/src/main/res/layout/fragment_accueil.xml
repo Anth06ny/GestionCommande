@@ -1,7 +1,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+             android:background="@color/bg_color"
              tools:context="com.example.anthony.gestionstock.controller.FragmentAccueil">
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
@@ -12,211 +14,249 @@
 
         <LinearLayout
             android:id="@+id/layoutAccueilNote"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:text="QTE"
-                    android:textAlignment="center"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:text="LIBELLE"
-                    android:textAlignment="center"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:text="PRIX U"
-                    android:textAlignment="center"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:text="MONTANT"
-                    android:textAlignment="center"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
-
-            </LinearLayout>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_accueilNote"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginLeft="10dp"
-                android:minHeight="100dp"
-                >
-            </android.support.v7.widget.RecyclerView>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/btn_deleteNote"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="ANNULER"/>
-
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/btn_printNote"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="NOTE"/>
-
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/btn_offClient"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="OFF CLIENT"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layoutAccueilCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_cat1"
-                android:layout_width="90dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"/>
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_cat2"
-                android:layout_width="90dp"
-                android:layout_height="60dp"
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/margin_8"
                 android:layout_weight="1"
-                />
+                app:cardBackgroundColor="@android:color/white"
+                >
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_cat3"
-                android:layout_width="90dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_cat4"
-                android:layout_width="90dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_cat5"
-                android:layout_width="90dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                />
+                        <TextView
+                            style="@style/acceuil_libelle"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:text="QTE"
+                            />
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_cat6"
-                android:layout_width="90dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                />
+                        <TextView
+                            style="@style/acceuil_libelle"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:text="LIBELLE"
+                            />
+
+                        <TextView
+                            style="@style/acceuil_libelle"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:text="PRIX U"
+                            />
+
+                        <TextView
+                            style="@style/acceuil_libelle"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:text="MONTANT"
+                            />
+
+                        <TextView
+                            style="@style/acceuil_libelle"
+                            android:layout_height="wrap_content"
+                            />
+
+                    </LinearLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_accueilNote"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/margin_10"
+                        tools:listitem="@layout/cellule_note_accueil">
+                    </android.support.v7.widget.RecyclerView>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/accueil_bloc_button_note_height"
+                android:layout_margin="@dimen/margin_8"
+                android:padding="@dimen/margin_5"
+                app:cardBackgroundColor="@android:color/white"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_50">
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/btn_deleteNote"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/accueil_bt_effacer"/>
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/btn_printNote"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="NOTE"/>
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/btn_offClient"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="OFF CLIENT"/>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
         </LinearLayout>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin_8"
+            android:padding="@dimen/margin_5"
+            app:cardBackgroundColor="@android:color/white"
+            >
+
+            <LinearLayout
+                android:id="@+id/layoutAccueilCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_cat1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/standard_height"
+                    />
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_cat2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/standard_height"
+                    />
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_cat3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/standard_height"
+                    />
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_cat4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/standard_height"
+                    />
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_cat5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/standard_height"
+                    />
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_cat6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/standard_height"
+                    />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
 
         <LinearLayout
             android:id="@+id/layoutAccueilProduit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_accueilProduit"
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:layout_marginRight="2dp"
-                android:fadeScrollbars="false"
-                android:scrollbarAlwaysDrawVerticalTrack="true"
-                android:scrollbars="vertical">
-            </android.support.v7.widget.RecyclerView>
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/margin_8"
+                android:layout_weight="1"
+                android:padding="@dimen/margin_5"
+                app:cardBackgroundColor="@android:color/white"
+                >
 
-            <GridLayout
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_accueilProduit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+                </android.support.v7.widget.RecyclerView>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:columnCount="3"
-                android:orientation="horizontal"
-                android:rowCount="2">
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_8"
+                android:padding="@dimen/margin_5"
+                app:cardBackgroundColor="@android:color/white"
+                >
 
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/btn_prod_favori1"
-                    android:layout_width="90dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:text="PRODUIT 1"
-                    android:textAlignment="center"/>
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="3"
+                    android:orientation="horizontal"
+                    android:rowCount="2">
 
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/btn_prod_favori2"
-                    android:layout_width="90dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:text="PRODUIT 2"
-                    android:textAlignment="center"/>
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/btn_prod_favori1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/standard_height"
+                        android:text="PRODUIT 1"
+                        android:textAlignment="center"/>
 
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/btn_prod_favori3"
-                    android:layout_width="90dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:text="PRODUIT 3"
-                    android:textAlignment="center"/>
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/btn_prod_favori2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/standard_height"
+                        android:text="PRODUIT 2"
+                        android:textAlignment="center"/>
 
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/btn_prod_favori4"
-                    android:layout_width="90dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:text="PRODUIT 4"
-                    android:textAlignment="center"/>
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/btn_prod_favori3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/standard_height"
+                        android:text="PRODUIT 3"
+                        android:textAlignment="center"/>
 
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/btn_prod_favori5"
-                    android:layout_width="90dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:text="PRODUIT 5"
-                    android:textAlignment="center"/>
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/btn_prod_favori4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/standard_height"
+                        android:text="PRODUIT 4"
+                        android:textAlignment="center"/>
 
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/btn_prod_favori6"
-                    android:layout_width="90dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:text="PRODUIT 6"
-                    android:textAlignment="center"/>
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/btn_prod_favori5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/standard_height"
+                        android:text="PRODUIT 5"
+                        android:textAlignment="center"/>
 
-            </GridLayout>
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/btn_prod_favori6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/standard_height"
+                        android:text="PRODUIT 6"
+                        android:textAlignment="center"/>
+
+                </GridLayout>
+
+            </android.support.v7.widget.CardView>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

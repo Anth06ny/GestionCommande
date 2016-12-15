@@ -42,4 +42,7 @@
     <dimen name="margin_40">60dp</dimen>
     <dimen name="margin_50">75dp</dimen>
     <dimen name="margin_80">120dp</dimen>
+
+    <dimen name="accueil_bloc_button_note_height">225dp</dimen>
+    <dimen name="accueil_nb_categorie">8</dimen>
 </resources>

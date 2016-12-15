@@ -52,4 +52,22 @@
         <item name="android:background">?android:selectableItemBackground</item>
     </style>
 
+    <!-- ##################  -->
+    <!-- Accueil -->
+    <!-- ################## -->
+
+    <style name="acceuil_libelle">
+        <item name="android:textSize">@dimen/font_14</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textColor">@color/product_color</item>
+    </style>
+
+    <style name="acceuil_tv_note" parent="acceuil_libelle">
+        <item name="android:textColor">@android:color/secondary_text_dark</item>
+        <item name="android:textSize">@dimen/font_11</item>
+    </style>
+
 </resources>
