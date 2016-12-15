@@ -32,7 +32,7 @@ import greendao.Produit;
 import model.CommandeBddManager;
 import model.ConsommeBddManager;
 import model.ProduitBddManager;
-import vue.ProductAdapter;
+import vue.adapter.ProductAdapter;
 import vue.ProductAffichageEnum;
 
 public class FragmentBilan extends Fragment implements DatePickerFragment.DatePickerFragmentCallBack {

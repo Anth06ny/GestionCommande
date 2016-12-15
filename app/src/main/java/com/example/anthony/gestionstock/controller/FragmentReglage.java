@@ -24,8 +24,8 @@ import greendao.Categorie;
 import greendao.Produit;
 import model.CategorieBddManager;
 import model.ProduitBddManager;
-import vue.CategoryAdapter;
-import vue.ProductAdapter;
+import vue.adapter.CategoryAdapter;
+import vue.adapter.ProductAdapter;
 import vue.ProductAffichageEnum;
 
 /**

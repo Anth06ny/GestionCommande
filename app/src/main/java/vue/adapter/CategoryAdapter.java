@@ -1,4 +1,4 @@
-package vue;
+package vue.adapter;
 
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;

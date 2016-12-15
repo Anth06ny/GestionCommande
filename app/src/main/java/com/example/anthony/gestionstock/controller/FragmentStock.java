@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 import greendao.Produit;
 import model.ProduitBddManager;
-import vue.ProductAdapter;
+import vue.adapter.ProductAdapter;
 import vue.ProductAffichageEnum;
 
 /**

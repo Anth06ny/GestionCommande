@@ -13,6 +13,7 @@
 
     <string name="valider">Valider</string>
     <string name="annuler">Annuler</string>
+    <string name="confirmation">Confirmation</string>
 
     <!-- Dialog Categorie -->
     <string name="dialog_categorie_title_new">Nouvelle catégorie</string>
@@ -25,12 +26,18 @@
     <string name="dialog_produit_title_new">Nouveau produit</string>
     <string name="dialog_produit_title_edit">Modifier le produit</string>
 
-
     <!-- Dialog ColorPicker -->
     <string name="dialog_colorpicker_title">Séléctionnez une couleur</string>
 
+    <!-- Dialog Erreur -->
+    <string name="dialog_error_title">Attention</string>
+
+
     <!-- Accueil -->
     <string name="accueil_bt_effacer">Tout effacer</string>
+    <string name="accueil_tost_cmd_save">Note enregistrée</string>
+    <string name="accueil_tost_cmd_del">Note supprimée</string>
+    <string name="accueil_confirm_message">Valider la commande ?</string>
 
 
 </resources>

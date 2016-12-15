@@ -6,13 +6,11 @@ import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,18 +19,18 @@ import android.widget.Toast;
 import com.example.anthony.gestionstock.R;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import greendao.Categorie;
 import greendao.Commande;
 import greendao.Consomme;
 import greendao.Produit;
 import model.CategorieBddManager;
-import model.CommandeBddManager;
 import model.ConsommeBddManager;
 import model.ProduitBddManager;
-import vue.ProductAdapter;
+import vue.AlertDialogutils;
 import vue.ProductAffichageEnum;
+import vue.adapter.ConsommeAdapter;
+import vue.adapter.ProductAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,7 +41,7 @@ import vue.ProductAffichageEnum;
  * create an instance of this fragment.
  */
 
-public class FragmentAccueil extends Fragment implements View.OnClickListener, ProductAdapter.ProductAdapterCallBack {
+public class FragmentAccueil extends Fragment implements View.OnClickListener, ProductAdapter.ProductAdapterCallBack, ConsommeAdapter.ConsommeAdapterCallBack {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -55,15 +53,18 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     private AppCompatButton btn_cancel;
     private AppCompatButton btn_note;
     private AppCompatButton btn_off_client;
+    //GestionNote
+    private ConsommeAdapter consommeAdapter;
+    private ArrayList<Consomme> consommeArrayListNote;
+    private RecyclerView recyclerViewNote;
+
     private ProductAdapter productAdapter;
-    private ProductAdapter productAdapterNote;
     private ArrayList<Categorie> categorieArrayList;
     private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerViewProduits;
     private ArrayList<Produit> produitArrayListFavoris;
     private ArrayList<Produit> arraylistProduits;
-    private RecyclerView recyclerViewNote;
-    private ArrayList<Produit> produitArrayListNote;
+
     private ArrayList<Commande> commandeArrayList;
 
     /**
@@ -110,6 +111,8 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         recyclerViewProduits.setItemAnimator(new DefaultItemAnimator());
 
         //RecyvclerView NOTE
+        consommeArrayListNote = new ArrayList<>(); // Instanciation de la liste
+        consommeAdapter = new ConsommeAdapter(consommeArrayListNote, this);
         recyclerViewNote = (RecyclerView) v.findViewById(R.id.rv_accueilNote);
         recyclerViewNote.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewNote.setItemAnimator(new DefaultItemAnimator());
@@ -121,8 +124,6 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         btn_note.setOnClickListener(this);
         btn_cancel.setOnClickListener(this);
         btn_off_client.setOnClickListener(this);
-
-        produitArrayListNote = new ArrayList<>(); // Instanciation de la liste
 
         // Gestion des Boutons de CATEGORIES
         AppCompatButton[] buttons = new AppCompatButton[NB_MAX_CATEGORIES];
@@ -148,9 +149,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         }
         for (int k = 0; k < categorieArrayList.size(); k++) {
             buttons[k].setText(categorieArrayList.get(k).getNom());
-            //TODO modif Anthony à tester
             buttons[k].setSupportBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(categorieArrayList.get(k).getCouleur())));
-            //TODO fin modif
             buttons[k].setVisibility(View.VISIBLE);
         }
         //TODO conditions ajout produit dans la note
@@ -167,45 +166,12 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
             buttonsFavoris[l].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ArrayList<Consomme> consommeArrayList = (ArrayList<Consomme>) produitArrayListFavoris.get(finalL).getProduitRef(); /* getProduitRef renvoi une liste de
-                    consomme par produit */
 
-                    // consomme
-                    Consomme consomme = new Consomme();
-                    consomme.setProduit(produitArrayListFavoris.get(finalL).getId()); // on donne l'id du produit à l'objet consomme
-                    int position = -1;
-                    for (int i = 0; i < consommeArrayList.size(); i++) {
-                        if (consommeArrayList.get(i).getCommande() == null) {
-                            position = i;
-                        }
-                    }
-                    if (position >= 0) {
-
-                        consommeArrayList.get(position).setQuantite(consommeArrayList.get(position).getQuantite() + 1);
+                    if (v.getTag() == null) {
+                        Toast.makeText(getContext(), "Le bouton " + v + " n'a pas de tag", Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        consomme.setQuantite((long) 1);
-                        consommeArrayList.add(consomme);
-                    }
-
-                    //On ajoute le produit favoris à la liste des produits de la note
-                    int positionProduitNote;
-                    positionProduitNote = produitArrayListNote.indexOf(produitArrayListFavoris.get(finalL));
-
-                    if (productAdapterNote != null) {
-                        if (positionProduitNote < 0) {
-                            produitArrayListNote.add(produitArrayListFavoris.get(finalL));
-                            productAdapterNote.notifyItemInserted(produitArrayListNote.size() - 1);
-                        }
-                        else {
-                            productAdapterNote.notifyItemChanged(positionProduitNote);
-                        }
-                    }
-                    else {
-                        // On affiche la note dans le recycler
-                        produitArrayListNote.add(produitArrayListFavoris.get(finalL));
-                        productAdapterNote = new ProductAdapter(ProductAffichageEnum.Note, produitArrayListNote, FragmentAccueil.this, null);
-                        recyclerViewNote.setAdapter(productAdapterNote);
+                        addProduitToNote((Long) v.getTag());
                     }
                 }
             });
@@ -263,81 +229,19 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     @Override
     public void onClick(View v) {
         if (v == btn_cancel) {
-            deleteNote();
+            AlertDialogutils.showOkCancelDialog(getContext(), "Confirmation", "Supprimer la note ?", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    deleteNote();
+                    Toast.makeText(getContext(), R.string.accueil_tost_cmd_del, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
         else if (v == btn_off_client) {
-            validationCommande();
+            saveCommande();
         }
         else if (v == btn_note) {
             Toast.makeText(getContext(), "Non implémenté", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    public void deleteNote() {
-        //On creer un alert dialog pour confirmer la suppression du produit
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                getContext());
-
-        //On set tous les elements et on display la dialog box
-        alertDialogBuilder.setTitle("Confirmation");
-        alertDialogBuilder.setMessage("Annuler la commande ?");
-        alertDialogBuilder.setCancelable(true)
-                .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        produitArrayListNote.clear();
-                        productAdapterNote.notifyDataSetChanged();
-                    }
-                }).setNegativeButton("Non", null).create().show();
-    }
-
-    public void validationCommande() {
-        final Commande commande = new Commande();
-
-        //On creer un alert dialog pour confirmer la suppression du produit
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                getContext());
-
-        //On set tous les elements et on display la dialog box
-        alertDialogBuilder.setTitle("Confirmation");
-
-        alertDialogBuilder
-                .setMessage("Voulez-vous terminer et valider la commande ?");
-
-        alertDialogBuilder.setCancelable(false)
-                .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //TODO formattage date
-              /*DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-                String date = df.format(Calendar.getInstance().getTime());*/
-                        commande.setDate(Calendar.getInstance().getTime());
-                        CommandeBddManager.insertOrUpdate(commande);
-
-                        commandeArrayList = (ArrayList<Commande>) CommandeBddManager.getCommande();
-                        int positionCommande = commandeArrayList.indexOf(commande);
-
-                        for (int i = 0; i < produitArrayListNote.size(); i++) {
-                            for (int j = 0; j < produitArrayListNote.get(i).getProduitRef().size(); j++) {
-                                if (produitArrayListNote.get(i).getProduitRef().get(j).getCommande() == null) {
-                                    produitArrayListNote.get(i).getProduitRef().get(j).setCommande(commandeArrayList.get(positionCommande).getId());
-                                    produitArrayListNote.get(i).setConsommation((int) (produitArrayListNote.get(i).getConsommation() + produitArrayListNote.get
-                                            (i).getProduitRef().get(j).getQuantite()));
-                                    Log.v("TagNote", String.valueOf(produitArrayListNote.get(i).getConsommation()));
-                                    ProduitBddManager.insertOrUpdate(produitArrayListNote.get(i));
-                                    ConsommeBddManager.insertOrUpdate(produitArrayListNote.get(i).getProduitRef().get(j));
-                                }
-                            }
-                        }
-                        produitArrayListNote.clear();
-                        productAdapterNote.notifyDataSetChanged();
-                        dialog.cancel();
-                    }
-                }).setNegativeButton("Non", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
     }
 
     @Override
@@ -347,55 +251,100 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
 
     @Override
     public void clicOnProduit(Produit produit) {
-        ArrayList<Consomme> consommeArrayList = (ArrayList<Consomme>) produit.getProduitRef(); /* getProduitRef renvoi une liste de
-                    consomme par produit */
-
-        // consomme
-        Consomme consomme = new Consomme();
-        consomme.setProduit(produit.getId()); // on donne l'id du produit à l'objet consomme
-        int position = -1;
-        for (int i = 0; i < consommeArrayList.size(); i++) {
-            if (consommeArrayList.get(i).getCommande() == null) {
-                position = i;
-            }
-        }
-        if (position >= 0) {
-
-            consommeArrayList.get(position).setQuantite(consommeArrayList.get(position).getQuantite() + 1);
-        }
-        else {
-            consomme.setQuantite((long) 1);
-            consommeArrayList.add(consomme);
-        }
-
-        // On ajoute le produit sur lequel on clic dans la liste des produits de la note
-        int positionProduitNote = produitArrayListNote.indexOf(produit);
-        if (productAdapterNote != null) {
-            if (positionProduitNote < 0) {
-                produitArrayListNote.add(produit);
-                productAdapterNote.notifyItemInserted(produitArrayListNote.size() - 1);
-            }
-            else {
-                productAdapterNote.notifyItemChanged(positionProduitNote);
-            }
-        }
-        else {
-            produitArrayListNote.add(produit);
-            productAdapterNote = new ProductAdapter(ProductAffichageEnum.Note, produitArrayListNote, this, null);
-            recyclerViewNote.setAdapter(productAdapterNote);
-        }
+        addProduitToNote(produit.getId());
     }
 
     @Override
     public void clicOnDeleteProduit(Produit produit) {
-        for (int i = 0; i < produit.getProduitRef().size(); i++) {
-            if (produit.getProduitRef().get(i).getCommande() == null) {
-                produit.getProduitRef().get(i).setQuantite((long) 0);
-            }
-        }
-        int positionProduitNote = produitArrayListNote.indexOf(produit);
-        produitArrayListNote.remove(positionProduitNote);
-        productAdapterNote.notifyItemRemoved(positionProduitNote);
+        removeProduitToNote(produit.getId());
     }
 
+    @Override
+    public void clicOnDeleteNote(Consomme consomme) {
+        removeProduitToNote(consomme.getProduit());
+    }
+
+    /* ---------------------------------
+    //  Private
+    // -------------------------------- */
+
+    /**
+     * Ajoute à la note le produit en param
+     *
+     * @param produitId
+     */
+    private void addProduitToNote(Long produitId) {
+        if (produitId == null) {
+            Toast.makeText(getContext(), "produitId a null", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //On cherche dans l'arrayList si un consomme correspond au produit
+        for (int i = 0; i < consommeArrayListNote.size(); i++) {
+            Consomme consomme = consommeArrayListNote.get(i);
+            if (consomme.getProduit() == produitId) {
+                //on ajoute 1 à la quantité
+                consomme.setQuantite(consomme.getQuantite() + 1);
+                consommeAdapter.notifyItemInserted(0);
+                return;
+            }
+        }
+        //Si on ne l'a pas trouvé on l'ajoute
+        consommeArrayListNote.add(0, new Consomme(null, 1L, produitId, null));
+        consommeAdapter.notifyItemInserted(0);
+    }
+
+    private void removeProduitToNote(Long produitId) {
+        if (produitId == null) {
+            Toast.makeText(getContext(), "produitId a null", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //On cherche dans l'arrayList si un consomme correspond au produit
+        for (int i = 0; i < consommeArrayListNote.size(); i++) {
+            Consomme consomme = consommeArrayListNote.get(i);
+            if (consomme.getProduit() == produitId) {
+                //on ajoute 1 à la quantité
+                consomme.setQuantite(consomme.getQuantite() - 1);
+                if (consomme.getQuantite() == 0) {
+                    consommeArrayListNote.remove(i);
+                    consommeAdapter.notifyItemRemoved(i);
+                }
+                else {
+                    consommeAdapter.notifyItemChanged(i);
+                }
+                return;
+            }
+        }
+    }
+
+    private void deleteNote() {
+        consommeAdapter.notifyItemRangeRemoved(0, consommeArrayListNote.size() - 1);
+        consommeArrayListNote.clear();
+    }
+
+    private void saveCommande() {
+
+        AlertDialogutils.showOkCancelDialog(getContext(), R.string.confirmation, R.string.accueil_confirm_message, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (consommeArrayListNote.isEmpty()) {
+                    Toast.makeText(getContext(), "Note vide", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                try {
+                    //On insert en base
+                    ConsommeBddManager.insertConsommeList(consommeArrayListNote);
+                    //Si l'insertion a reussi on efface la note
+                    deleteNote();
+                    Toast.makeText(getContext(), R.string.accueil_tost_cmd_save, Toast.LENGTH_SHORT).show();
+                }
+                catch (Exception e) {
+                    showError(e);
+                }
+            }
+        });
+    }
+
+    private void showError(Exception e) {
+        AlertDialogutils.showOkDialog(getContext(), R.string.dialog_error_title, e.getMessage(), null);
+    }
 }

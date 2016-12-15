@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:baselineAligned="false"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="@dimen/margin_5">
 
         <LinearLayout
             android:id="@+id/layoutAccueilNote"
@@ -22,7 +23,6 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_margin="@dimen/margin_8"
                 android:layout_weight="1"
                 app:cardBackgroundColor="@android:color/white"
                 >
@@ -42,41 +42,46 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
                             android:text="QTE"
-                            />
+                            android:layout_width="0dp"/>
 
                         <TextView
                             style="@style/acceuil_libelle"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
                             android:text="LIBELLE"
-                            />
+                            android:layout_width="0dp"/>
 
                         <TextView
                             style="@style/acceuil_libelle"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
                             android:text="PRIX U"
-                            />
+                            android:layout_width="0dp"/>
 
                         <TextView
                             style="@style/acceuil_libelle"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
                             android:text="MONTANT"
-                            />
+                            android:layout_width="0dp"/>
 
                         <TextView
                             style="@style/acceuil_libelle"
                             android:layout_height="wrap_content"
-                            />
+                            android:layout_width="0dp"
+                            android:layout_weight="1"/>
 
                     </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/margin_2"
+                        android:background="@color/selected_cellule_bg"/>
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rv_accueilNote"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/margin_10"
                         tools:listitem="@layout/cellule_note_accueil">
                     </android.support.v7.widget.RecyclerView>
                 </LinearLayout>
@@ -86,10 +91,9 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/accueil_bloc_button_note_height"
-                android:layout_margin="@dimen/margin_8"
                 android:padding="@dimen/margin_5"
                 app:cardBackgroundColor="@android:color/white"
-                >
+                android:layout_marginTop="@dimen/margin_5">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -123,10 +127,10 @@
         <android.support.v7.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/margin_8"
             android:padding="@dimen/margin_5"
             app:cardBackgroundColor="@android:color/white"
-            >
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10">
 
             <LinearLayout
                 android:id="@+id/layoutAccueilCategory"
@@ -183,7 +187,6 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_margin="@dimen/margin_8"
                 android:layout_weight="1"
                 android:padding="@dimen/margin_5"
                 app:cardBackgroundColor="@android:color/white"
@@ -200,10 +203,9 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_8"
                 android:padding="@dimen/margin_5"
                 app:cardBackgroundColor="@android:color/white"
-                >
+                android:layout_marginTop="@dimen/margin_10">
 
                 <GridLayout
                     android:layout_width="match_parent"

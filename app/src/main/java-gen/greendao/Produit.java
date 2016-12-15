@@ -35,6 +35,7 @@ public class Produit {
 
     // KEEP FIELDS - put your custom fields here
     private Boolean isSelected = false;
+    private int quantite;//Pour la note
     // KEEP FIELDS END
 
     public Produit() {
@@ -207,6 +208,14 @@ public class Produit {
 
     public void setSelected(Boolean selected) {
         isSelected = selected;
+    }
+
+    public int getQuantite() {
+        return quantite;
+    }
+
+    public void setQuantite(int quantite) {
+        this.quantite = quantite;
     }
     // KEEP METHODS END
 

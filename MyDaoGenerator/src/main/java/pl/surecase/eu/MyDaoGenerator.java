@@ -41,6 +41,7 @@ public class MyDaoGenerator {
         Property commandeId = consomme.addLongProperty("commande").getProperty();
 
         //Création des liens des propriétés
+        consomme.addToOne(produit, produitId).setName("produitRef");
         commande.addToMany(consomme, produitId).setName("commandeRef");
         produit.addToMany(consomme, commandeId).setName("produitRef");
 

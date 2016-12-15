@@ -1,4 +1,4 @@
-package vue;
+package vue.adapter;
 
 import android.content.res.ColorStateList;
 import android.support.v7.widget.AppCompatButton;
@@ -15,9 +15,9 @@ import com.example.anthony.gestionstock.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import greendao.Consomme;
 import greendao.Produit;
 import model.ProduitBddManager;
+import vue.ProductAffichageEnum;
 
 /**
  * Created by Axel legué on 23/11/2016.
@@ -26,17 +26,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     private ProductAffichageEnum choixAffichage;
     private ArrayList<Produit> getProduitArrayList;
-    private View v;
     private ProductAdapterCallBack productAdapterCallBack;
-    private ArrayList<Long> idCommandes;
-    private String quantiteTest;
-    private HashMap<Produit, Long> quantiteHashMap;
     private ArrayList<Produit> produitArrayListAll;
+    private HashMap<Produit, Long> quantiteHashMap;
+    private HashMap<Produit, Integer> lotRecommandeHashMap = new HashMap<>();
     private final String SYMBOLE_EURO = " €";
 
     // -------------------------------- CONSTRUCTOR -------------------------------------------------- //
-    public ProductAdapter(ProductAffichageEnum choixAffichage, ArrayList<Produit> getProduitArrayList, ProductAdapterCallBack
-            productAdapterCallBack, HashMap<Produit, Long> quantiteHashMap) {
+    public ProductAdapter(ProductAffichageEnum choixAffichage, ArrayList<Produit> getProduitArrayList, ProductAdapterCallBack productAdapterCallBack, HashMap<Produit, Long> quantiteHashMap) {
         this.choixAffichage = choixAffichage;
         this.getProduitArrayList = getProduitArrayList;
         this.productAdapterCallBack = productAdapterCallBack;
@@ -47,11 +44,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public ProductAdapter.ViewHolder onCreateViewHolder(ViewGroup vg, int viewType) {
+        View v = null;
         switch (choixAffichage) {
-
-            case Note:
-                v = LayoutInflater.from(vg.getContext()).inflate(R.layout.cellule_note_accueil, vg, false);
-                break;
             case Accueil:
                 v = LayoutInflater.from(vg.getContext()).inflate(R.layout.cellule_produit_accueil, vg, false);
                 break;
@@ -77,28 +71,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         switch (choixAffichage) {
 
-            case Note:
-                ArrayList<Consomme> consommeArrayList = (ArrayList<Consomme>) produitbean.getProduitRef();
-                int positionNote = -1;
-                float montantLigne = 0;
-                for (int i = 0; i < consommeArrayList.size(); i++) {
-                    if (consommeArrayList.get(i).getCommande() == null) {
-                        positionNote = i;
-                        montantLigne = consommeArrayList.get(i).getQuantite() * produitbean.getPrix();
-                    }
-                }
-                holder.displayQuantite.setText(String.valueOf(consommeArrayList.get(positionNote).getQuantite()));
-                holder.displaylibelle.setText(produitbean.getNom());
-                holder.displayTarif.setText(String.valueOf(produitbean.getPrix()) + SYMBOLE_EURO);
-                holder.displayMontant.setText(String.valueOf(montantLigne) + SYMBOLE_EURO);
-                holder.displayDeleteProduit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        productAdapterCallBack.clicOnDeleteProduit(produitbean);
-                    }
-                });
-
-                break;
             case Accueil:
                 holder.produitAccueil.setText(produitbean.getNom());
                 holder.produitAccueil.setSupportBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(produitbean.getCategorie().getCouleur())));
@@ -237,15 +209,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             super(itemView);
 
             switch (choixAffichage) {
-                case Note:
-                    displayQuantite = (TextView) itemView.findViewById(R.id.quantite_note);
-                    displaylibelle = (TextView) itemView.findViewById(R.id.libelle_note);
-                    displayTarif = (TextView) itemView.findViewById(R.id.prix_u_note);
-                    displayMontant = (TextView) itemView.findViewById(R.id.montant_note);
-                    displayDeleteProduit = (ImageView) itemView.findViewById(R.id.delete_produit_note);
-                    displayDeleteProduit.setColorFilter(displayDeleteProduit.getResources().getColor(R.color.red));
-                    break;
-
                 case Accueil:
                     produitAccueil = (AppCompatButton) itemView.findViewById(R.id.root_produit_accueil);
                     break;
