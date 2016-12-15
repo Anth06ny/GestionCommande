@@ -36,7 +36,8 @@ import vue.ProductAffichageEnum;
  * Use the {@link FragmentReglage#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentReglage extends Fragment implements View.OnClickListener, CategoryAdapter.CategoryAdapterCallBack, ProductAdapter.ProductAdapterCallBack {
+public class FragmentReglage extends Fragment implements View.OnClickListener, CategoryAdapter.CategoryAdapterCallBack, ProductAdapter.ProductAdapterCallBack,
+        DialogLogin.DialogLoginCallBack {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -104,6 +105,11 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
 
     // initUI permet de recupere les elements graphique et faire des operations sur ces elements
     private void initUI(View v) {
+
+        DialogLogin dialogLogin = new DialogLogin();
+        dialogLogin.setDialogLoginCallBack(FragmentReglage.this);
+        dialogLogin.setCancelable(false);
+        dialogLogin.show(getFragmentManager(), "tag");
 
         categorieList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
 
@@ -460,5 +466,16 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+    }
+
+    @Override
+    public void onCancelLogin(Boolean cancel) {
+        FragmentAccueil fragmentAcceuil = new FragmentAccueil();
+        //lancer un autre fragment
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.flContent, fragmentAcceuil, "string")
+                .addToBackStack(null)
+                .commit();
     }
 }

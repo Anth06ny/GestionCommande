@@ -41,7 +41,6 @@ public class FragmentAdminInfo extends Fragment {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private UserSession session;
-    private FragmentLogin fragmentLogin;
 
     /**
      * Use this factory method to create a new instance of
@@ -111,15 +110,14 @@ public class FragmentAdminInfo extends Fragment {
                     editor.commit();
                 }
 
-                fragmentLogin = new FragmentLogin();
 
-                getActivity().getSupportFragmentManager()
+                /*getActivity().getSupportFragmentManager()
                         .beginTransaction()
-                        //TODO lancer un autre fragment
+                        // lancer un autre fragment
                         .replace(R.id.flContent, fragmentLogin, "string")
                         .addToBackStack(null)
                         .commit();
-                /*Intent ob = new Intent(getContext(), Login.class);
+                Intent ob = new Intent(getContext(), Login.class);
                 startActivity(ob);*/
             }
         });

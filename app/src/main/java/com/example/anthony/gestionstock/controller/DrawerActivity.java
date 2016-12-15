@@ -19,7 +19,7 @@ import com.example.anthony.gestionstock.R;
 
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, FragmentReglage.OnFragmentInteractionListener, FragmentStock.OnFragmentInteractionListener,
-        FragmentAccueil.OnFragmentInteractionListener, FragmentBilan.OnFragmentInteractionListener, FragmentAdminInfo.OnFragmentInteractionListener, FragmentLogin.OnFragmentInteractionListener {
+        FragmentAccueil.OnFragmentInteractionListener, FragmentBilan.OnFragmentInteractionListener, FragmentAdminInfo.OnFragmentInteractionListener {
     private DrawerLayout mDrawer;
 
     @Override
@@ -110,7 +110,7 @@ public class DrawerActivity extends AppCompatActivity
             fragmentClass = FragmentBilan.class;
         }
         else if (id == R.id.Reglage) {
-            fragmentClass = FragmentLogin.class;
+            fragmentClass = FragmentReglage.class;
         }
         try {
             fragment = (Fragment) fragmentClass.newInstance();

@@ -35,11 +35,9 @@ public class UserSession {
     }
 
     //Create login session
-    public void createUserLoginSession(String uName, String uPsw) {
+    public void createUserLoginSession(String uPsw) {
         // Storing login value as TRUE
         editor.putBoolean(IS_USER_LOGIN, true);
-        // Storing name in preferences
-        editor.putString(KEY_NAME, uName);
         // Storing password in preferences
         editor.putString(KEY_PASSWORD, uPsw);
         // commit changes
