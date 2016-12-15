@@ -47,5 +47,5 @@
 
     <!-- Acceuil -->
     <dimen name="accueil_bloc_button_note_height">150dp</dimen>
-    <dimen name="accueil_nb_categorie">5</dimen>
+    <integer name="accueil_nb_categorie">5</integer>
 </resources>
