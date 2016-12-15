@@ -44,5 +44,5 @@
     <dimen name="margin_80">120dp</dimen>
 
     <dimen name="accueil_bloc_button_note_height">225dp</dimen>
-    <dimen name="accueil_nb_categorie">8</dimen>
+    <integer name="accueil_nb_categorie">8</integer>
 </resources>
