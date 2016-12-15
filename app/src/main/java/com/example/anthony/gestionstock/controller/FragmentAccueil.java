@@ -2,13 +2,11 @@ package com.example.anthony.gestionstock.controller;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,7 +19,6 @@ import com.example.anthony.gestionstock.R;
 import java.util.ArrayList;
 
 import greendao.Categorie;
-import greendao.Commande;
 import greendao.Consomme;
 import greendao.Produit;
 import model.CategorieBddManager;
@@ -29,7 +26,9 @@ import model.ConsommeBddManager;
 import model.ProduitBddManager;
 import vue.AlertDialogutils;
 import vue.ProductAffichageEnum;
+import vue.adapter.CategoryAdapter;
 import vue.adapter.ConsommeAdapter;
+import vue.adapter.GridAutofitLayoutManager;
 import vue.adapter.ProductAdapter;
 
 /**
@@ -41,31 +40,36 @@ import vue.adapter.ProductAdapter;
  * create an instance of this fragment.
  */
 
-public class FragmentAccueil extends Fragment implements View.OnClickListener, ProductAdapter.ProductAdapterCallBack, ConsommeAdapter.ConsommeAdapterCallBack {
-    // TODO: Rename parameter arguments, choose names that match
+public class FragmentAccueil extends Fragment implements View.OnClickListener, ProductAdapter.ProductAdapterCallBack, ConsommeAdapter.ConsommeAdapterCallBack, CategoryAdapter.CategoryAdapterCallBack {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    // TODO: Rename and change types of parameters
+    private OnFragmentInteractionListener mListener;
 
-    private final int NB_MAX_CATEGORIES = 6;
     private final int NB_MAX_FAVORIS = 6;
-    private AppCompatButton btn_cancel;
-    private AppCompatButton btn_note;
-    private AppCompatButton btn_off_client;
+
     //GestionNote
     private ConsommeAdapter consommeAdapter;
     private ArrayList<Consomme> consommeArrayListNote;
     private RecyclerView recyclerViewNote;
+    private AppCompatButton btn_cancel;
+    private AppCompatButton btn_note;
+    private AppCompatButton btn_off_client;
 
-    private ProductAdapter productAdapter;
+    //Gestion Categorie
+    private RecyclerView rv_accueilCategorie;
     private ArrayList<Categorie> categorieArrayList;
-    private OnFragmentInteractionListener mListener;
-    private RecyclerView recyclerViewProduits;
-    private ArrayList<Produit> produitArrayListFavoris;
-    private ArrayList<Produit> arraylistProduits;
+    private CategoryAdapter categoryAdapter;
 
-    private ArrayList<Commande> commandeArrayList;
+    //Gestion Produit
+    private ProductAdapter productAdapter;
+    private ArrayList<Produit> arraylistProduits;
+    private RecyclerView recyclerViewProduits;
+
+    //Gestion ProduitFavorie
+    private ProductAdapter productAdapterFavoris;
+    private ArrayList<Produit> produitArrayListFavoris;
+    private RecyclerView rv_accueilProduitFavoris;
 
     /**
      * Use this factory method to create a new instance of
@@ -99,16 +103,6 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     }
 
     private void initUI(View v) {
-        //Création de la liste de catégories
-        //Remplissage de la liste
-        categorieArrayList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
-        produitArrayListFavoris = (ArrayList<Produit>) ProduitBddManager.getProduitFavoris(); // remplissage de la liste de produits
-
-        //RecyclerView PRODUIT
-        //On instancie un grid layoutmanager qui prend en parametre le context et le nombre de colonne/ligne
-        recyclerViewProduits = (RecyclerView) v.findViewById(R.id.rv_accueilProduit);//on reucpere le recycler view
-        recyclerViewProduits.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        recyclerViewProduits.setItemAnimator(new DefaultItemAnimator());
 
         //RecyvclerView NOTE
         consommeArrayListNote = new ArrayList<>(); // Instanciation de la liste
@@ -116,7 +110,35 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         recyclerViewNote = (RecyclerView) v.findViewById(R.id.rv_accueilNote);
         recyclerViewNote.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewNote.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewNote.setAdapter(consommeAdapter);
 
+        //RecyclerView Category
+        categorieArrayList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
+        categoryAdapter = new CategoryAdapter(categorieArrayList, CategoryAdapter.CATEGORY_TYPE.ACCUEIL, this);
+        rv_accueilCategorie = (RecyclerView) v.findViewById(R.id.rv_accueilCategorie);
+        rv_accueilCategorie.setLayoutManager(new LinearLayoutManager(getContext()));
+        rv_accueilCategorie.setItemAnimator(new DefaultItemAnimator());
+        rv_accueilCategorie.setAdapter(categoryAdapter);
+
+        //RecycleView produit par defaut à vide
+        arraylistProduits = new ArrayList<>();
+        productAdapter = new ProductAdapter(ProductAffichageEnum.Accueil, arraylistProduits, this, null);
+        recyclerViewProduits = (RecyclerView) v.findViewById(R.id.rv_accueilProduit);//on reucpere le recycler view
+        int bt_width = getResources().getDimensionPixelSize(R.dimen.accueil_bt_product_width);
+        //Permet un calcul auto du nombre de colonne
+        recyclerViewProduits.setLayoutManager(new GridAutofitLayoutManager(getContext(), bt_width));
+        recyclerViewProduits.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewProduits.setAdapter(productAdapter);
+
+        //RecycleView produit Favoris
+        produitArrayListFavoris = (ArrayList<Produit>) ProduitBddManager.getProduitFavoris(); // remplissage de la liste de produits
+        productAdapterFavoris = new ProductAdapter(ProductAffichageEnum.Accueil, produitArrayListFavoris, this, null);
+        rv_accueilProduitFavoris = (RecyclerView) v.findViewById(R.id.rv_accueilProduitFavoris);//on reucpere le recycler view
+        rv_accueilProduitFavoris.setLayoutManager(new GridAutofitLayoutManager(getContext(), bt_width));
+        rv_accueilProduitFavoris.setItemAnimator(new DefaultItemAnimator());
+        rv_accueilProduitFavoris.setAdapter(productAdapterFavoris);
+
+        //Autre
         btn_cancel = (AppCompatButton) v.findViewById(R.id.btn_deleteNote);
         btn_note = (AppCompatButton) v.findViewById(R.id.btn_printNote);
         btn_off_client = (AppCompatButton) v.findViewById(R.id.btn_offClient);
@@ -124,69 +146,8 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         btn_note.setOnClickListener(this);
         btn_cancel.setOnClickListener(this);
         btn_off_client.setOnClickListener(this);
-
-        // Gestion des Boutons de CATEGORIES
-        AppCompatButton[] buttons = new AppCompatButton[NB_MAX_CATEGORIES];
-        for (int j = 0; j < NB_MAX_CATEGORIES; j++) {
-            int idBtnCategories = j + 1;
-            String buttonId = "btn_cat" + idBtnCategories;
-            int resId = getResources().getIdentifier(buttonId, "id", "com.example.anthony.gestionstock");
-            buttons[j] = ((AppCompatButton) v.findViewById(resId));
-            buttons[j].setVisibility(View.INVISIBLE);
-            final int finalJ = j;
-            buttons[j].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    // rempli l'arrayListe avec les produits de la catégorie
-                    arraylistProduits = (ArrayList<Produit>) categorieArrayList.get(finalJ).getProduitList();
-                    // instancie l'adpateur.
-                    productAdapter = new ProductAdapter(ProductAffichageEnum.Accueil, arraylistProduits, FragmentAccueil.this, null);
-                    // on passe l'adapter au recycler view
-                    recyclerViewProduits.setAdapter(productAdapter);
-                }
-            });
-        }
-        for (int k = 0; k < categorieArrayList.size(); k++) {
-            buttons[k].setText(categorieArrayList.get(k).getNom());
-            buttons[k].setSupportBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(categorieArrayList.get(k).getCouleur())));
-            buttons[k].setVisibility(View.VISIBLE);
-        }
-        //TODO conditions ajout produit dans la note
-
-        //Gestion des boutons favoris
-        AppCompatButton[] buttonsFavoris = new AppCompatButton[NB_MAX_FAVORIS]; // création du tableau de bouton
-        for (int l = 0; l < NB_MAX_FAVORIS; l++) {
-            int idBtnFavoris = l + 1;
-            String buttonIdFavoris = "btn_prod_favori" + idBtnFavoris; // récupère en String la nomenclature de l'ID
-            int resIdFavoris = getResources().getIdentifier(buttonIdFavoris, "id", "com.example.anthony.gestionstock");// Récupère la ressource R.id.btn_prod_favori+idBtnFavoris
-            buttonsFavoris[l] = ((AppCompatButton) v.findViewById(resIdFavoris)); // récupère le bouton
-            buttonsFavoris[l].setVisibility(View.INVISIBLE);
-            final int finalL = l;
-            buttonsFavoris[l].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    if (v.getTag() == null) {
-                        Toast.makeText(getContext(), "Le bouton " + v + " n'a pas de tag", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        addProduitToNote((Long) v.getTag());
-                    }
-                }
-            });
-        }
-        for (int m = 0; m < produitArrayListFavoris.size(); m++) {
-            // Paramerage de l'affichage des boutons des produits favoris
-            buttonsFavoris[m].setText(produitArrayListFavoris.get(m).getNom());
-            //TODO modif Anthony à tester
-            buttonsFavoris[m].setSupportBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(produitArrayListFavoris.get(m).getCategorie().getCouleur())));
-            //TODO fin modif
-            buttonsFavoris[m].setVisibility(View.VISIBLE);
-        }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -244,9 +205,13 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         }
     }
 
+    /* ---------------------------------
+    // Callback ProductAdapter
+    // -------------------------------- */
+
     @Override
     public void clicOnModifyOrInsertProduit(Produit produit) {
-
+        //Non utilisée ici
     }
 
     @Override
@@ -256,14 +221,40 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
 
     @Override
     public void clicOnDeleteProduit(Produit produit) {
-        removeProduitToNote(produit.getId());
+        //non utilisée ici
     }
+
+
+    /* ---------------------------------
+    // CallBack ConsommeAdapter
+    // -------------------------------- */
 
     @Override
     public void clicOnDeleteNote(Consomme consomme) {
         removeProduitToNote(consomme.getProduit());
     }
 
+    /* ---------------------------------
+    // CallBack CategoryAdapter
+    // -------------------------------- */
+
+    @Override
+    public void clicOnModifyCategory(Categorie categorie) {
+        //non utilisée ici
+    }
+
+    @Override
+    public void clicOnCategory(Categorie categorie) {
+        //on clic sur une category, on modifie la liste de produit et on actualise l'ecran
+        arraylistProduits.clear();
+        arraylistProduits.addAll(categorie.getProduitList());
+        productAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void clicOnDeleteCategory(Categorie categorie) {
+        //non utilisée ici
+    }
     /* ---------------------------------
     //  Private
     // -------------------------------- */

@@ -24,9 +24,10 @@ import greendao.Categorie;
 import greendao.Produit;
 import model.CategorieBddManager;
 import model.ProduitBddManager;
+import vue.AlertDialogutils;
+import vue.ProductAffichageEnum;
 import vue.adapter.CategoryAdapter;
 import vue.adapter.ProductAdapter;
-import vue.ProductAffichageEnum;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -116,7 +117,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         categorieList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
 
         //On recupere le recycler view des categories et on lui passe l'adapteur qui contient la liste de toutes les categories
-        categoryAdapter = new CategoryAdapter(categorieList, this);
+        categoryAdapter = new CategoryAdapter(categorieList, CategoryAdapter.CATEGORY_TYPE.REGLAGE, this);
         recyclerViewCategories = (RecyclerView) v.findViewById(R.id.rv_categorie);
         recyclerViewCategories.setAdapter(categoryAdapter);
         recyclerViewCategories.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -137,7 +138,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
             @Override
             public void onClick(View v) {
                 //On appel clicOnModifyOrInsertCategorie avec null en paramatre car il n'y a pas de categorie deja existante quand on ajoute une categorie
-                clicOnModifyOrInsertCategory(null);
+                clicOnModifyCategory(null);
             }
         });
 
@@ -199,7 +200,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
 
     /////////////// Call Back Categorie ///////////////
     @Override
-    public void clicOnModifyOrInsertCategory(Categorie cat) {
+    public void clicOnModifyCategory(Categorie cat) {
         //On instancie la dialog Categorie
         DialogCategorie newFragment = new DialogCategorie();
 
@@ -231,37 +232,29 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
 
             @Override
             public void dialogCategorieClicOnValiderErreur(int tag) {
-                //On creer un alert dialog pour indiquer que les valeurs saisie par l'utilisateur sont incorrect
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        getContext());
 
+                //On creer un alert dialog pour indiquer que les valeurs saisie par l'utilisateur sont incorrect
+                String erreur;
                 //On set tous les elements et on display la dialog box
-                alertDialogBuilder.setTitle("Erreur");
                 switch (tag) {
                     case 0:
-                        alertDialogBuilder
-                                .setMessage("Erreur lors de l'envoie des données saisie veuillez réessayer");
+                        erreur = "Erreur lors de l'envoie des données saisie veuillez réessayer";
                         break;
                     case 1:
-                        alertDialogBuilder
-                                .setMessage("Catégorie déjà existante");
+                        erreur = "Catégorie déjà existante";
                         break;
                     case 2:
-                        alertDialogBuilder
-                                .setMessage("Couleur déjà utilisé");
+                        erreur = "Couleur déjà utilisé";
                         break;
                     case 3:
-                        alertDialogBuilder.setMessage("Nombre maximal de catégorie atteint");
+                        erreur = "Nombre maximal de catégorie atteint";
+                        break;
+                    default:
+                        erreur = "Case inconnu";
+                        break;
                 }
 
-                alertDialogBuilder.setCancelable(false)
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
+                AlertDialogutils.showOkCancelDialog(getContext(), R.string.dialog_error_title, erreur, null);
             }
         });
         newFragment.show(getFragmentManager(), tag);

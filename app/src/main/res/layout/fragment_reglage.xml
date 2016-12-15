@@ -49,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
-                tools:listitem="@layout/cellule_category">
+                tools:listitem="@layout/cellule_category_reglage">
 
             </android.support.v7.widget.RecyclerView>
 

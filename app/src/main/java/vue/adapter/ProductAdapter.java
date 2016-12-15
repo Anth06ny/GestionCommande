@@ -16,20 +16,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import greendao.Produit;
-import model.ProduitBddManager;
 import vue.ProductAffichageEnum;
 
 /**
  * Created by Axel legué on 23/11/2016.
  */
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
+public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ProductAffichageEnum choixAffichage;
     private ArrayList<Produit> getProduitArrayList;
     private ProductAdapterCallBack productAdapterCallBack;
-    private ArrayList<Produit> produitArrayListAll;
     private HashMap<Produit, Long> quantiteHashMap;
-    private HashMap<Produit, Integer> lotRecommandeHashMap = new HashMap<>();
     private final String SYMBOLE_EURO = " €";
 
     // -------------------------------- CONSTRUCTOR -------------------------------------------------- //
@@ -43,12 +40,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     // --------------------------------  END CONSTRUCTOR -------------------------------------------------- //
 
     @Override
-    public ProductAdapter.ViewHolder onCreateViewHolder(ViewGroup vg, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup vg, int viewType) {
         View v = null;
         switch (choixAffichage) {
             case Accueil:
                 v = LayoutInflater.from(vg.getContext()).inflate(R.layout.cellule_produit_accueil, vg, false);
-                break;
+                return new ProductAdapter.ViewHolderAccueil(v);
             case Reglage:
                 v = LayoutInflater.from(vg.getContext()).inflate(R.layout.cellule_produit_reglage, vg, false);
                 break;
@@ -64,17 +61,17 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(final ProductAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder vh, int position) {
 
         final Produit produitbean = getProduitArrayList.get(position);
-        produitArrayListAll = (ArrayList<Produit>) ProduitBddManager.getProduit();
 
         switch (choixAffichage) {
-
             case Accueil:
-                holder.produitAccueil.setText(produitbean.getNom());
-                holder.produitAccueil.setSupportBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(produitbean.getCategorie().getCouleur())));
-                holder.produitAccueil.setOnClickListener(new View.OnClickListener() {
+                ProductAdapter.ViewHolderAccueil viewHolderAccueil = (ViewHolderAccueil) vh;
+                viewHolderAccueil.root.setText(produitbean.getNom());
+
+                viewHolderAccueil.root.setSupportBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(produitbean.getCategorie().getCouleur())));
+                viewHolderAccueil.root.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         productAdapterCallBack.clicOnProduit(produitbean);
@@ -83,27 +80,28 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 break;
 
             case Reglage:
-                holder.displaylibelle.setText(produitbean.getNom());
-                holder.displayTarif.setText(String.valueOf(produitbean.getPrix() + SYMBOLE_EURO));
-                holder.displayLot.setText(String.valueOf(produitbean.getLot()));
+                ProductAdapter.ViewHolder holderReglage = (ViewHolder) vh;
+                holderReglage.displaylibelle.setText(produitbean.getNom());
+                holderReglage.displayTarif.setText(String.valueOf(produitbean.getPrix() + SYMBOLE_EURO));
+                holderReglage.displayLot.setText(String.valueOf(produitbean.getLot()));
 
                 if (produitbean.isSelected()) {
-                    holder.displayModifyProduit.setVisibility(View.VISIBLE);
-                    holder.displayDeleteProduit.setVisibility(View.VISIBLE);
-                    holder.cv_bg.setCardBackgroundColor(holder.cv_bg.getResources().getColor(R.color.selected_cellule_bg));
+                    holderReglage.displayModifyProduit.setVisibility(View.VISIBLE);
+                    holderReglage.displayDeleteProduit.setVisibility(View.VISIBLE);
+                    holderReglage.cv_bg.setCardBackgroundColor(holderReglage.cv_bg.getResources().getColor(R.color.selected_cellule_bg));
                 }
                 else {
-                    holder.displayModifyProduit.setVisibility(View.INVISIBLE);
-                    holder.displayDeleteProduit.setVisibility(View.INVISIBLE);
-                    holder.cv_bg.setCardBackgroundColor(holder.cv_bg.getResources().getColor(R.color.unselected_cellule_bg));
+                    holderReglage.displayModifyProduit.setVisibility(View.INVISIBLE);
+                    holderReglage.displayDeleteProduit.setVisibility(View.INVISIBLE);
+                    holderReglage.cv_bg.setCardBackgroundColor(holderReglage.cv_bg.getResources().getColor(R.color.unselected_cellule_bg));
                 }
-                holder.root.setOnClickListener(new View.OnClickListener() {
+                holderReglage.root.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         productAdapterCallBack.clicOnProduit(produitbean);
                     }
                 });
-                holder.displayModifyProduit.setOnClickListener(new View.OnClickListener() {
+                holderReglage.displayModifyProduit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (productAdapterCallBack != null) {
@@ -111,7 +109,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                         }
                     }
                 });
-                holder.displayDeleteProduit.setOnClickListener(new View.OnClickListener() {
+                holderReglage.displayDeleteProduit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         productAdapterCallBack.clicOnDeleteProduit(produitbean);
@@ -120,63 +118,64 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 break;
 
             case Bilan:
-                holder.displaylibelle.setText(produitbean.getNom());
-                holder.displayTarif.setText(String.valueOf(produitbean.getPrix()) + SYMBOLE_EURO);
+                ProductAdapter.ViewHolder holder2 = (ViewHolder) vh;
+                holder2.displaylibelle.setText(produitbean.getNom());
+                holder2.displayTarif.setText(String.valueOf(produitbean.getPrix()) + SYMBOLE_EURO);
                 if (quantiteHashMap != null) {
-                    holder.displayQuantite.setText(String.valueOf(quantiteHashMap.get(produitbean)));
-                    holder.displayMontant.setText(String.valueOf((quantiteHashMap.get(produitbean) * produitbean.getPrix())) + SYMBOLE_EURO);
+                    holder2.displayQuantite.setText(String.valueOf(quantiteHashMap.get(produitbean)));
+                    holder2.displayMontant.setText(String.valueOf((quantiteHashMap.get(produitbean) * produitbean.getPrix())) + SYMBOLE_EURO);
                 }
 
                 break;
 
             case Stock:
-
+                final ProductAdapter.ViewHolder holder3 = (ViewHolder) vh;
                 if (produitbean.getLotRecommande() == null) {
                     produitbean.setLotRecommande(0);
                 }
 
-                holder.displaylibelle.setText(produitbean.getNom());
+                holder3.displaylibelle.setText(produitbean.getNom());
                 if (produitbean.getConsommation() != null) {
-                    holder.displayQuantite.setText(String.valueOf(produitbean.getConsommation()));
-                    holder.displayLot.setText(String.valueOf(produitbean.getConsommation() / produitbean.getLot()));
+                    holder3.displayQuantite.setText(String.valueOf(produitbean.getConsommation()));
+                    holder3.displayLot.setText(String.valueOf(produitbean.getConsommation() / produitbean.getLot()));
                 }
                 else {
-                    holder.displayQuantite.setText("0");
-                    holder.displayLot.setText("0");
+                    holder3.displayQuantite.setText("0");
+                    holder3.displayLot.setText("0");
                 }
 
-                holder.displayLotRecommande.setText(String.valueOf(produitbean.getLotRecommande()));
+                holder3.displayLotRecommande.setText(String.valueOf(produitbean.getLotRecommande()));
 
-                holder.displayMin.setOnClickListener(new View.OnClickListener() {
+                holder3.displayMin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         produitbean.setLotRecommande(0);
-                        holder.displayLotRecommande.setText(String.valueOf(produitbean.getLotRecommande()));
+                        holder3.displayLotRecommande.setText(String.valueOf(produitbean.getLotRecommande()));
                     }
                 });
-                holder.displayRemove.setOnClickListener(new View.OnClickListener() {
+                holder3.displayRemove.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (Integer.valueOf(String.valueOf(holder.displayLotRecommande.getText())) > 0) {
+                        if (Integer.valueOf(String.valueOf(holder3.displayLotRecommande.getText())) > 0) {
                             produitbean.setLotRecommande(produitbean.getLotRecommande() - 1);
-                            holder.displayLotRecommande.setText(String.valueOf(produitbean.getLotRecommande()));
+                            holder3.displayLotRecommande.setText(String.valueOf(produitbean.getLotRecommande()));
                         }
                     }
                 });
-                holder.displayAdd.setOnClickListener(new View.OnClickListener() {
+                holder3.displayAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (Integer.valueOf(String.valueOf(holder.displayLotRecommande.getText())) < Integer.valueOf(String.valueOf(holder.displayLot.getText()))) {
+                        if (Integer.valueOf(String.valueOf(holder3.displayLotRecommande.getText())) < Integer.valueOf(String.valueOf(holder3.displayLot.getText()))) {
                             produitbean.setLotRecommande(produitbean.getLotRecommande() + 1);
-                            holder.displayLotRecommande.setText(String.valueOf(produitbean.getLotRecommande()));
+                            holder3.displayLotRecommande.setText(String.valueOf(produitbean.getLotRecommande()));
                         }
                     }
                 });
-                holder.displayMax.setOnClickListener(new View.OnClickListener() {
+                holder3.displayMax.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        produitbean.setLotRecommande(Integer.valueOf((String) holder.displayLot.getText()));
-                        holder.displayLotRecommande.setText(String.valueOf(produitbean.getLotRecommande()));
+                        produitbean.setLotRecommande(Integer.valueOf((String) holder3.displayLot.getText()));
+                        holder3.displayLotRecommande.setText(String.valueOf(produitbean.getLotRecommande()));
                     }
                 });
                 break;
@@ -186,6 +185,17 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     @Override
     public int getItemCount() {
         return getProduitArrayList.size();
+    }
+
+    public class ViewHolderAccueil extends RecyclerView.ViewHolder {
+
+        public AppCompatButton root;
+
+        public ViewHolderAccueil(View itemView) {
+            super(itemView);
+
+            root = (AppCompatButton) itemView.findViewById(R.id.root);
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -209,9 +219,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             super(itemView);
 
             switch (choixAffichage) {
-                case Accueil:
-                    produitAccueil = (AppCompatButton) itemView.findViewById(R.id.root_produit_accueil);
-                    break;
 
                 case Reglage:
                     displaylibelle = (TextView) itemView.findViewById(R.id.txt_produit);

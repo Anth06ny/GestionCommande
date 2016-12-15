@@ -57,7 +57,7 @@
     <!-- ################## -->
 
     <style name="acceuil_libelle">
-        <item name="android:textSize">@dimen/font_14</item>
+        <item name="android:textSize">@dimen/font_13</item>
         <item name="android:textStyle">bold</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:textAlignment">center</item>

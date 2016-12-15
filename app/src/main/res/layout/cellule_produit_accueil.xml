@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.v7.widget.AppCompatButton
+    android:id="@+id/root"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textAlignment="center">
+    android:layout_width="@dimen/accueil_bt_product_width"
+    android:layout_height="@dimen/accueil_bt_product_height"
+    android:padding="@dimen/margin_10"
+    android:singleLine="true"
+    android:text="Cafe"
+    android:textAlignment="center"
+    android:textAllCaps="true"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/font_12">
 
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/root_produit_accueil"
-        android:layout_width="90dp"
-        android:layout_height="60dp"
-        android:text="produit1"
-        android:textAlignment="center"
-        android:textAllCaps="true"/>
 
-</RelativeLayout>
+</android.support.v7.widget.AppCompatButton>
