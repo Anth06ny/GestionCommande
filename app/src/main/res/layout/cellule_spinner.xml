@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+              android:background="@android:color/white"
+    >
 
-    <TextView
-        android:id="@+id/field1"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="test"
-        android:textAllCaps="true"/>
+
+        android:background="?android:selectableItemBackground"
+        android:clickable="false"
+        android:padding="@dimen/margin_2">
+
+        <ImageView
+            android:id="@+id/iv_color"
+            android:layout_width="@dimen/standard_height"
+            android:layout_height="@dimen/standard_height"
+            android:padding="@dimen/margin_5"
+            android:src="@drawable/circle_bg"/>
+
+        <TextView
+            android:id="@+id/tv_categorie"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:gravity="center_vertical"
+            android:text="test"
+            android:textColor="@color/product_color"
+            android:textSize="@dimen/font_16"/>
+    </LinearLayout>
 
 
 </LinearLayout>

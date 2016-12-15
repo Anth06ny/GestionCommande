@@ -9,12 +9,14 @@
     <EditText
         android:id="@+id/user_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="Ad"/>
 
     <EditText
         android:id="@+id/mot_de_passe"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="1234"/>
 
     <Button
         android:id="@+id/btn_conection_admin"

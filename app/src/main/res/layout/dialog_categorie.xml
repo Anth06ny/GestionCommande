@@ -1,38 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:padding="@dimen/margin_20">
 
     <TextView
+        style="@style/dialog_text_libelle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nom :"/>
+        android:text="@string/dialog_categorie_name_libelle"
+        />
 
     <EditText
         android:id="@+id/nomCategorie"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="@string/dialog_categorie_name_hint"
         android:inputType="text"
-        />
+        android:textSize="@dimen/font_14"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginTop="@dimen/margin_20"
+        android:text="@string/dialog_categorie_color_libelle"
+        style="@style/dialog_text_libelle"/>
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btnChoisirCouleur"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Choisir la couleur"/>
-
-        <TextView
-            android:id="@+id/boxCouleur"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="couleur "
-            android:textColor="@android:color/transparent"/>
-    </LinearLayout>
+    <android.support.v7.widget.AppCompatImageButton
+        android:id="@+id/btnChoisirCouleur"
+        style="@style/color_picker_bt"
+        />
 
 </LinearLayout>
