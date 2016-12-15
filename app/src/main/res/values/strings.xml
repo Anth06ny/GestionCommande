@@ -29,5 +29,8 @@
     <!-- Dialog ColorPicker -->
     <string name="dialog_colorpicker_title">Séléctionnez une couleur</string>
 
+    <!-- Accueil -->
+    <string name="accueil_bt_effacer">Tout effacer</string>
+
 
 </resources>
