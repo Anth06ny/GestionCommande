@@ -106,13 +106,16 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     // initUI permet de recupere les elements graphique et faire des operations sur ces elements
     private void initUI(View v) {
 
+        //On creer un dialog pour que l'utilisateur puisse rentrer son mot de passe et acceder aux reglages
         DialogLogin dialogLogin = new DialogLogin();
         dialogLogin.setDialogLoginCallBack(FragmentReglage.this);
         dialogLogin.setCancelable(false);
         dialogLogin.show(getFragmentManager(), "tag");
 
+        //On recupere la liste des categories
         categorieList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
 
+        //On recupere le recycler view des categories et on lui passe l'adapteur qui contient la liste de toutes les categories
         categoryAdapter = new CategoryAdapter(categorieList, this);
         recyclerViewCategories = (RecyclerView) v.findViewById(R.id.rv_categorie);
         recyclerViewCategories.setAdapter(categoryAdapter);
@@ -120,31 +123,31 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         recyclerViewCategories.setItemAnimator(new DefaultItemAnimator());
 
         produitList = new ArrayList<>();
-        //On creer l'adapteur et on set le recycler view des produits avec la liste de produits qui correpondent a la categorie choisie
-        productAdapter = new ProductAdapter(ProductAffichageEnum.Reglage, produitList, null, this, false, false);
 
+        //On creer l'adapteur et on set le recycler view des produits avec la liste de produits qui correpondent a la categorie choisie quand on clic sur une
+        // categorie
+        productAdapter = new ProductAdapter(ProductAffichageEnum.Reglage, produitList, this, null);
         recyclerViewProduits = (RecyclerView) v.findViewById(R.id.rv_produit);
         recyclerViewProduits.setAdapter(productAdapter);
         recyclerViewProduits.setLayoutManager(new GridLayoutManager(this.getContext(), 2));
         recyclerViewProduits.setItemAnimator(new DefaultItemAnimator());
+
+        btnAddCategorie = (AppCompatButton) v.findViewById(R.id.btn_addCategorie);
+        btnAddCategorie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //On appel clicOnModifyOrInsertCategorie avec null en paramatre car il n'y a pas de categorie deja existante quand on ajoute une categorie
+                clicOnModifyOrInsertCategory(null);
+            }
+        });
 
         btnAddProduit = (AppCompatButton) v.findViewById(R.id.btn_addProduit);
         btnAddProduit.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-
+                //On appel clicOnModifyOrInsertProduit avec null en paramatre car il n'y a pas de produit deja existant quand on ajoute un produit
                 clicOnModifyOrInsertProduit(null);
-            }
-        });
-
-        btnAddCategorie = (AppCompatButton) v.findViewById(R.id.btn_addCategorie);
-
-        btnAddCategorie.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //On appel clicOnModifyOrInsertProduit avec null en paramatre car il n'y a pas de categorie deja existante quand on ajoute une categorie
-                clicOnModifyOrInsertCategory(null);
             }
         });
     }
@@ -470,8 +473,10 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
 
     @Override
     public void onCancelLogin(Boolean cancel) {
+        //Quand on clic sur le bouton annuler du dialog login on redirige l'utilisateur vers la page d'accueil
         FragmentAccueil fragmentAcceuil = new FragmentAccueil();
-        //lancer un autre fragment
+
+        //Lance un autre fragment
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.flContent, fragmentAcceuil, "string")

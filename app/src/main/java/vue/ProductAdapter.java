@@ -14,7 +14,6 @@ import com.example.anthony.gestionstock.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import greendao.Consomme;
 import greendao.Produit;
@@ -33,20 +32,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     private String quantiteTest;
     private HashMap<Produit, Long> quantiteHashMap;
     private ArrayList<Produit> produitArrayListAll;
-    private Boolean mettreZero = false;
-    private Boolean mettreMax = false;
-    private HashMap<Produit, Integer> lotRecommandeHashMap = new HashMap<>();
+    private final String SYMBOLE_EURO = " €";
 
     // -------------------------------- CONSTRUCTOR -------------------------------------------------- //
-    public ProductAdapter(ProductAffichageEnum choixAffichage, ArrayList<Produit> getProduitArrayList, HashMap<Produit, Long> quantiteHashMap,
-                          ProductAdapterCallBack
-                                  productAdapterCallBack, Boolean mettreZero, Boolean mettreMax) {
+    public ProductAdapter(ProductAffichageEnum choixAffichage, ArrayList<Produit> getProduitArrayList, ProductAdapterCallBack
+            productAdapterCallBack, HashMap<Produit, Long> quantiteHashMap) {
         this.choixAffichage = choixAffichage;
         this.getProduitArrayList = getProduitArrayList;
         this.productAdapterCallBack = productAdapterCallBack;
         this.quantiteHashMap = quantiteHashMap;
-        this.mettreZero = mettreZero;
-        this.mettreMax = mettreMax;
     }
 
     // --------------------------------  END CONSTRUCTOR -------------------------------------------------- //
@@ -95,8 +89,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 }
                 holder.displayQuantite.setText(String.valueOf(consommeArrayList.get(positionNote).getQuantite()));
                 holder.displaylibelle.setText(produitbean.getNom());
-                holder.displayTarif.setText(String.valueOf(produitbean.getPrix()));
-                holder.displayMontant.setText(String.valueOf(montantLigne));
+                holder.displayTarif.setText(String.valueOf(produitbean.getPrix()) + SYMBOLE_EURO);
+                holder.displayMontant.setText(String.valueOf(montantLigne) + SYMBOLE_EURO);
                 holder.displayDeleteProduit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -118,7 +112,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
             case Reglage:
                 holder.displaylibelle.setText(produitbean.getNom());
-                holder.displayTarif.setText(String.valueOf(produitbean.getPrix() + " €"));
+                holder.displayTarif.setText(String.valueOf(produitbean.getPrix() + SYMBOLE_EURO));
                 holder.displayLot.setText(String.valueOf(produitbean.getLot()));
 
                 if (produitbean.isSelected()) {
@@ -155,19 +149,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
             case Bilan:
                 holder.displaylibelle.setText(produitbean.getNom());
-                holder.displayTarif.setText(String.valueOf(produitbean.getPrix()));
+                holder.displayTarif.setText(String.valueOf(produitbean.getPrix()) + SYMBOLE_EURO);
                 if (quantiteHashMap != null) {
                     holder.displayQuantite.setText(String.valueOf(quantiteHashMap.get(produitbean)));
-                    holder.displayMontant.setText(String.valueOf((quantiteHashMap.get(produitbean) * produitbean.getPrix())));
+                    holder.displayMontant.setText(String.valueOf((quantiteHashMap.get(produitbean) * produitbean.getPrix())) + SYMBOLE_EURO);
                 }
 
                 break;
 
             case Stock:
 
-                if (!lotRecommandeHashMap.containsKey(produitbean)) {
-                    int lotRecommande = 0;
-                    lotRecommandeHashMap.put(produitbean, lotRecommande);
+                if (produitbean.getLotRecommande() == null) {
+                    produitbean.setLotRecommande(0);
                 }
 
                 holder.displaylibelle.setText(produitbean.getNom());
@@ -179,38 +172,22 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     holder.displayQuantite.setText("0");
                     holder.displayLot.setText("0");
                 }
-                holder.displayLotRecommande.setText(String.valueOf(lotRecommandeHashMap.get(produitbean)));
-                if (mettreZero) {
-                    for (Map.Entry entry : lotRecommandeHashMap.entrySet()) {
-                        int lotRecommande = 0;
-                        lotRecommandeHashMap.put((Produit) entry.getKey(), lotRecommande);
-                    }
-                    holder.displayLotRecommande.setText(String.valueOf(lotRecommandeHashMap.get(produitbean)));
-                }
-                if (mettreMax) {
-                    for (Map.Entry entry : lotRecommandeHashMap.entrySet()) {
-                        int positionProduitHash = getProduitArrayList.indexOf(entry.getKey());
-                        int lotRecommande = getProduitArrayList.get(positionProduitHash).getConsommation() / getProduitArrayList.get(positionProduitHash).getLot();
-                        lotRecommandeHashMap.put((Produit) entry.getKey(), lotRecommande);
-                    }
-                    holder.displayLotRecommande.setText(holder.displayLot.getText());
-                }
+
+                holder.displayLotRecommande.setText(String.valueOf(produitbean.getLotRecommande()));
+
                 holder.displayMin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int lotRecommande = 0;
-                        lotRecommandeHashMap.put(produitbean, lotRecommande);
-                        holder.displayLotRecommande.setText(String.valueOf(lotRecommandeHashMap.get(produitbean)));
+                        produitbean.setLotRecommande(0);
+                        holder.displayLotRecommande.setText(String.valueOf(produitbean.getLotRecommande()));
                     }
                 });
                 holder.displayRemove.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (Integer.valueOf(String.valueOf(holder.displayLotRecommande.getText())) > 0) {
-                            int lotRecommande = 0;
-                            lotRecommande = lotRecommandeHashMap.get(produitbean) - 1;
-                            lotRecommandeHashMap.put(produitbean, lotRecommande);
-                            holder.displayLotRecommande.setText(String.valueOf(lotRecommandeHashMap.get(produitbean)));
+                            produitbean.setLotRecommande(produitbean.getLotRecommande() - 1);
+                            holder.displayLotRecommande.setText(String.valueOf(produitbean.getLotRecommande()));
                         }
                     }
                 });
@@ -218,20 +195,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     @Override
                     public void onClick(View v) {
                         if (Integer.valueOf(String.valueOf(holder.displayLotRecommande.getText())) < Integer.valueOf(String.valueOf(holder.displayLot.getText()))) {
-                            int lotRecommande;
-                            lotRecommande = lotRecommandeHashMap.get(produitbean) + 1;
-                            lotRecommandeHashMap.put(produitbean, lotRecommande);
-                            holder.displayLotRecommande.setText(String.valueOf(lotRecommandeHashMap.get(produitbean)));
+                            produitbean.setLotRecommande(produitbean.getLotRecommande() + 1);
+                            holder.displayLotRecommande.setText(String.valueOf(produitbean.getLotRecommande()));
                         }
                     }
                 });
                 holder.displayMax.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int lotRecommande = 0;
-                        lotRecommande = Integer.valueOf((String) holder.displayLot.getText());
-                        lotRecommandeHashMap.put(produitbean, lotRecommande);
-                        holder.displayLotRecommande.setText(String.valueOf(lotRecommandeHashMap.get(produitbean)));
+                        produitbean.setLotRecommande(Integer.valueOf((String) holder.displayLot.getText()));
+                        holder.displayLotRecommande.setText(String.valueOf(produitbean.getLotRecommande()));
                     }
                 });
                 break;

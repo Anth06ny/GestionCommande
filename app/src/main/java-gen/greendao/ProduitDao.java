@@ -33,8 +33,9 @@ public class ProduitDao extends AbstractDao<Produit, Long> {
         public final static Property Prix = new Property(2, Float.class, "prix", false, "PRIX");
         public final static Property Lot = new Property(3, Integer.class, "lot", false, "LOT");
         public final static Property Consommation = new Property(4, Integer.class, "consommation", false, "CONSOMMATION");
-        public final static Property Favori = new Property(5, Boolean.class, "favori", false, "FAVORI");
-        public final static Property CategorieID = new Property(6, long.class, "CategorieID", false, "CATEGORIE_ID");
+        public final static Property LotRecommande = new Property(5, Integer.class, "lotRecommande", false, "LOT_RECOMMANDE");
+        public final static Property Favori = new Property(6, Boolean.class, "favori", false, "FAVORI");
+        public final static Property CategorieID = new Property(7, long.class, "CategorieID", false, "CATEGORIE_ID");
     };
 
     private DaoSession daoSession;
@@ -59,8 +60,9 @@ public class ProduitDao extends AbstractDao<Produit, Long> {
                 "'PRIX' REAL," + // 2: prix
                 "'LOT' INTEGER," + // 3: lot
                 "'CONSOMMATION' INTEGER," + // 4: consommation
-                "'FAVORI' INTEGER," + // 5: favori
-                "'CATEGORIE_ID' INTEGER NOT NULL );"); // 6: CategorieID
+                "'LOT_RECOMMANDE' INTEGER," + // 5: lotRecommande
+                "'FAVORI' INTEGER," + // 6: favori
+                "'CATEGORIE_ID' INTEGER NOT NULL );"); // 7: CategorieID
     }
 
     /** Drops the underlying database table. */
@@ -99,11 +101,16 @@ public class ProduitDao extends AbstractDao<Produit, Long> {
             stmt.bindLong(5, consommation);
         }
  
+        Integer lotRecommande = entity.getLotRecommande();
+        if (lotRecommande != null) {
+            stmt.bindLong(6, lotRecommande);
+        }
+ 
         Boolean favori = entity.getFavori();
         if (favori != null) {
-            stmt.bindLong(6, favori ? 1l: 0l);
+            stmt.bindLong(7, favori ? 1l: 0l);
         }
-        stmt.bindLong(7, entity.getCategorieID());
+        stmt.bindLong(8, entity.getCategorieID());
     }
 
     @Override
@@ -127,8 +134,9 @@ public class ProduitDao extends AbstractDao<Produit, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getFloat(offset + 2), // prix
             cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // lot
             cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // consommation
-            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // favori
-            cursor.getLong(offset + 6) // CategorieID
+            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // lotRecommande
+            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // favori
+            cursor.getLong(offset + 7) // CategorieID
         );
         return entity;
     }
@@ -141,8 +149,9 @@ public class ProduitDao extends AbstractDao<Produit, Long> {
         entity.setPrix(cursor.isNull(offset + 2) ? null : cursor.getFloat(offset + 2));
         entity.setLot(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
         entity.setConsommation(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
-        entity.setFavori(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
-        entity.setCategorieID(cursor.getLong(offset + 6));
+        entity.setLotRecommande(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
+        entity.setFavori(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
+        entity.setCategorieID(cursor.getLong(offset + 7));
      }
     
     /** @inheritdoc */

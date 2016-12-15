@@ -140,7 +140,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
                     // rempli l'arrayListe avec les produits de la catégorie
                     arraylistProduits = (ArrayList<Produit>) categorieArrayList.get(finalJ).getProduitList();
                     // instancie l'adpateur.
-                    productAdapter = new ProductAdapter(ProductAffichageEnum.Accueil, arraylistProduits, null, FragmentAccueil.this, false, false);
+                    productAdapter = new ProductAdapter(ProductAffichageEnum.Accueil, arraylistProduits, FragmentAccueil.this, null);
                     // on passe l'adapter au recycler view
                     recyclerViewProduits.setAdapter(productAdapter);
                 }
@@ -204,7 +204,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
                     else {
                         // On affiche la note dans le recycler
                         produitArrayListNote.add(produitArrayListFavoris.get(finalL));
-                        productAdapterNote = new ProductAdapter(ProductAffichageEnum.Note, produitArrayListNote, null, FragmentAccueil.this, false, false);
+                        productAdapterNote = new ProductAdapter(ProductAffichageEnum.Note, produitArrayListNote, FragmentAccueil.this, null);
                         recyclerViewNote.setAdapter(productAdapterNote);
                     }
                 }
@@ -381,7 +381,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         }
         else {
             produitArrayListNote.add(produit);
-            productAdapterNote = new ProductAdapter(ProductAffichageEnum.Note, produitArrayListNote, null, this, false, false);
+            productAdapterNote = new ProductAdapter(ProductAffichageEnum.Note, produitArrayListNote, this, null);
             recyclerViewNote.setAdapter(productAdapterNote);
         }
     }
@@ -397,4 +397,5 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         produitArrayListNote.remove(positionProduitNote);
         productAdapterNote.notifyItemRemoved(positionProduitNote);
     }
+
 }

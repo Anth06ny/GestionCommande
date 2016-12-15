@@ -56,7 +56,7 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
     private AppCompatButton btnAnnee;
     private AppCompatButton btnImprimer;
     private TextView textViewPrixTotal;
-    private ArrayList<Produit> produitArrayListBilan;
+    private ArrayList<Produit> produitsArrayList;
     private TextView editDateDebut;
     private TextView editDateFin;
     private DatePickerFragment.DatePickerFragmentCallBack datePickerFragmentCallBack;
@@ -77,6 +77,7 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
     private Date dateFinAnnee;
     private Date dateDebut;
     private Date dateFin;
+    private final String SYMBOLE_EURO = " €";
 
     /**
      * Use this factory method to create a new instance of
@@ -120,6 +121,7 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
     }
 
     private void initUI(View v) {
+        //On recupere les elements graphique
         btnJour = (AppCompatButton) v.findViewById(R.id.btn_jour);
         btnSemaine = (AppCompatButton) v.findViewById(R.id.btn_semaine);
         btnMois = (AppCompatButton) v.findViewById(R.id.btn_mois);
@@ -129,14 +131,22 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
         editDateDebut = (TextView) v.findViewById(R.id.champ_date_debut);
         editDateFin = (TextView) v.findViewById(R.id.champ_date_fin);
 
-        produitArrayListBilan = new ArrayList<>();
-        produitArrayListBilan = (ArrayList<Produit>) ProduitBddManager.getProduit();
+        //On recupere la liste de tous les produits
+        produitsArrayList = new ArrayList<>();
+        produitsArrayList = (ArrayList<Produit>) ProduitBddManager.getProduit();
 
+        produitArrayListSelected = new ArrayList<>();
+        quantiteHashMap = new HashMap<>();
+
+        //On recupere le recycler view et on creer l'adapteur
         recyclerViewBilan = (RecyclerView) v.findViewById(R.id.rv_bilan);
         recyclerViewBilan.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerViewBilan.setItemAnimator(new DefaultItemAnimator());
+        productAdapter = new ProductAdapter(ProductAffichageEnum.Bilan, produitArrayListSelected, null, quantiteHashMap);
+        recyclerViewBilan.setAdapter(productAdapter);
         datePickerFragmentCallBack = this;
 
+        //Par defaut on affiche le bilan du jour
         affichageBilan(Calendar.getInstance().getTime(), Calendar.getInstance().getTime());
 
         //Initalisation des champs à la date du jour.
@@ -147,48 +157,10 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
 
         commandeArrayList = new ArrayList<>();
         commandeArrayList = (ArrayList<Commande>) CommandeBddManager.getCommande();
-        btnJour.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                choixDatePicker = 2;
-                launchDatePicker();
-            }
-        });
-
-        btnSemaine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                choixDatePicker = 3;
-                onSelectDate(null);
-            }
-        });
-
-        btnMois.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                choixDatePicker = 4;
-                onSelectDate(null);
-            }
-        });
-
-        btnAnnee.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                choixDatePicker = 5;
-                onSelectDate(null);
-            }
-        });
-
-        btnImprimer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
         editDateDebut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Ouvre le date picker pour modifier la date du champ debut
                 choixDatePicker = 0;
                 launchDatePicker();
             }
@@ -197,8 +169,52 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
         editDateFin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Ouvre le date picker pour modifier la date du champ fin
                 choixDatePicker = 1;
                 launchDatePicker();
+            }
+        });
+
+        btnJour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Ouvre le date picker pour selectionner un jour en particulier
+                choixDatePicker = 2;
+                launchDatePicker();
+            }
+        });
+
+        btnSemaine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Selectionne la semaine en cour
+                choixDatePicker = 3;
+                onSelectDate(null);
+            }
+        });
+
+        btnMois.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Selectionne le mois en cour
+                choixDatePicker = 4;
+                onSelectDate(null);
+            }
+        });
+
+        btnAnnee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Selectionne l'annee en cour
+                choixDatePicker = 5;
+                onSelectDate(null);
+            }
+        });
+
+        btnImprimer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO Gerer l'impression de tickets
             }
         });
     }
@@ -246,16 +262,18 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
     @Override
     public void onSelectDate(Date date) {
 
+        //Si la date passer en parametre est null on l'initialise par defaut a la date du jour
         if (date == null) {
             date = Calendar.getInstance().getTime();
         }
-        String fDate = new SimpleDateFormat("dd/MM/yyyy").format(date);
-        quantiteHashMap = new HashMap<>();
 
+        quantiteHashMap = new HashMap<>();
         commandeArrayListSelected = new ArrayList<>();
         produitArrayListSelected = new ArrayList<>();
+
         switch (choixDatePicker) {
             case 0:
+                //On recupere la date dans le champ date fin et on la format
                 String dateTypageString = (String) editDateFin.getText();
                 //Format de date à choisir
                 SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
@@ -267,10 +285,12 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
                     e.printStackTrace();
                 }
 
+                //On appel la methode affichage bilan avec comme parametre la date recuperer en entrer et la date qu'on recupere du champ
                 affichageBilan(date, dateFin);
                 break;
 
             case 1:
+                //On recupere la date dans le champ date debut et on la format
                 String dateTypageString2 = (String) editDateDebut.getText();
                 //Format de date à choisir
                 SimpleDateFormat dtDebut = new SimpleDateFormat("dd/MM/yyyy");
@@ -281,48 +301,59 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
                 catch (ParseException e) {
                     e.printStackTrace();
                 }
+
+                //On appel la methode affichage bilan avec comme parametre la date recuperer en entrer et la date qu'on recupere du champ
                 affichageBilan(dateDebut, date);
                 break;
 
             case 2:
+                //On appel la methode affichage bilan avec comme parametre la date recuperer en entrer
                 affichageBilan(date, date);
                 break;
 
             case 3:
+                //On recupere la liste des dates de la semaine en cour
                 ArrayList<Date> dateArrayListSemaine = getSemaine(date);
                 dateDebutSemaine = new Date();
                 dateDebutSemaine = dateArrayListSemaine.get(0);
                 dateFinSemaine = new Date();
                 dateFinSemaine = dateArrayListSemaine.get(dateArrayListSemaine.size() - 1);
 
+                //On appel la methode affichage bilan avec comme parametre la date de debut de semaine et la date de fin de semaine
                 affichageBilan(dateDebutSemaine, dateFinSemaine);
 
                 break;
             case 4:
+                //On recupere la liste des dates du mois en cour
                 ArrayList<Date> dateArrayListMois = getMois(date);
                 dateDebutMois = new Date();
                 dateDebutMois = dateArrayListMois.get(0);
                 dateFinMois = new Date();
                 dateFinMois = dateArrayListMois.get(dateArrayListMois.size() - 1);
+
+                //On appel la methode affichage bilan avec comme parametre la date de debut du mois et la date de fin du mois
                 affichageBilan(dateDebutMois, dateFinMois);
 
                 break;
             case 5:
+                //On recupere la liste des dates de l'annee en cour
                 ArrayList<Date> dateArrayListAnnee = getAnnee(date);
                 dateDebutAnnee = new Date();
                 dateDebutAnnee = dateArrayListAnnee.get(0);
                 dateFinAnnee = new Date();
                 dateFinAnnee = dateArrayListAnnee.get(dateArrayListAnnee.size() - 1);
 
+                //On appel la methode affichage bilan avec comme parametre la date de debut d'annee et la date de fin d'annee
                 affichageBilan(dateDebutAnnee, dateFinAnnee);
                 break;
         }
     }
 
     public void launchDatePicker() {
+        //Creer le dialog du date picker et l'affiche
         DatePickerFragment datePickerFragment = new DatePickerFragment();
         datePickerFragment.setDatePickerFragmentCallBack(datePickerFragmentCallBack);
-        datePickerFragment.show(getFragmentManager(), "Date fin");
+        datePickerFragment.show(getFragmentManager(), "Date");
     }
 
     //TODO faire ne sorte que la semaine commence tout le temps le LUNDI
@@ -382,51 +413,69 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
 
     public void affichageBilan(Date dateDebut, Date dateFin) {
 
+        //On recupere la liste des commande comprise entre les dates entrees en parametre
         commandeArrayListSelected = new ArrayList<>();
         commandeArrayListSelected = (ArrayList<Commande>) CommandeBddManager.getCommandeBetweenDate(dateDebut, dateFin);
+
+        //On format les dates entrees en paramettre et on les affiche dans les champs date debut et date fin
         String fDateDebut = new SimpleDateFormat("dd/MM/yyyy").format(dateDebut);
         String fDateFin = new SimpleDateFormat("dd/MM/yyyy").format(dateFin);
         editDateDebut.setText(fDateDebut);
         editDateFin.setText(fDateFin);
+
         if (dateDebut.after(dateFin)) {
             Toast.makeText(getContext(), "La date de début est supérieur à la date de fin.", Toast.LENGTH_SHORT).show();
         }
 
         float montantTotal = 0;
-        ArrayList<Produit> produitArrayListSelected = new ArrayList<>();
-        HashMap<Produit, Long> quantiteHashMap = new HashMap<>();
 
+        //On parcoure la liste des commandes comprise entre les dates entrees en parametre
         for (int i = 0; i < commandeArrayListSelected.size(); i++) {
-            ArrayList<Consomme> consommeArrayList = (ArrayList<Consomme>) ConsommeBddManager.getConsomme();
+
+            //On recupere la liste de tous les consommé de la bdd
+            consommeArrayList = (ArrayList<Consomme>) ConsommeBddManager.getConsomme();
+
+            //On parcours cette liste
             for (int j = 0; j < consommeArrayList.size(); j++) {
+
+                //Si l'id de la commande de la liste consomme correspond a l'id de la commande a l'instant i
                 if (ObjectUtils.equals(consommeArrayList.get(j).getCommande(), commandeArrayListSelected.get(i).getId())) {
+
+                    //Alors on recupere l'id du produit qui correspond
                     Long produitId = consommeArrayList.get(j).getProduit();
-                    for (int k = 0; k < produitArrayListBilan.size(); k++) {
-                        if (ObjectUtils.equals(produitArrayListBilan.get(k).getId(), produitId)) {
-                            if (!quantiteHashMap.containsKey(produitArrayListBilan.get(k))) {
-                                quantiteHashMap.put(produitArrayListBilan.get(k), consommeArrayList.get(j).getQuantite());
-                                produitArrayListSelected.add(produitArrayListBilan.get(k));
+
+                    //On parcours la liste de tous les produits
+                    for (int k = 0; k < produitsArrayList.size(); k++) {
+
+                        //Si l'id du produit recupere correspond a l'id du produit a l'instant k
+                        if (ObjectUtils.equals(produitsArrayList.get(k).getId(), produitId)) {
+
+                            //Si la hash map ne contient pas ce produit alors on lui ajoute avec la quantite qu'on recupere de la list consomme
+                            //Et on ajoute le produit de l'instant k a la liste des produits selectionnees
+                            if (!quantiteHashMap.containsKey(produitsArrayList.get(k))) {
+                                quantiteHashMap.put(produitsArrayList.get(k), consommeArrayList.get(j).getQuantite());
+                                produitArrayListSelected.add(produitsArrayList.get(k));
                             }
+                            //Si la hash map contient ce produit alors on modifie sa quantite en recuperant l'ancienne valeur et en lui ajoutant la quantite
+                            // recupere das la list consomme
                             else {
-                                long quantite = quantiteHashMap.get(produitArrayListBilan.get(k));
+                                long quantite = quantiteHashMap.get(produitsArrayList.get(k));
                                 quantite = quantite + consommeArrayList.get(j).getQuantite();
-                                quantiteHashMap.put(produitArrayListBilan.get(k), quantite);
+                                quantiteHashMap.put(produitsArrayList.get(k), quantite);
                             }
                         }
                     }
                 }
             }
         }
-        for (int i = 0; i < produitArrayListBilan.size(); i++) {
-            if (quantiteHashMap.containsKey(produitArrayListBilan.get(i))) {
-                montantTotal = montantTotal + (quantiteHashMap.get(produitArrayListBilan.get(i)) * produitArrayListBilan.get(i)
-                        .getPrix());
-            }
+        //On parcours la liste des produits selectionner, on recupere leur prix et leur quantites pour calculer le total d'un produit et mettre a jour le total de
+        // tous les produits
+        for (int i = 0; i < produitArrayListSelected.size(); i++) {
+            montantTotal = montantTotal + (quantiteHashMap.get(produitArrayListSelected.get(i)) * produitArrayListSelected.get(i)
+                    .getPrix());
         }
-        textViewPrixTotal.setText(String.valueOf(montantTotal));
+        textViewPrixTotal.setText(String.format("%s%s", montantTotal, SYMBOLE_EURO));
 
-        productAdapter = new ProductAdapter(ProductAffichageEnum.Bilan, produitArrayListSelected, quantiteHashMap, null, false, false);
-        recyclerViewBilan.setAdapter(productAdapter);
         productAdapter.notifyDataSetChanged();
     }
 }

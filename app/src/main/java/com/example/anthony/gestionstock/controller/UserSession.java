@@ -3,8 +3,6 @@ package com.example.anthony.gestionstock.controller;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.util.HashMap;
-
 /**
  * Created by Axel legué on 13/12/2016.
  */
@@ -42,23 +40,5 @@ public class UserSession {
         editor.putString(KEY_PASSWORD, uPsw);
         // commit changes
         editor.commit();
-    }
-
-    /**
-     * Get stored session data
-     */
-    public HashMap<String, String> getUserDetails() {
-        HashMap<String, String> user = new HashMap<>();
-        // user name
-        user.put(KEY_NAME, preferences.getString(KEY_NAME, null));
-        // user password id
-        user.put(KEY_PASSWORD, preferences.getString(KEY_PASSWORD, null));
-        // return user
-        return user;
-    }
-
-    // Check for login
-    public boolean isUserLoggedIn() {
-        return preferences.getBoolean(IS_USER_LOGIN, false);
     }
 }

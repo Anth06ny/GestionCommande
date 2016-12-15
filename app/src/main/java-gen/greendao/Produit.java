@@ -18,6 +18,7 @@ public class Produit {
     private Float prix;
     private Integer lot;
     private Integer consommation;
+    private Integer lotRecommande;
     private Boolean favori;
     private long CategorieID;
 
@@ -43,12 +44,13 @@ public class Produit {
         this.id = id;
     }
 
-    public Produit(Long id, String nom, Float prix, Integer lot, Integer consommation, Boolean favori, long CategorieID) {
+    public Produit(Long id, String nom, Float prix, Integer lot, Integer consommation, Integer lotRecommande, Boolean favori, long CategorieID) {
         this.id = id;
         this.nom = nom;
         this.prix = prix;
         this.lot = lot;
         this.consommation = consommation;
+        this.lotRecommande = lotRecommande;
         this.favori = favori;
         this.CategorieID = CategorieID;
     }
@@ -97,6 +99,14 @@ public class Produit {
 
     public void setConsommation(Integer consommation) {
         this.consommation = consommation;
+    }
+
+    public Integer getLotRecommande() {
+        return lotRecommande;
+    }
+
+    public void setLotRecommande(Integer lotRecommande) {
+        this.lotRecommande = lotRecommande;
     }
 
     public Boolean getFavori() {

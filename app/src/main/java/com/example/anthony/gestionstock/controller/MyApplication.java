@@ -25,6 +25,7 @@ public class MyApplication extends Application {
         super.onCreate();
         setupDatabase();
 
+        //TODO retirer l'ajout de données test
         if (MyApplication.DEBUG && CategorieBddManager.getCategories().size() == 0) {
             MaBaseSQLite.fillBase(this);
         }
@@ -44,5 +45,4 @@ public class MyApplication extends Application {
     public static DaoSession getDaoSession() {
         return daoSession;
     }
-
 }

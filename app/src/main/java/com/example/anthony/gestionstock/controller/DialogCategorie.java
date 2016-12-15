@@ -65,7 +65,8 @@ public class DialogCategorie extends DialogFragment {
 
         //On build la dialog box avec la vue personaliser + l'ajout des boutons positifs et négatif
         builder.setView(alertDialogView)
-                .setPositiveButton(R.string.valider, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.valider,
+                        new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 
                                 int tag = 0;
@@ -140,43 +141,41 @@ public class DialogCategorie extends DialogFragment {
                             }
                         }
 
-                                  )
-                .
+                                  ).setNegativeButton(R.string.annuler, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //Ensemble des taches a realiser quand l'utilisateur cliq sur annuler
+                    }
+                }
 
-                        setNegativeButton(R.string.annuler, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        //Ensemble des taches a realiser quand l'utilisateur cliq sur annuler
-                                    }
-                                }
-
-                                         );
+                                                     );
 
         //Au cliq du bouton on ouvre une nouvelle dialog box qui affiche le color picker
-        btnChoisirCouleur.setOnClickListener(new View.OnClickListener() {
-                                                 public void onClick(View v) {
-                                                     final ColorChooserDialog dialog = new ColorChooserDialog();
-                                                     if (couleurChoisi != 0) {
-                                                         dialog.setSelectedColor(couleurChoisi);
-                                                     }
-                                                     else if (StringUtils.isNotBlank(categorie.getCouleur())) {
-                                                         dialog.setSelectedColor(Integer.parseInt(categorie.getCouleur()));
-                                                     }
-                                                     dialog.setColorListener(new ColorChooserDialog.ColorListener() {
-                                                         @Override
-                                                         public void OnColorClick(View v, int color) {
-                                                             //Lorsque l'utilisateur selectionne une couleur on recupere la valeur int de la couleur choisie
-                                                             couleurChoisi = color;
+        btnChoisirCouleur.setOnClickListener(
+                new View.OnClickListener() {
+                    public void onClick(View v) {
+                        final ColorChooserDialog dialog = new ColorChooserDialog();
+                        if (couleurChoisi != 0) {
+                            dialog.setSelectedColor(couleurChoisi);
+                        }
+                        else if (StringUtils.isNotBlank(categorie.getCouleur())) {
+                            dialog.setSelectedColor(Integer.parseInt(categorie.getCouleur()));
+                        }
+                        dialog.setColorListener(new ColorChooserDialog.ColorListener() {
+                            @Override
+                            public void OnColorClick(View v, int color) {
+                                //Lorsque l'utilisateur selectionne une couleur on recupere la valeur int de la couleur choisie
+                                couleurChoisi = color;
 
-                                                             //On display la couleur choisie sur la dialog box precedente
-                                                             btnChoisirCouleur.setColorFilter(couleurChoisi, PorterDuff.Mode.SRC_IN);
+                                //On display la couleur choisie sur la dialog box precedente
+                                btnChoisirCouleur.setColorFilter(couleurChoisi, PorterDuff.Mode.SRC_IN);
 
-                                                             //On termine le picker color et on retourne sur la dialog box precedente
-                                                             dialog.dismiss();
-                                                         }
-                                                     });
-                                                     dialog.show(getFragmentManager(), "tag");
-                                                 }
-                                             }
+                                //On termine le picker color et on retourne sur la dialog box precedente
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show(getFragmentManager(), "tag");
+                    }
+                }
 
                                             );
 

@@ -29,6 +29,8 @@ public class DialogLogin extends DialogFragment {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final LayoutInflater inflater = getActivity().getLayoutInflater();
         final View alertDialogView = inflater.inflate(R.layout.dialog_login, null);
+
+        //On recupere les elements graphique
         editTextMotDePasse = (EditText) alertDialogView.findViewById(R.id.mot_de_passe_login);
         sharedPreferences = getActivity().getSharedPreferences(PREFER_NAME, Context.MODE_PRIVATE);
         userSession = new UserSession(getContext());
@@ -48,13 +50,15 @@ public class DialogLogin extends DialogFragment {
 
         final AlertDialog dialog = builder.create();
         dialog.show();
+
+        //On override la methode onClick du bouton positif pour eviter que la dialog se ferme sans que les conditions soit respecter
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Boolean wantToCloseDialog = false;
+                Boolean conditionRemplie = false;
                 String motdepasse = editTextMotDePasse.getText().toString();
 
-                // Validate if username, password is filled
+                //On verifie que le champ mot de passe soit remplie
                 if (motdepasse.trim().length() > 0) {
                     String uPsw = null;
 
@@ -62,24 +66,25 @@ public class DialogLogin extends DialogFragment {
                         uPsw = sharedPreferences.getString("MotDePasse", "");
                     }
 
+                    //On compare le mot de passe saisie avec celui qui est sauvegarde
                     if (motdepasse.equals((uPsw))) {
                         userSession.createUserLoginSession(uPsw);
-                        wantToCloseDialog = true;
+                        conditionRemplie = true;
                     }
                     else {
                         // password doesn't match&
                         Toast.makeText(getContext(),
-                                "Password is incorrect",
+                                "Mot de passe incorrect",
                                 Toast.LENGTH_LONG).show();
                     }
                 }
                 else {
                     // user didn't entered password
                     Toast.makeText(getContext(),
-                            "Please enter password",
+                            "Entrer le mot de passe",
                             Toast.LENGTH_LONG).show();
                 }
-                if (wantToCloseDialog) {
+                if (conditionRemplie) {
                     dialog.dismiss();
                 }
             }

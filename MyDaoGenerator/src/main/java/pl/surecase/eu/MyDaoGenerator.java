@@ -9,7 +9,7 @@ public class MyDaoGenerator {
 
     public static void main(String args[]) throws Exception {
 
-        Schema schema = new Schema(10, "greendao");
+        Schema schema = new Schema(11, "greendao");
 
         Entity categorie = schema.addEntity("Categorie");
         categorie.addIdProperty().autoincrement();
@@ -23,6 +23,7 @@ public class MyDaoGenerator {
         produit.addFloatProperty("prix");
         produit.addIntProperty("lot");
         produit.addIntProperty("consommation");
+        produit.addIntProperty("lotRecommande");
         produit.addBooleanProperty("favori");
         produit.setHasKeepSections(true);
 

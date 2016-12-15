@@ -16,14 +16,17 @@ public class ProduitBddManager {
     // ------------------------------------ '' SQL QUERY Fnctions ''' -------------------------------- //
 
     public static List<Produit> getProduit() {
+        MyApplication.getDaoSession().clear();
         return MyApplication.getDaoSession().getProduitDao().loadAll();
     }
 
     public static List<Produit> getProduitFavoris() {
+        MyApplication.getDaoSession().clear();
         return MyApplication.getDaoSession().getProduitDao().queryBuilder().where(ProduitDao.Properties.Favori.eq(true)).list();
     }
 
     public static List<Produit> getProduitConsommation() {
+        MyApplication.getDaoSession().clear();
         return MyApplication.getDaoSession().getProduitDao().queryBuilder().where(ProduitDao.Properties.Consommation.notEq(0), ProduitDao.Properties.Consommation
                 .isNotNull()).list();
     }
