@@ -40,13 +40,11 @@ import vue.adapter.ProductAdapter;
  * create an instance of this fragment.
  */
 
-public class FragmentAccueil extends Fragment implements View.OnClickListener, ProductAdapter.ProductAdapterCallBack, ConsommeAdapter.ConsommeAdapterCallBack, CategoryAdapter.CategoryAdapterCallBack {
+public class FragmentAccueil extends Fragment implements View.OnClickListener, ProductAdapter.ProductAdapterCallBack, ConsommeAdapter.ConsommeAdapterCallBack, CategoryAdapter.CategoryAdapterCallBack, View.OnLongClickListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private OnFragmentInteractionListener mListener;
-
-    private final int NB_MAX_FAVORIS = 6;
 
     //GestionNote
     private ConsommeAdapter consommeAdapter;
@@ -146,12 +144,8 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         btn_note.setOnClickListener(this);
         btn_cancel.setOnClickListener(this);
         btn_off_client.setOnClickListener(this);
-    }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        btn_cancel.setOnLongClickListener(this);
     }
 
     @Override
@@ -187,6 +181,10 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         void onFragmentInteraction(Uri uri);
     }
 
+    /* ---------------------------------
+    // Gestion evenements
+    // -------------------------------- */
+
     @Override
     public void onClick(View v) {
         if (v == btn_cancel) {
@@ -205,6 +203,17 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         }
     }
 
+    @Override
+    public boolean onLongClick(View v) {
+        if (v == btn_cancel) {
+            //le long clic efface la note sans confirmation
+            deleteNote();
+            Toast.makeText(getContext(), R.string.accueil_tost_cmd_del, Toast.LENGTH_SHORT).show();
+            //True pour dire qu'on a traiter le long clic, sinon il va considerer que c'est aussi un clic classique
+            return true;
+        }
+        return false;
+    }
     /* ---------------------------------
     // Callback ProductAdapter
     // -------------------------------- */
@@ -275,12 +284,17 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
             if (consomme.getProduit() == produitId) {
                 //on ajoute 1 à la quantité
                 consomme.setQuantite(consomme.getQuantite() + 1);
-                consommeAdapter.notifyItemInserted(0);
+                consommeAdapter.notifyItemChanged(i);
                 return;
             }
         }
         //Si on ne l'a pas trouvé on l'ajoute
-        consommeArrayListNote.add(0, new Consomme(null, 1L, produitId, null));
+        Consomme consomme = new Consomme(null, 1L, produitId, null);
+        //On passe la daoSession car c'est nous qui construisons l'objet et que sinon
+        //on ne pourra pas faire de getProduit avec (ou autre relation entre table dessus)
+        //tant qu'on ne l'aura pas sauvegardé
+        consomme.__setDaoSession(MyApplication.getDaoSession());
+        consommeArrayListNote.add(0, consomme);
         consommeAdapter.notifyItemInserted(0);
     }
 
@@ -308,7 +322,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     }
 
     private void deleteNote() {
-        consommeAdapter.notifyItemRangeRemoved(0, consommeArrayListNote.size() - 1);
+        consommeAdapter.notifyItemRangeRemoved(0, consommeArrayListNote.size());
         consommeArrayListNote.clear();
     }
 
