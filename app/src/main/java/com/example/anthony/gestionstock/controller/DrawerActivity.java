@@ -6,7 +6,6 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,6 +25,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView navigationView;
+    private Fragment currentFragment; //fragment en cours
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,22 +38,6 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
         setSupportActionBar(toolbar);
 
-        // A modifier ///////////////////////////////////////////////////////////////////////////////
-        Fragment fragment = null;
-        Class fragmentClass;
-        fragmentClass = FragmentAccueil.class;
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        }
-        catch (InstantiationException e) {
-            e.printStackTrace();
-        }
-        catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         ////////////////////////////////////////////////////////////////////////////////////////////
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -69,6 +53,10 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         navigationView.getMenu().findItem(R.id.Stock).getIcon().setColorFilter(getResources().getColor(R.color.orange), PorterDuff.Mode.SRC_IN);
         navigationView.getMenu().findItem(R.id.Bilan).getIcon().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_IN);
         navigationView.getMenu().findItem(R.id.Reglage).getIcon().setColorFilter(getResources().getColor(R.color.grey), PorterDuff.Mode.SRC_IN);
+
+        //On lance la page d'acceuil par defaut en simulant un clic sur le bouton acceuil
+        //our qu'il soit selectionné dans le menu au passage
+        navigationView.getMenu().performIdentifierAction(R.id.Accueil, 0);
     }
 
     @Override
@@ -78,48 +66,46 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             drawer.closeDrawer(GravityCompat.START);
         }
         else {
-            super.onBackPressed();
+            //On ne sort de l'application que si on est sur l'ecran d'accueil
+            if (currentFragment.getTag().equalsIgnoreCase(R.id.Accueil + "")) {
+                super.onBackPressed();
+            }
+            //sinon on revient dessus
+            else {
+                navigationView.getMenu().performIdentifierAction(R.id.Accueil, 0);
+            }
         }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-
-        int id = item.getItemId();
-        Fragment fragment = null;
-        Class fragmentClass = null;
-
-        if (id == R.id.Accueil) {
-            fragmentClass = FragmentAccueil.class;
-        }
-        else if (id == R.id.Stock) {
-            fragmentClass = FragmentStock.class;
-        }
-        else if (id == R.id.Bilan) {
-            fragmentClass = FragmentBilan.class;
-        }
-        else if (id == R.id.Reglage) {
-            fragmentClass = FragmentReglage.class;
-        }
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment, "fragment").commit();
-
-        // Highlight the selected item has been done by NavigationView
-        item.setChecked(true);
-        // Set action bar title
-        setTitle(item.getTitle());
         // Close the navigation drawer
         mDrawer.closeDrawers();
+
+        //On ne change de fragment que si c'est un different
+        if (currentFragment == null || !currentFragment.getTag().equalsIgnoreCase("" + item.getItemId())) {
+            if (item.getItemId() == R.id.Accueil) {
+                currentFragment = new FragmentAccueil();
+            }
+            else if (item.getItemId() == R.id.Stock) {
+                currentFragment = new FragmentStock();
+            }
+            else if (item.getItemId() == R.id.Bilan) {
+                currentFragment = new FragmentBilan();
+            }
+            else if (item.getItemId() == R.id.Reglage) {
+                currentFragment = new FragmentReglage();
+            }
+            // Insert the fragment by replacing any existing fragment
+            //Je mets en tag l'item id pour pouvoir facilement identifier le fragment courant
+            getSupportFragmentManager().beginTransaction().replace(R.id.flContent, currentFragment, "" + item.getItemId()).commit();
+
+            // Highlight the selected item has been done by NavigationView
+            item.setChecked(true);
+            // Set action bar title
+            setTitle(item.getTitle());
+        }
 
         return true;
     }

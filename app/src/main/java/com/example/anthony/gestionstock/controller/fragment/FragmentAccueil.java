@@ -32,15 +32,6 @@ import greendao.Categorie;
 import greendao.Consomme;
 import greendao.Produit;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FragmentAccueil.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FragmentAccueil#newInstance} factory method to
- * create an instance of this fragment.
- */
-
 public class FragmentAccueil extends Fragment implements View.OnClickListener, ProductAdapter.ProductAdapterCallBack, ConsommeAdapter.ConsommeAdapterCallBack, CategoryAdapter.CategoryAdapterCallBack, View.OnLongClickListener {
 
     //bouton
@@ -140,8 +131,6 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     public void onResume() {
         super.onResume();
         refreshSold();
-
-        getActivity().setTitle(R.string.accueil_title);
     }
 
     /* ---------------------------------
