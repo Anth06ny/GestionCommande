@@ -1,4 +1,4 @@
-package vue.adapter;
+package com.example.anthony.gestionstock.vue.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;

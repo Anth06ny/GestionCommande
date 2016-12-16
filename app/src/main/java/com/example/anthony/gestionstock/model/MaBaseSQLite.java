@@ -1,4 +1,4 @@
-package model;
+package com.example.anthony.gestionstock.model;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

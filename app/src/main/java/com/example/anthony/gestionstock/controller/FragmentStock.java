@@ -17,9 +17,9 @@ import com.example.anthony.gestionstock.R;
 import java.util.ArrayList;
 
 import greendao.Produit;
-import model.ProduitBddManager;
-import vue.adapter.ProductAdapter;
-import vue.ProductAffichageEnum;
+import com.example.anthony.gestionstock.model.ProduitBddManager;
+import com.example.anthony.gestionstock.vue.adapter.ProductAdapter;
+import com.example.anthony.gestionstock.vue.ProductAffichageEnum;
 
 /**
  * A simple {@link Fragment} subclass.

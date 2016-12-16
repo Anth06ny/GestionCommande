@@ -1,4 +1,4 @@
-package vue;
+package com.example.anthony.gestionstock.vue;
 
 import android.content.Context;
 import android.content.DialogInterface;

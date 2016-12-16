@@ -29,11 +29,11 @@ import java.util.HashMap;
 import greendao.Commande;
 import greendao.Consomme;
 import greendao.Produit;
-import model.CommandeBddManager;
-import model.ConsommeBddManager;
-import model.ProduitBddManager;
-import vue.adapter.ProductAdapter;
-import vue.ProductAffichageEnum;
+import com.example.anthony.gestionstock.model.CommandeBddManager;
+import com.example.anthony.gestionstock.model.ConsommeBddManager;
+import com.example.anthony.gestionstock.model.ProduitBddManager;
+import com.example.anthony.gestionstock.vue.adapter.ProductAdapter;
+import com.example.anthony.gestionstock.vue.ProductAffichageEnum;
 
 public class FragmentBilan extends Fragment implements DatePickerFragment.DatePickerFragmentCallBack {
     // TODO: Rename parameter arguments, choose names that match

@@ -25,8 +25,8 @@ import java.util.List;
 
 import greendao.Categorie;
 import greendao.Produit;
-import model.CategorieBddManager;
-import model.ProduitBddManager;
+import com.example.anthony.gestionstock.model.CategorieBddManager;
+import com.example.anthony.gestionstock.model.ProduitBddManager;
 
 /**
  * Created by Allan on 23/11/2016.
@@ -69,7 +69,7 @@ public class DialogProduit extends DialogFragment {
         produitArrayList = (ArrayList<Produit>) ProduitBddManager.getProduit();
 
         // instancie l'adapteur pour la liste déroulante
-        spinnerTest = new vue.SpinnerAdapter(this.getActivity(), listCategories);
+        spinnerTest = new com.example.anthony.gestionstock.vue.SpinnerAdapter(this.getActivity(), listCategories);
 
         //On recupere les elements graphique et leur valeur, Recupère ce qui est contenu dans le champ apres saisi de l'utilisateur
         editNom = (EditText) alertDialogView.findViewById(R.id.editNomProduit);

@@ -20,8 +20,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 
 import greendao.Categorie;
-import model.CategorieBddManager;
-import vue.material_color_picker.ColorChooserDialog;
+import com.example.anthony.gestionstock.model.CategorieBddManager;
+import com.example.anthony.gestionstock.vue.material_color_picker.ColorChooserDialog;
 
 /**
  * Created by Allan on 23/11/2016.

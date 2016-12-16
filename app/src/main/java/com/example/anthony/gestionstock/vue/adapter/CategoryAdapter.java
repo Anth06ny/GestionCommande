@@ -1,4 +1,4 @@
-package vue.adapter;
+package com.example.anthony.gestionstock.vue.adapter;
 
 import android.content.res.ColorStateList;
 import android.support.v7.widget.AppCompatButton;

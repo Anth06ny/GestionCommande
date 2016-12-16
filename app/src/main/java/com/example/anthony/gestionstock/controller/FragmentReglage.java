@@ -22,12 +22,12 @@ import java.util.ArrayList;
 
 import greendao.Categorie;
 import greendao.Produit;
-import model.CategorieBddManager;
-import model.ProduitBddManager;
-import vue.AlertDialogutils;
-import vue.ProductAffichageEnum;
-import vue.adapter.CategoryAdapter;
-import vue.adapter.ProductAdapter;
+import com.example.anthony.gestionstock.model.CategorieBddManager;
+import com.example.anthony.gestionstock.model.ProduitBddManager;
+import com.example.anthony.gestionstock.vue.AlertDialogutils;
+import com.example.anthony.gestionstock.vue.ProductAffichageEnum;
+import com.example.anthony.gestionstock.vue.adapter.CategoryAdapter;
+import com.example.anthony.gestionstock.vue.adapter.ProductAdapter;
 
 /**
  * A simple {@link Fragment} subclass.

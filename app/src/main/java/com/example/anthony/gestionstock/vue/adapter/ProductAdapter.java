@@ -1,4 +1,4 @@
-package vue.adapter;
+package com.example.anthony.gestionstock.vue.adapter;
 
 import android.content.res.ColorStateList;
 import android.support.v7.widget.AppCompatButton;
@@ -11,12 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.anthony.gestionstock.R;
+import com.example.anthony.gestionstock.vue.ProductAffichageEnum;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import greendao.Produit;
-import vue.ProductAffichageEnum;
 
 /**
  * Created by Axel legué on 23/11/2016.

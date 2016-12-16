@@ -1,4 +1,4 @@
-package vue.material_color_picker;
+package com.example.anthony.gestionstock.vue.material_color_picker;
 
 /**
  * Created by Anthony on 13/12/2016.

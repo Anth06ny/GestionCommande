@@ -15,21 +15,21 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
+import com.example.anthony.gestionstock.model.CategorieBddManager;
+import com.example.anthony.gestionstock.model.ConsommeBddManager;
+import com.example.anthony.gestionstock.model.ProduitBddManager;
+import com.example.anthony.gestionstock.vue.AlertDialogutils;
+import com.example.anthony.gestionstock.vue.ProductAffichageEnum;
+import com.example.anthony.gestionstock.vue.adapter.CategoryAdapter;
+import com.example.anthony.gestionstock.vue.adapter.ConsommeAdapter;
+import com.example.anthony.gestionstock.vue.adapter.GridAutofitLayoutManager;
+import com.example.anthony.gestionstock.vue.adapter.ProductAdapter;
 
 import java.util.ArrayList;
 
 import greendao.Categorie;
 import greendao.Consomme;
 import greendao.Produit;
-import model.CategorieBddManager;
-import model.ConsommeBddManager;
-import model.ProduitBddManager;
-import vue.AlertDialogutils;
-import vue.ProductAffichageEnum;
-import vue.adapter.CategoryAdapter;
-import vue.adapter.ConsommeAdapter;
-import vue.adapter.GridAutofitLayoutManager;
-import vue.adapter.ProductAdapter;
 
 /**
  * A simple {@link Fragment} subclass.

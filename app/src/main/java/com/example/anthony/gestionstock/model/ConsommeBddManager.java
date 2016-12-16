@@ -1,4 +1,4 @@
-package model;
+package com.example.anthony.gestionstock.model;
 
 import com.example.anthony.gestionstock.controller.MyApplication;
 
