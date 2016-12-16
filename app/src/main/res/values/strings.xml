@@ -32,6 +32,9 @@
     <!-- Dialog Erreur -->
     <string name="dialog_error_title">Attention</string>
 
+    <!-- Dialog connexion -->
+    <string name="dialog_connexion_titre">Entrez le mot de passe </string>
+
 
     <!-- Accueil -->
     <string name="accueil_title">Accueil</string>

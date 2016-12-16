@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.example.anthony.gestionstock.R;
 import com.example.anthony.gestionstock.controller.MyApplication;
 import com.example.anthony.gestionstock.controller.dialog.DialogCategorie;
-import com.example.anthony.gestionstock.controller.dialog.DialogLogin;
 import com.example.anthony.gestionstock.controller.dialog.DialogProduit;
 import com.example.anthony.gestionstock.model.bdd.CategorieBddManager;
 import com.example.anthony.gestionstock.model.bdd.ProduitBddManager;
@@ -39,7 +38,7 @@ import greendao.Produit;
  * Use the {@link FragmentReglage#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentReglage extends Fragment implements View.OnClickListener, CategoryAdapter.CategoryAdapterCallBack, ProductAdapter.ProductAdapterCallBack, DialogLogin.DialogLoginCallBack {
+public class FragmentReglage extends Fragment implements View.OnClickListener, CategoryAdapter.CategoryAdapterCallBack, ProductAdapter.ProductAdapterCallBack {
 
     private AppCompatButton btnAddCategorie;
     private AppCompatButton btnAddProduit;
@@ -75,12 +74,6 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
 
     // initUI permet de recupere les elements graphique et faire des operations sur ces elements
     private void initUI(View v) {
-
-        //On creer un dialog pour que l'utilisateur puisse rentrer son mot de passe et acceder aux reglages
-        DialogLogin dialogLogin = new DialogLogin();
-        dialogLogin.setDialogLoginCallBack(FragmentReglage.this);
-        dialogLogin.setCancelable(false);
-        dialogLogin.show(getFragmentManager(), "tag");
 
         //On recupere la liste des categories
         categorieList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
@@ -412,18 +405,5 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
-    }
-
-    @Override
-    public void onCancelLogin(Boolean cancel) {
-        //Quand on clic sur le bouton annuler du dialog login on redirige l'utilisateur vers la page d'accueil
-        FragmentAccueil fragmentAcceuil = new FragmentAccueil();
-
-        //Lance un autre fragment
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.flContent, fragmentAcceuil, "string")
-                .addToBackStack(null)
-                .commit();
     }
 }

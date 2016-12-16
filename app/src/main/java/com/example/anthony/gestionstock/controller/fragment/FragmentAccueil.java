@@ -160,6 +160,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         }
         else if (v == btn_note) {
             Toast.makeText(getContext(), "Non implémenté", Toast.LENGTH_SHORT).show();
+            AlertDialogutils.loginDialog(getContext());
         }
     }
 

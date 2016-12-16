@@ -3,11 +3,11 @@ package com.example.anthony.gestionstock.controller;
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 
-import greendao.DaoMaster;
-import greendao.DaoSession;
 import com.example.anthony.gestionstock.model.bdd.CategorieBddManager;
 import com.example.anthony.gestionstock.model.bdd.MaBaseSQLite;
-import com.example.anthony.gestionstock.model.sharedPreference.UserSession;
+
+import greendao.DaoMaster;
+import greendao.DaoSession;
 
 /**
  * Created by Allan on 29/11/2016.
@@ -19,20 +19,18 @@ public class MyApplication extends Application {
     public final static boolean DEBUG = true;
 
     private static DaoSession daoSession;
-    private UserSession userSession;
+    private static MyApplication instance;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
         setupDatabase();
 
         //TODO retirer l'ajout de données test
         if (MyApplication.DEBUG && CategorieBddManager.getCategories().size() == 0) {
             MaBaseSQLite.fillBase(this);
         }
-
-        //CategorieBddManager.clearCategorie();
-        // ProduitBddManager.clearProduit();
     }
 
     private void setupDatabase() {
@@ -41,6 +39,10 @@ public class MyApplication extends Application {
         SQLiteDatabase db = helper.getWritableDatabase();
         DaoMaster daoMaster = new DaoMaster(db);
         daoSession = daoMaster.newSession();
+    }
+
+    public static MyApplication getInstance() {
+        return instance;
     }
 
     public static DaoSession getDaoSession() {

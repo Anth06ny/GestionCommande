@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
-import com.example.anthony.gestionstock.model.sharedPreference.UserSession;
+import com.example.anthony.gestionstock.model.sharedPreference.SharedPreferenceUtils;
 
 public class FragmentAdminInfo extends Fragment {
     private View v;
@@ -20,7 +20,7 @@ public class FragmentAdminInfo extends Fragment {
     private Button btn_conection;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    private UserSession session;
+    private SharedPreferenceUtils session;
 
     public FragmentAdminInfo() {
         // Required empty public constructor

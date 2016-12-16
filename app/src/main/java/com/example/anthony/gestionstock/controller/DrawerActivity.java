@@ -1,7 +1,5 @@
 package com.example.anthony.gestionstock.controller;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -18,7 +16,6 @@ import com.example.anthony.gestionstock.controller.fragment.FragmentAccueil;
 import com.example.anthony.gestionstock.controller.fragment.FragmentBilan;
 import com.example.anthony.gestionstock.controller.fragment.FragmentReglage;
 import com.example.anthony.gestionstock.controller.fragment.FragmentStock;
-import com.example.anthony.gestionstock.model.sharedPreference.UserSession;
 
 public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -108,14 +105,5 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         }
 
         return true;
-    }
-
-    @Override
-    protected void onStop() {
-        SharedPreferences sharedpreferences = getSharedPreferences(UserSession.PREFER_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.clear();
-        editor.commit();
-        super.onStop();
     }
 }
