@@ -2,6 +2,7 @@ package com.example.anthony.gestionstock.controller;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -19,13 +20,20 @@ import com.example.anthony.gestionstock.R;
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, FragmentReglage.OnFragmentInteractionListener, FragmentStock.OnFragmentInteractionListener,
         FragmentAccueil.OnFragmentInteractionListener, FragmentBilan.OnFragmentInteractionListener, FragmentAdminInfo.OnFragmentInteractionListener {
+
     private DrawerLayout mDrawer;
+    private Toolbar toolbar;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reglage);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+
         setSupportActionBar(toolbar);
         //TODO voir pour premiere execution de l'application
         // A modifier ///////////////////////////////////////////////////////////////////////////////
@@ -46,14 +54,18 @@ public class DrawerActivity extends AppCompatActivity
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         ////////////////////////////////////////////////////////////////////////////////////////////
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        navigationView.setItemIconTintList(null);
+        navigationView.getMenu().findItem(R.id.Accueil).getIcon().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_IN);
+        navigationView.getMenu().findItem(R.id.Stock).getIcon().setColorFilter(getResources().getColor(R.color.orange), PorterDuff.Mode.SRC_IN);
+        navigationView.getMenu().findItem(R.id.Bilan).getIcon().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_IN);
+        navigationView.getMenu().findItem(R.id.Reglage).getIcon().setColorFilter(getResources().getColor(R.color.grey), PorterDuff.Mode.SRC_IN);
     }
 
     @Override
@@ -71,7 +83,6 @@ public class DrawerActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         int id = item.getItemId();
         Fragment fragment = null;

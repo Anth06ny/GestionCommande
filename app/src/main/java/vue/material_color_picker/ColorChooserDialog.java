@@ -82,26 +82,26 @@ public class ColorChooserDialog extends DialogFragment {
         twenty = (AppCompatImageButton) view.findViewById(R.id.b20);
 
         colors = new ArrayList<>();
-        colors.add(red);
-        colors.add(pink);
-        colors.add(Purple);
-        colors.add(DeepPurple);
-        colors.add(Indigo);
-        colors.add(Blue);
-        colors.add(LightBlue);
-        colors.add(Cyan);
-        colors.add(Teal);
-        colors.add(Green);
-        colors.add(LightGreen);
-        colors.add(Lime);
-        colors.add(Yellow);
-        colors.add(Amber);
-        colors.add(Orange);
-        colors.add(DeepOrange);
-        colors.add(Brown);
-        colors.add(Grey);
-        colors.add(BlueGray);
-        colors.add(Black);
+        colors.add(getContext().getResources().getColor(R.color.red));
+        colors.add(getContext().getResources().getColor(R.color.pink));
+        colors.add(getContext().getResources().getColor(R.color.purple));
+        colors.add(getContext().getResources().getColor(R.color.deep_purple));
+        colors.add(getContext().getResources().getColor(R.color.indigo));
+        colors.add(getContext().getResources().getColor(R.color.blue));
+        colors.add(getContext().getResources().getColor(R.color.light_blue));
+        colors.add(getContext().getResources().getColor(R.color.cyan));
+        colors.add(getContext().getResources().getColor(R.color.teal));
+        colors.add(getContext().getResources().getColor(R.color.green));
+        colors.add(getContext().getResources().getColor(R.color.light_green));
+        colors.add(getContext().getResources().getColor(R.color.lime));
+        colors.add(getContext().getResources().getColor(R.color.yellow));
+        colors.add(getContext().getResources().getColor(R.color.amber));
+        colors.add(getContext().getResources().getColor(R.color.orange));
+        colors.add(getContext().getResources().getColor(R.color.deep_orange));
+        colors.add(getContext().getResources().getColor(R.color.brown));
+        colors.add(getContext().getResources().getColor(R.color.green));
+        colors.add(getContext().getResources().getColor(R.color.blue_grey));
+        colors.add(getContext().getResources().getColor(R.color.black));
 
         buttons = new ArrayList<>();
         buttons.add(one);
@@ -277,28 +277,6 @@ public class ColorChooserDialog extends DialogFragment {
         imageButton.setVisibility(View.VISIBLE);
         animation.start();
     }
-
-    //CONSTANTS
-    public static final int red = 0xffF44336;
-    public static final int pink = 0xffE91E63;
-    public static final int Purple = 0xff9C27B0;
-    public static final int DeepPurple = 0xff673AB7;
-    public static final int Indigo = 0xff3F51B5;
-    public static final int Blue = 0xff2196F3;
-    public static final int LightBlue = 0xff03A9F4;
-    public static final int Cyan = 0xff00BCD4;
-    public static final int Teal = 0xff009688;
-    public static final int Green = 0xff4CAF50;
-    public static final int LightGreen = 0xff8BC34A;
-    public static final int Lime = 0xffCDDC39;
-    public static final int Yellow = 0xffFFEB3B;
-    public static final int Amber = 0xffFFC107;
-    public static final int Orange = 0xffFF9800;
-    public static final int DeepOrange = 0xffFF5722;
-    public static final int Brown = 0xff795548;
-    public static final int Grey = 0xff9E9E9E;
-    public static final int BlueGray = 0xff607D8B;
-    public static final int Black = 0xff000000;
 
     public void setColorListener(ColorListener listener) {
         this.myColorListener = listener;

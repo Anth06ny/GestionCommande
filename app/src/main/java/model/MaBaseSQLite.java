@@ -4,10 +4,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.anthony.gestionstock.R;
+
 import greendao.Categorie;
 import greendao.DaoMaster;
 import greendao.Produit;
-import vue.material_color_picker.ColorChooserDialog;
 
 /**
  * Created by Axel legué on 25/11/2016.
@@ -41,7 +42,7 @@ public class MaBaseSQLite extends SQLiteOpenHelper {
 
         //CATEGORIE 1
         Categorie categorie = new Categorie();
-        categorie.setCouleur("" + ColorChooserDialog.DeepOrange);
+        categorie.setCouleur("" + context.getResources().getColor(R.color.deep_orange));
         categorie.setNom("Alcool");
         CategorieBddManager.insertOrUpdate(categorie);
 
@@ -59,7 +60,7 @@ public class MaBaseSQLite extends SQLiteOpenHelper {
 
         //CATEGORIE 2
         categorie = new Categorie();
-        categorie.setCouleur("" + ColorChooserDialog.Blue);
+        categorie.setCouleur("" + context.getResources().getColor(R.color.blue));
         categorie.setNom("Soft");
         CategorieBddManager.insertOrUpdate(categorie);
 
@@ -77,7 +78,7 @@ public class MaBaseSQLite extends SQLiteOpenHelper {
 
         //CATEGORIE 3
         categorie = new Categorie();
-        categorie.setCouleur("" + ColorChooserDialog.Teal);
+        categorie.setCouleur("" + context.getResources().getColor(R.color.teal));
         categorie.setNom("Cafe");
         CategorieBddManager.insertOrUpdate(categorie);
 
