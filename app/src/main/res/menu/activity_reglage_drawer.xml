@@ -6,20 +6,19 @@
         <item
             android:id="@+id/Accueil"
             android:icon="@drawable/ic_home_black_48dp"
-
-            android:title="Accueil"/>
+            android:title="@string/accueil_title"/>
         <item
             android:id="@+id/Stock"
             android:icon="@drawable/ic_local_grocery_store_black_48dp"
-            android:title="Stock"/>
+            android:title="@string/stock_title"/>
         <item
             android:id="@+id/Bilan"
             android:icon="@drawable/ic_trending_up_black_48dp"
-            android:title="Bilan"/>
+            android:title="@string/bilan_title"/>
         <item
             android:id="@+id/Reglage"
             android:icon="@drawable/ic_settings_black_48dp"
-            android:title="Réglages"/>
+            android:title="@string/reglage_title"/>
 
     </group>
 </menu>

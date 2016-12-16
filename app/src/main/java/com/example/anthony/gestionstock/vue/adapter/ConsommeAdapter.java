@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.anthony.gestionstock.R;
+import com.example.anthony.gestionstock.Utils;
 
 import java.util.ArrayList;
 
@@ -55,8 +56,8 @@ public class ConsommeAdapter extends RecyclerView.Adapter<ConsommeAdapter.ViewHo
         final Consomme consomme = consommeArrayList.get(position);
         holder.displayQuantite.setText(consomme.getQuantite() + "");
         holder.displaylibelle.setText(consomme.getProduitRef().getNom());
-        holder.displayTarif.setText(consomme.getProduitRef().getPrix() + "");
-        holder.displayMontant.setText("" + (consomme.getProduitRef().getPrix() * consomme.getQuantite()));
+        holder.displayTarif.setText(Utils.formatToMoney(consomme.getProduitRef().getPrix()));
+        holder.displayMontant.setText(Utils.formatToMoney(consomme.getProduitRef().getPrix() * consomme.getQuantite()));
         holder.displayDeleteProduit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

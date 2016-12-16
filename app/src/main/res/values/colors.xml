@@ -9,6 +9,7 @@
     <color name="selected_cellule_bg">#eceff1</color>
     <color name="unselected_cellule_bg">#ffffff</color>
     <color name="product_color">#607d8b</color>
+    <color name="solde_color">#FFFF8D</color>
 
 
     <color name="red">#C62828</color>

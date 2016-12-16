@@ -1,8 +1,6 @@
-package com.example.anthony.gestionstock.controller;
+package com.example.anthony.gestionstock.controller.fragment;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
@@ -12,12 +10,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
-import com.example.anthony.gestionstock.model.CategorieBddManager;
-import com.example.anthony.gestionstock.model.ConsommeBddManager;
-import com.example.anthony.gestionstock.model.ProduitBddManager;
+import com.example.anthony.gestionstock.Utils;
+import com.example.anthony.gestionstock.controller.MyApplication;
+import com.example.anthony.gestionstock.model.bdd.CategorieBddManager;
+import com.example.anthony.gestionstock.model.bdd.ConsommeBddManager;
+import com.example.anthony.gestionstock.model.bdd.ProduitBddManager;
 import com.example.anthony.gestionstock.vue.AlertDialogutils;
 import com.example.anthony.gestionstock.vue.ProductAffichageEnum;
 import com.example.anthony.gestionstock.vue.adapter.CategoryAdapter;
@@ -41,18 +42,17 @@ import greendao.Produit;
  */
 
 public class FragmentAccueil extends Fragment implements View.OnClickListener, ProductAdapter.ProductAdapterCallBack, ConsommeAdapter.ConsommeAdapterCallBack, CategoryAdapter.CategoryAdapterCallBack, View.OnLongClickListener {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private OnFragmentInteractionListener mListener;
+
+    //bouton
+    private AppCompatButton btn_cancel;
+    private AppCompatButton btn_note;
+    private AppCompatButton btn_off_client;
+    private TextView tv_solde;
 
     //GestionNote
     private ConsommeAdapter consommeAdapter;
     private ArrayList<Consomme> consommeArrayListNote;
     private RecyclerView recyclerViewNote;
-    private AppCompatButton btn_cancel;
-    private AppCompatButton btn_note;
-    private AppCompatButton btn_off_client;
 
     //Gestion Categorie
     private RecyclerView rv_accueilCategorie;
@@ -69,27 +69,13 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     private ArrayList<Produit> produitArrayListFavoris;
     private RecyclerView rv_accueilProduitFavoris;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentAccueil.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentAccueil newInstance(String param1, String param2) {
-        FragmentAccueil fragment = new FragmentAccueil();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     public FragmentAccueil() {
         // Required empty public constructor
     }
+
+    /* ---------------------------------
+    // Cycle vie fragment
+    // -------------------------------- */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -140,53 +126,33 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         btn_cancel = (AppCompatButton) v.findViewById(R.id.btn_deleteNote);
         btn_note = (AppCompatButton) v.findViewById(R.id.btn_printNote);
         btn_off_client = (AppCompatButton) v.findViewById(R.id.btn_offClient);
+        tv_solde = (TextView) v.findViewById(R.id.tv_solde);
 
         btn_note.setOnClickListener(this);
         btn_cancel.setOnClickListener(this);
         btn_off_client.setOnClickListener(this);
 
         btn_cancel.setOnLongClickListener(this);
+        btn_off_client.setOnLongClickListener(this);
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        }
-        else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
+    public void onResume() {
+        super.onResume();
+        refreshSold();
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        getActivity().setTitle(R.string.accueil_title);
     }
 
     /* ---------------------------------
-    // Gestion evenements
+    // CallBack bouton
     // -------------------------------- */
 
     @Override
     public void onClick(View v) {
+        //Vibration au clic
+        Utils.vibration(getContext());
+
         if (v == btn_cancel) {
             AlertDialogutils.showOkCancelDialog(getContext(), "Confirmation", "Supprimer la note ?", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
@@ -196,7 +162,12 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
             });
         }
         else if (v == btn_off_client) {
-            saveCommande();
+            AlertDialogutils.showOkCancelDialog(getContext(), R.string.confirmation, R.string.accueil_confirm_message, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    saveCommande();
+                }
+            });
         }
         else if (v == btn_note) {
             Toast.makeText(getContext(), "Non implémenté", Toast.LENGTH_SHORT).show();
@@ -205,10 +176,18 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
 
     @Override
     public boolean onLongClick(View v) {
+        //Vibration au clic
+        Utils.vibration(getContext());
         if (v == btn_cancel) {
             //le long clic efface la note sans confirmation
             deleteNote();
             Toast.makeText(getContext(), R.string.accueil_tost_cmd_del, Toast.LENGTH_SHORT).show();
+            //True pour dire qu'on a traiter le long clic, sinon il va considerer que c'est aussi un clic classique
+            return true;
+        }
+        else if (v == btn_off_client) {
+            //le long clic valide sans confirmation
+            saveCommande();
             //True pour dire qu'on a traiter le long clic, sinon il va considerer que c'est aussi un clic classique
             return true;
         }
@@ -225,7 +204,10 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
 
     @Override
     public void clicOnProduit(Produit produit) {
+        //Vibration au clic
+        Utils.vibration(getContext());
         addProduitToNote(produit.getId());
+        refreshSold();
     }
 
     @Override
@@ -254,6 +236,8 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
 
     @Override
     public void clicOnCategory(Categorie categorie) {
+        //Vibration au clic
+        Utils.vibration(getContext());
         //on clic sur une category, on modifie la liste de produit et on actualise l'ecran
         arraylistProduits.clear();
         arraylistProduits.addAll(categorie.getProduitList());
@@ -267,6 +251,15 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     /* ---------------------------------
     //  Private
     // -------------------------------- */
+
+    private void refreshSold() {
+        double solde = 0;
+        for (Consomme consomme : consommeArrayListNote) {
+            solde += consomme.getQuantite() * consomme.getProduitRef().getPrix();
+        }
+
+        tv_solde.setText(Utils.formatToMoney(solde) + " €");
+    }
 
     /**
      * Ajoute à la note le produit en param
@@ -319,46 +312,43 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
                 return;
             }
         }
+
+        refreshSold();
     }
 
     private void deleteNote() {
         consommeAdapter.notifyItemRangeRemoved(0, consommeArrayListNote.size());
         consommeArrayListNote.clear();
+        refreshSold();
     }
 
     private void saveCommande() {
+        if (consommeArrayListNote.isEmpty()) {
+            Toast.makeText(getContext(), "Note vide", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        try {
+            //On parours la liste des consomme de la note
+            for (int i = 0; i < consommeArrayListNote.size(); i++) {
+                //On recupere le produit qui correspond a l'id du produit de la consomme a l'instant i
+                Produit produit = ProduitBddManager.getProduitById(consommeArrayListNote.get(i).getProduit());
 
-        AlertDialogutils.showOkCancelDialog(getContext(), R.string.confirmation, R.string.accueil_confirm_message, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (consommeArrayListNote.isEmpty()) {
-                    Toast.makeText(getContext(), "Note vide", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                try {
-                    //On parours la liste des consomme de la note
-                    for (int i = 0; i < consommeArrayListNote.size(); i++) {
-                        //On recupere le produit qui correspond a l'id du produit de la consomme a l'instant i
-                        Produit produit = ProduitBddManager.getProduitById(consommeArrayListNote.get(i).getProduit());
+                //On set consommation en recuperant l'ancienne valeur de la consommation et en lui ajoutant la nouvelle qui est dans la liste de consomme
+                produit.setConsommation((int) (produit.getConsommation() + consommeArrayListNote.get(i).getQuantite()));
 
-                        //On set consommation en recuperant l'ancienne valeur de la consommation et en lui ajoutant la nouvelle qui est dans la liste de consomme
-                        produit.setConsommation((int) (produit.getConsommation() + consommeArrayListNote.get(i).getQuantite()));
-
-                        //On insert en bdd la modification de la consommation
-                        ProduitBddManager.insertOrUpdate(produit);
-                    }
-                    //On insert en base
-                    ConsommeBddManager.insertConsommeList(consommeArrayListNote);
-                    //Si l'insertion a reussi on efface la note
-                    deleteNote();
-
-                    Toast.makeText(getContext(), R.string.accueil_tost_cmd_save, Toast.LENGTH_SHORT).show();
-                }
-                catch (Exception e) {
-                    showError(e);
-                }
+                //On insert en bdd la modification de la consommation
+                ProduitBddManager.insertOrUpdate(produit);
             }
-        });
+            //On insert en base
+            ConsommeBddManager.insertConsommeList(consommeArrayListNote);
+            //Si l'insertion a reussi on efface la note
+            deleteNote();
+
+            Toast.makeText(getContext(), R.string.accueil_tost_cmd_save, Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e) {
+            showError(e);
+        }
     }
 
     private void showError(Exception e) {

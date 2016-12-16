@@ -5,8 +5,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import greendao.DaoMaster;
 import greendao.DaoSession;
-import com.example.anthony.gestionstock.model.CategorieBddManager;
-import com.example.anthony.gestionstock.model.MaBaseSQLite;
+import com.example.anthony.gestionstock.model.bdd.CategorieBddManager;
+import com.example.anthony.gestionstock.model.bdd.MaBaseSQLite;
+import com.example.anthony.gestionstock.model.sharedPreference.UserSession;
 
 /**
  * Created by Allan on 29/11/2016.

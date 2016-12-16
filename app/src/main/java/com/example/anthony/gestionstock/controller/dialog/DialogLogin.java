@@ -1,4 +1,4 @@
-package com.example.anthony.gestionstock.controller;
+package com.example.anthony.gestionstock.controller.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
+import com.example.anthony.gestionstock.model.sharedPreference.UserSession;
 
 public class DialogLogin extends DialogFragment {
 
@@ -93,7 +94,7 @@ public class DialogLogin extends DialogFragment {
         return dialog;
     }
 
-    interface DialogLoginCallBack {
+    public interface DialogLoginCallBack {
         void onCancelLogin(Boolean cancel);
     }
 

@@ -1,4 +1,4 @@
-package com.example.anthony.gestionstock.model;
+package com.example.anthony.gestionstock.model.bdd;
 
 import com.example.anthony.gestionstock.controller.MyApplication;
 

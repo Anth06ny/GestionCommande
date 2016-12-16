@@ -1,4 +1,4 @@
-package com.example.anthony.gestionstock.controller;
+package com.example.anthony.gestionstock.controller.fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;

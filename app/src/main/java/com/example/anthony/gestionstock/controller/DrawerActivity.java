@@ -3,7 +3,6 @@ package com.example.anthony.gestionstock.controller;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -16,10 +15,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.example.anthony.gestionstock.R;
+import com.example.anthony.gestionstock.controller.fragment.FragmentAccueil;
+import com.example.anthony.gestionstock.controller.fragment.FragmentBilan;
+import com.example.anthony.gestionstock.controller.fragment.FragmentReglage;
+import com.example.anthony.gestionstock.controller.fragment.FragmentStock;
+import com.example.anthony.gestionstock.model.sharedPreference.UserSession;
 
-public class DrawerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, FragmentReglage.OnFragmentInteractionListener, FragmentStock.OnFragmentInteractionListener,
-        FragmentAccueil.OnFragmentInteractionListener, FragmentBilan.OnFragmentInteractionListener, FragmentAdminInfo.OnFragmentInteractionListener {
+public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
@@ -35,7 +37,7 @@ public class DrawerActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         setSupportActionBar(toolbar);
-        //TODO voir pour premiere execution de l'application
+
         // A modifier ///////////////////////////////////////////////////////////////////////////////
         Fragment fragment = null;
         Class fragmentClass;
@@ -61,6 +63,7 @@ public class DrawerActivity extends AppCompatActivity
 
         navigationView.setNavigationItemSelectedListener(this);
 
+        //Changement des couleurs des icones du menu
         navigationView.setItemIconTintList(null);
         navigationView.getMenu().findItem(R.id.Accueil).getIcon().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_IN);
         navigationView.getMenu().findItem(R.id.Stock).getIcon().setColorFilter(getResources().getColor(R.color.orange), PorterDuff.Mode.SRC_IN);
@@ -119,10 +122,6 @@ public class DrawerActivity extends AppCompatActivity
         mDrawer.closeDrawers();
 
         return true;
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
     }
 
     @Override

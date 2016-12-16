@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.anthony.gestionstock.R;
+import com.example.anthony.gestionstock.Utils;
 import com.example.anthony.gestionstock.vue.ProductAffichageEnum;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private ArrayList<Produit> getProduitArrayList;
     private ProductAdapterCallBack productAdapterCallBack;
     private HashMap<Produit, Long> quantiteHashMap;
-    private final String SYMBOLE_EURO = " €";
+    private final String SYMBOLE_EURO = "€";
 
     // -------------------------------- CONSTRUCTOR -------------------------------------------------- //
     public ProductAdapter(ProductAffichageEnum choixAffichage, ArrayList<Produit> getProduitArrayList, ProductAdapterCallBack productAdapterCallBack, HashMap<Produit, Long> quantiteHashMap) {
@@ -68,8 +69,9 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         switch (choixAffichage) {
             case Accueil:
                 ProductAdapter.ViewHolderAccueil viewHolderAccueil = (ViewHolderAccueil) vh;
-                viewHolderAccueil.root.setText(produitbean.getNom());
 
+                String text = produitbean.getNom().toUpperCase() + "\n(" + Utils.formatToMoney(produitbean.getPrix()) + "€)";
+                viewHolderAccueil.root.setText(text);
                 viewHolderAccueil.root.setSupportBackgroundTintList(ColorStateList.valueOf(Integer.parseInt(produitbean.getCategorie().getCouleur())));
                 viewHolderAccueil.root.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -82,7 +84,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case Reglage:
                 ProductAdapter.ViewHolder holderReglage = (ViewHolder) vh;
                 holderReglage.displaylibelle.setText(produitbean.getNom());
-                holderReglage.displayTarif.setText(String.valueOf(produitbean.getPrix() + SYMBOLE_EURO));
+                holderReglage.displayTarif.setText(Utils.formatToMoney(produitbean.getPrix()) + SYMBOLE_EURO);
                 holderReglage.displayLot.setText(String.valueOf(produitbean.getLot()));
 
                 if (produitbean.isSelected()) {

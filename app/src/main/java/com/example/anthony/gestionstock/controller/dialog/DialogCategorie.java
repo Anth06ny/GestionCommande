@@ -1,4 +1,4 @@
-package com.example.anthony.gestionstock.controller;
+package com.example.anthony.gestionstock.controller.dialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 
 import greendao.Categorie;
-import com.example.anthony.gestionstock.model.CategorieBddManager;
+import com.example.anthony.gestionstock.model.bdd.CategorieBddManager;
 import com.example.anthony.gestionstock.vue.material_color_picker.ColorChooserDialog;
 
 /**

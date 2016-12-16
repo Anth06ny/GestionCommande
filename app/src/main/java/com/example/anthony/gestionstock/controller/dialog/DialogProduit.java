@@ -1,4 +1,4 @@
-package com.example.anthony.gestionstock.controller;
+package com.example.anthony.gestionstock.controller.dialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -25,8 +25,8 @@ import java.util.List;
 
 import greendao.Categorie;
 import greendao.Produit;
-import com.example.anthony.gestionstock.model.CategorieBddManager;
-import com.example.anthony.gestionstock.model.ProduitBddManager;
+import com.example.anthony.gestionstock.model.bdd.CategorieBddManager;
+import com.example.anthony.gestionstock.model.bdd.ProduitBddManager;
 
 /**
  * Created by Allan on 23/11/2016.

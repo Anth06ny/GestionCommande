@@ -1,4 +1,4 @@
-package com.example.anthony.gestionstock.controller;
+package com.example.anthony.gestionstock.model.sharedPreference;
 
 import android.content.Context;
 import android.content.SharedPreferences;

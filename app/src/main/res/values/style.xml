@@ -67,7 +67,7 @@
 
     <style name="acceuil_tv_note" parent="acceuil_libelle">
         <item name="android:textColor">@android:color/secondary_text_dark</item>
-        <item name="android:textSize">@dimen/font_11</item>
+        <item name="android:textSize">@dimen/font_12</item>
     </style>
 
 </resources>
