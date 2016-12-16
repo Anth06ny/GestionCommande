@@ -336,10 +336,16 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
                     return;
                 }
                 try {
+                    for (int i = 0; i < consommeArrayListNote.size(); i++) {
+                        Produit produit = ProduitBddManager.getProduitById(consommeArrayListNote.get(i).getProduit());
+                        produit.setConsommation((int) (produit.getConsommation() + consommeArrayListNote.get(i).getQuantite()));
+                        ProduitBddManager.insertOrUpdate(produit);
+                    }
                     //On insert en base
                     ConsommeBddManager.insertConsommeList(consommeArrayListNote);
                     //Si l'insertion a reussi on efface la note
                     deleteNote();
+
                     Toast.makeText(getContext(), R.string.accueil_tost_cmd_save, Toast.LENGTH_SHORT).show();
                 }
                 catch (Exception e) {

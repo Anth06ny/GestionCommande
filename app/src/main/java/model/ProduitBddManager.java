@@ -31,6 +31,11 @@ public class ProduitBddManager {
                 .isNotNull()).list();
     }
 
+    public static Produit getProduitById(Long id) {
+        MyApplication.getDaoSession().clear();
+        return MyApplication.getDaoSession().getProduitDao().queryBuilder().where(ProduitDao.Properties.Id.eq(id)).unique();
+    }
+
     public static Produit getProduitFromName(String name) {
         return MyApplication.getDaoSession().getProduitDao().queryBuilder().where(ProduitDao.Properties.Nom.eq(name)).unique();
     }
