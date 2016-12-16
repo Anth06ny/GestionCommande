@@ -336,9 +336,15 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
                     return;
                 }
                 try {
+                    //On parours la liste des consomme de la note
                     for (int i = 0; i < consommeArrayListNote.size(); i++) {
+                        //On recupere le produit qui correspond a l'id du produit de la consomme a l'instant i
                         Produit produit = ProduitBddManager.getProduitById(consommeArrayListNote.get(i).getProduit());
+
+                        //On set consommation en recuperant l'ancienne valeur de la consommation et en lui ajoutant la nouvelle qui est dans la liste de consomme
                         produit.setConsommation((int) (produit.getConsommation() + consommeArrayListNote.get(i).getQuantite()));
+
+                        //On insert en bdd la modification de la consommation
                         ProduitBddManager.insertOrUpdate(produit);
                     }
                     //On insert en base

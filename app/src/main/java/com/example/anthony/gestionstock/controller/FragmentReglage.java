@@ -361,6 +361,8 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                 else {
                     //une insertion
                     if (finalProduit.getId() == null) {
+                        finalProduit.setConsommation(0);
+                        finalProduit.setLotRecommande(0);
                         ProduitBddManager.insertOrUpdate(finalProduit);
                         if (categorieSelected != null && categorieSelected.getId() == finalProduit.getCategorieID()) {
                             produitList.add(finalProduit);
@@ -369,6 +371,10 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                     }
                     else {
                         //une modification
+                        if (finalProduit.getConsommation() == null) {
+                            finalProduit.setConsommation(0);
+                        }
+                        finalProduit.setLotRecommande(0);
                         ProduitBddManager.insertOrUpdate(finalProduit);
                         productAdapter.notifyItemChanged(produitList.indexOf(finalProduit));
                     }
