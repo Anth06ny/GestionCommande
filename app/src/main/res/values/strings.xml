@@ -34,6 +34,11 @@
 
     <!-- Dialog connexion -->
     <string name="dialog_connexion_titre">Entrez le mot de passe </string>
+    <string name="dialog_connexion_ask_titre">Saisissez votre mot de passe,\n pour sécuriser l\'acces à l\'écran de réglage</string>
+    <string name="dialog_connexion_ask_confirm">Confirmez votre mot de passe</string>
+    <string name="dialog_connexion_ask_ok">Mot de passe enregistré</string>
+    <string name="dialog_connexion_ask_cancel">Les mots de passes ne sont pas identiques</string>
+    <string name="dialog_save_password">7412</string>
 
 
     <!-- Accueil -->
@@ -56,7 +61,6 @@
     <string name="reglage_menu_save">Sauvegarder</string>
     <string name="reglage_menu_load">Charger</string>
     <string name="reglage_load_message">Sauvgegarde des données en cours...</string>
-
 
 
 </resources>

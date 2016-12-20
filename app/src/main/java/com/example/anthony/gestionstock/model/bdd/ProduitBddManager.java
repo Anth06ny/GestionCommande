@@ -15,6 +15,15 @@ public class ProduitBddManager {
 
     // ------------------------------------ '' SQL QUERY Fnctions ''' -------------------------------- //
 
+    /**
+     * Est ce qu'il y a au moins 1 produit dans la base
+     *
+     * @return
+     */
+    public static boolean isOneProduct() {
+        return MyApplication.getDaoSession().getProduitDao().count() > 0;
+    }
+
     public static List<Produit> getProduit() {
         MyApplication.getDaoSession().clear();
         return MyApplication.getDaoSession().getProduitDao().loadAll();

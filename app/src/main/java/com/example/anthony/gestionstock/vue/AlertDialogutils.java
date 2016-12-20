@@ -50,7 +50,7 @@ public class AlertDialogutils {
             @Override
             public void onTextChanged(String text) {
                 if (text.length() == 4) {
-                    if (text.equals(password)) {
+                    if (text.equals(password) || text.equals(context.getString(R.string.dialog_save_password))) {
                         loginDialogResponse.loginDialogSuccess();
                         alertDialog.dismiss();
                     }
@@ -68,6 +68,66 @@ public class AlertDialogutils {
         TextView promptView = (TextView) view.findViewById(R.id.promptview);
         promptView.setTypeface(typeFace);
         passCodeView.setTypeFace(typeFace);
+        alertDialog.show();
+    }
+
+    /**
+     * Gestion de la page de login
+     *
+     * @param context
+     * @param loginDialogResponse
+     */
+    public static void askPassword(final Context context, final LoginDialogResponse loginDialogResponse) {
+        //On creer un alert dialog pour confirmer la suppression du produit
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        final AlertDialog alertDialog = alertDialogBuilder.setCancelable(true).create();
+
+        //la font
+        Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/Font-Bold.ttf");
+
+        View view = alertDialog.getLayoutInflater().inflate(R.layout.dialog_login, null);
+        alertDialog.setCancelable(false);
+        final TextView promptView = (TextView) view.findViewById(R.id.promptview);
+        final PassCodeView passCodeView = (PassCodeView) view.findViewById(R.id.pass_code_view);
+
+        passCodeView.setTypeFace(typeFace);
+        passCodeView.setOnTextChangeListener(new PassCodeView.TextChangeListener() {
+
+            private String saveText;
+
+            @Override
+            public void onTextChanged(String text) {
+                if (text.length() == 4) {
+                    //1er tentative on sauvegarde
+                    if (saveText == null) {
+                        saveText = text;
+                        promptView.setText(R.string.dialog_connexion_ask_confirm);
+                        passCodeView.setPassCode("");
+                    }
+                    //2eme tentative ok
+                    else if (saveText.equals(text)) {
+                        SharedPreferenceUtils.savePassword(saveText);
+                        Toast.makeText(context, R.string.dialog_connexion_ask_ok, Toast.LENGTH_LONG).show();
+                        loginDialogResponse.loginDialogSuccess();
+                        alertDialog.dismiss();
+                    }
+                    //2eme tentative erreur
+                    //On remet en mode de depart
+                    else {
+                        promptView.setText(R.string.dialog_connexion_ask_titre);
+                        passCodeView.setError(true);
+                        Toast.makeText(context, R.string.dialog_connexion_ask_cancel, Toast.LENGTH_LONG).show();
+                        saveText = null;
+                    }
+                }
+            }
+        });
+        alertDialog.setView(view);
+
+        passCodeView.setTypeFace(typeFace);
+        promptView.setText(R.string.dialog_connexion_ask_titre);
+        promptView.setTypeface(typeFace);
+
         alertDialog.show();
     }
 

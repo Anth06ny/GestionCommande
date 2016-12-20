@@ -10,14 +10,20 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
 import com.example.anthony.gestionstock.controller.fragment.FragmentAccueil;
 import com.example.anthony.gestionstock.controller.fragment.FragmentBilan;
 import com.example.anthony.gestionstock.controller.fragment.FragmentReglage;
 import com.example.anthony.gestionstock.controller.fragment.FragmentStock;
+import com.example.anthony.gestionstock.model.bdd.ProduitBddManager;
+import com.example.anthony.gestionstock.model.sharedPreference.SharedPreferenceUtils;
+import com.example.anthony.gestionstock.vue.AlertDialogutils;
 
-public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+import org.apache.commons.lang3.StringUtils;
+
+public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AlertDialogutils.LoginDialogResponse {
 
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
@@ -51,9 +57,8 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         navigationView.getMenu().findItem(R.id.Bilan).getIcon().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_IN);
         navigationView.getMenu().findItem(R.id.Reglage).getIcon().setColorFilter(getResources().getColor(R.color.grey), PorterDuff.Mode.SRC_IN);
 
-        //On lance la page d'acceuil par defaut en simulant un clic sur le bouton acceuil
-        //our qu'il soit selectionné dans le menu au passage
-        navigationView.getMenu().performIdentifierAction(R.id.Accueil, 0);
+        //On lance la page d'acceuil par defaut (un controle est fait dans la méthode)
+        gotoAccueil();
     }
 
     @Override
@@ -69,7 +74,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             }
             //sinon on revient dessus
             else {
-                navigationView.getMenu().performIdentifierAction(R.id.Accueil, 0);
+                gotoAccueil();
             }
         }
     }
@@ -80,18 +85,43 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         // Close the navigation drawer
         mDrawer.closeDrawers();
 
+        switch (item.getItemId()) {
+            case R.id.Accueil:
+                gotoAccueil();
+                break;
+
+            case R.id.Reglage:
+                gotoReglage(true);
+                break;
+
+            case R.id.Bilan:
+                gotoBilan();
+                break;
+
+            case R.id.Stock:
+                gotoStock();
+                break;
+        }
+
+        return true;
+    }
+
+    private void changeFragment(int fragmentId) {
+        //le menu correspondant au fragment
+        MenuItem item = navigationView.getMenu().findItem(fragmentId);
+
         //On ne change de fragment que si c'est un different
         if (currentFragment == null || !currentFragment.getTag().equalsIgnoreCase("" + item.getItemId())) {
-            if (item.getItemId() == R.id.Accueil) {
+            if (fragmentId == R.id.Accueil) {
                 currentFragment = new FragmentAccueil();
             }
-            else if (item.getItemId() == R.id.Stock) {
+            else if (fragmentId == R.id.Stock) {
                 currentFragment = new FragmentStock();
             }
-            else if (item.getItemId() == R.id.Bilan) {
+            else if (fragmentId == R.id.Bilan) {
                 currentFragment = new FragmentBilan();
             }
-            else if (item.getItemId() == R.id.Reglage) {
+            else if (fragmentId == R.id.Reglage) {
                 currentFragment = new FragmentReglage();
             }
             // Insert the fragment by replacing any existing fragment
@@ -103,7 +133,71 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             // Set action bar title
             setTitle(item.getTitle());
         }
+    }
 
+
+      /* ---------------------------------
+    // Redirection
+    // -------------------------------- */
+
+    public void gotoAccueil() {
+        if (checkApplicationReadyToUse()) {
+            changeFragment(R.id.Accueil);
+        }
+    }
+
+    public void gotoStock() {
+        if (checkApplicationReadyToUse()) {
+            changeFragment(R.id.Stock);
+        }
+    }
+
+    public void gotoBilan() {
+        if (checkApplicationReadyToUse()) {
+            changeFragment(R.id.Bilan);
+        }
+    }
+
+    public void gotoReglage(boolean askPassword) {
+        if (askPassword) {
+            //on ne change que si ce n'est pas le même fragment
+            if (currentFragment == null || !currentFragment.getTag().equalsIgnoreCase("" + R.id.Reglage)) {
+                //On fait une demande de mot de passe pour aller dans la page de réglage
+                AlertDialogutils.loginDialog(this, this);
+            }
+        }
+        else {
+            changeFragment(R.id.Reglage);
+        }
+    }
+
+    /**
+     * Test si l'application est prette à utiliser c'est à dire s'il y a au oins 1 produit et le mot de passe admin
+     */
+    private boolean checkApplicationReadyToUse() {
+        //On regarde s'il y a le mot de passe réglage
+        if (StringUtils.isBlank(SharedPreferenceUtils.getPassword())) {
+            //sinon on affiche la demande de mot de passe
+            AlertDialogutils.askPassword(this, this);
+            return false;
+        }
+        //On regarde s'il y a au moins un produit dans la base
+        else if (!ProduitBddManager.isOneProduct()) {
+            Toast.makeText(DrawerActivity.this, "Il faut au moins un produit avant de pouvoir utiliser l'application", Toast.LENGTH_SHORT).show();
+            //on redirige sur le réglage
+            gotoReglage(true);
+            return false;
+        }
         return true;
+    }
+
+    /* ---------------------------------
+    // Callback Ecran login
+    // -------------------------------- */
+
+    @Override
+    public void loginDialogSuccess() {
+        //On redirige sur l'écran de réglage
+        gotoReglage(false);
     }
 }
