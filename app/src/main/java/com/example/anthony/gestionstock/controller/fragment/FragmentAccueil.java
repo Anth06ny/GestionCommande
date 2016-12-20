@@ -32,7 +32,7 @@ import greendao.Categorie;
 import greendao.Consomme;
 import greendao.Produit;
 
-public class FragmentAccueil extends Fragment implements View.OnClickListener, ProductAdapter.ProductAdapterCallBack, ConsommeAdapter.ConsommeAdapterCallBack, CategoryAdapter.CategoryAdapterCallBack, View.OnLongClickListener {
+public class FragmentAccueil extends Fragment implements View.OnClickListener, ProductAdapter.ProductAdapterCallBack, ConsommeAdapter.ConsommeAdapterCallBack, CategoryAdapter.CategoryAdapterCallBack, View.OnLongClickListener, AlertDialogutils.LoginDialogResponse {
 
     //bouton
     private AppCompatButton btn_cancel;
@@ -160,7 +160,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         }
         else if (v == btn_note) {
             Toast.makeText(getContext(), "Non implémenté", Toast.LENGTH_SHORT).show();
-            AlertDialogutils.loginDialog(getContext());
+            AlertDialogutils.loginDialog(getContext(), this);
         }
     }
 
@@ -186,8 +186,6 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     /* ---------------------------------
     // Callback ProductAdapter
     // -------------------------------- */
-
-
 
     @Override
     public void clicOnModifyOrInsertProduit(Produit produit) {
@@ -239,6 +237,15 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     @Override
     public void clicOnDeleteCategory(Categorie categorie) {
         //non utilisée ici
+    }
+
+    /* ---------------------------------
+    //     CallBack fenetre login
+    // -------------------------------- */
+
+    @Override
+    public void loginDialogSuccess() {
+
     }
     /* ---------------------------------
     //  Private
