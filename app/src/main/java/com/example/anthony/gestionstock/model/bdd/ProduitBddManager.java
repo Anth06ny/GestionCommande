@@ -2,6 +2,7 @@ package com.example.anthony.gestionstock.model.bdd;
 
 import com.example.anthony.gestionstock.controller.MyApplication;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import greendao.Produit;
@@ -29,6 +30,16 @@ public class ProduitBddManager {
         MyApplication.getDaoSession().clear();
         return MyApplication.getDaoSession().getProduitDao().queryBuilder().where(ProduitDao.Properties.Consommation.notEq(0), ProduitDao.Properties.Consommation
                 .isNotNull()).list();
+    }
+
+    public static void insertProduitList(ArrayList<Produit> produitsArrayList) throws Exception {
+        if (produitsArrayList == null || produitsArrayList.isEmpty()) {
+            return;
+        }
+        //On ajoute chaque consomme à la base
+        for (Produit produit : produitsArrayList) {
+            insertOrUpdate(produit);
+        }
     }
 
     public static Produit getProduitById(Long id) {
