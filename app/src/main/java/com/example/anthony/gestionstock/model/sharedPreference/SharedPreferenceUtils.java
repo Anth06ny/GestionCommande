@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import com.example.anthony.gestionstock.controller.MyApplication;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Created by Axel legué on 13/12/2016.
  */
@@ -27,13 +29,16 @@ public class SharedPreferenceUtils {
     // -------------------------------- */
     private static final String PASSWORD_KEY = "PASSWORD_KEY";
 
-    public static boolean checkPassword(String password) {
-
-        String savePassword = getSharedPreferences().getString(PASSWORD_KEY, "");
-        return savePassword.equalsIgnoreCase(password);
+    public static String getPassword() {
+        return getSharedPreferences().getString(PASSWORD_KEY, null);
     }
 
-    public static void savePAssword(String password) {
+    public static void savePassword(String password) {
+
+        if(StringUtils.isBlank(password)) {
+
+        }
+
         SharedPreferences.Editor editor = getEditor();
         editor.putString(PASSWORD_KEY, password);
         editor.apply();

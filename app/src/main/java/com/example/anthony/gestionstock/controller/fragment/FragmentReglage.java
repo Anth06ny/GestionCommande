@@ -1,6 +1,8 @@
 package com.example.anthony.gestionstock.controller.fragment;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -131,7 +133,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_save:
-                WSUtils.saveData();
+                new MonAT().execute();
                 return true;
             case R.id.menu_load:
                 Toast.makeText(getActivity(), "load", Toast.LENGTH_SHORT).show();
@@ -426,5 +428,41 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+    }
+
+    /* ---------------------------------
+    // AT
+    // -------------------------------- */
+
+    private class MonAT extends AsyncTask<Void, Void, Exception> {
+        private Exception exception = null;
+        private ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(getContext(), "", getContext().getString(R.string.reglage_load_message), true, false);
+        }
+
+        @Override
+        protected Exception doInBackground(Void... params) {
+            try {
+                WSUtils.saveData();
+                return null;
+            }
+            catch (Exception e) {
+                return e;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Exception e) {
+            super.onPostExecute(e);
+            progressDialog.dismiss();
+            if (e != null) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Une erreur est survenue " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
