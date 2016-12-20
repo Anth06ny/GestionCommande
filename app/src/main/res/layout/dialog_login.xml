@@ -3,17 +3,21 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              android:paddingLeft="@dimen/margin_25"
+              android:paddingTop="@dimen/margin_25"
+              android:paddingRight="@dimen/margin_25">
 
     <com.example.anthony.gestionstock.vue.login_dialog.PassCodeView
         android:id="@+id/pass_code_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/margin_25"
         app:digit_size="@dimen/font_30"
         app:digits="4"
         app:empty_drawable="@drawable/empty_dot"
         app:filled_drawable="@drawable/filled_dot"
-        app:key_text_size="@dimen/font_30"/>
+        app:key_text_size="@dimen/font_30"
+        android:layout_marginTop="@dimen/margin_20"
+        />
 
 </LinearLayout>

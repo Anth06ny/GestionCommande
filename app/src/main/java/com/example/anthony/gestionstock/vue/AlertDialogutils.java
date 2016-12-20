@@ -3,6 +3,7 @@ package com.example.anthony.gestionstock.vue;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
@@ -48,6 +49,10 @@ public class AlertDialogutils {
             }
         });
         alertDialog.setView(view);
+
+        //la font
+        Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/Font-Bold.ttf");
+        passCodeView.setTypeFace(typeFace);
         alertDialog.show();
     }
 
