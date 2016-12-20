@@ -133,9 +133,10 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_save:
-                new MonAT().execute();
+                new MonAT(CHOIX.SAVE).execute();
                 return true;
             case R.id.menu_load:
+                new MonAT(CHOIX.LOAD).execute();
                 Toast.makeText(getActivity(), "load", Toast.LENGTH_SHORT).show();
                 return true;
         }
@@ -434,9 +435,17 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     // AT
     // -------------------------------- */
 
+    private enum CHOIX {SAVE, LOAD}
+
     private class MonAT extends AsyncTask<Void, Void, Exception> {
+
         private Exception exception = null;
         private ProgressDialog progressDialog;
+        private CHOIX choix;
+
+        public MonAT(CHOIX choix) {
+            this.choix = choix;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -447,7 +456,16 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         @Override
         protected Exception doInBackground(Void... params) {
             try {
-                WSUtils.saveData();
+                switch (choix) {
+
+                    case SAVE:
+                        WSUtils.saveData();
+                        break;
+                    case LOAD:
+                        WSUtils.loadData();
+                        break;
+                }
+
                 return null;
             }
             catch (Exception e) {
@@ -462,6 +480,28 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
             if (e != null) {
                 e.printStackTrace();
                 Toast.makeText(getContext(), "Une erreur est survenue " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+            else {
+                switch (choix) {
+
+                    case SAVE:
+                        //TODO mettre message dans string xml
+                        Toast.makeText(getContext(), "Données sauvegardé", Toast.LENGTH_SHORT).show();
+                        break;
+                    case LOAD:
+                        for (Categorie categorie : categorieList) {
+                            categorie.setSelected(false);
+                        }
+                        //TODO reload data depuis la base (faire une method)(clear et addAll)
+                        //vide la liste des produits
+                        produitList.clear();
+                        //on acutalise les adapter
+                        categoryAdapter.notifyDataSetChanged();
+                        productAdapter.notifyDataSetChanged();
+                        Toast.makeText(getContext(), "Données chargée", Toast.LENGTH_SHORT).show();
+
+                        break;
+                }
             }
         }
     }

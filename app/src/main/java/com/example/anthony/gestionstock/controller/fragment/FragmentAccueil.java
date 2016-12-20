@@ -351,6 +351,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     }
 
     private void showError(Exception e) {
+        e.printStackTrace();
         AlertDialogutils.showOkDialog(getContext(), R.string.dialog_error_title, e.getMessage(), null);
     }
 }

@@ -96,4 +96,11 @@ public class MaBaseSQLite extends SQLiteOpenHelper {
         produit = new Produit(null, "Cafe américain", 2.5f, 8, 0, null, false, categorie.getId());
         ProduitBddManager.insertOrUpdate(produit);
     }
+
+    public static void clearAllTable() {
+        ProduitBddManager.clearProduit();
+        CategorieBddManager.clearCategorie();
+        CommandeBddManager.clearCommande();
+        ConsommeBddManager.clearConsomme();
+    }
 }

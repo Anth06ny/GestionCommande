@@ -2,6 +2,7 @@ package com.example.anthony.gestionstock.model.bdd;
 
 import com.example.anthony.gestionstock.controller.MyApplication;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +37,16 @@ public class CommandeBddManager {
 
         return MyApplication.getDaoSession().getCommandeDao().queryBuilder()
                 .where(CommandeDao.Properties.Date.between(cDebut.getTime(), cFin.getTime())).list();
+    }
+
+    public static void insertCommandeList(ArrayList<Commande> commandeArrayList) throws Exception {
+        if (commandeArrayList == null || commandeArrayList.isEmpty()) {
+            return;
+        }
+        //On ajoute chaque consomme à la base
+        for (Commande commande : commandeArrayList) {
+            insertOrUpdate(commande);
+        }
     }
 
     public static void insertOrUpdate(Commande commande) {
