@@ -50,7 +50,8 @@
     <string name="accueil_solde">Solde : </string>
 
     <!-- Stock -->
-    <string name="stock_title">Stock</string>
+    <string name="stock_title">Consommation</string>
+    <string name="stock_explication">Etat des consomations</string>
 
 
     <!-- Bilan -->

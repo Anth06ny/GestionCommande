@@ -35,6 +35,8 @@ public class MaBaseSQLite extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+
+
     /**
      * Remplir la base avec un jeu de donnée
      */

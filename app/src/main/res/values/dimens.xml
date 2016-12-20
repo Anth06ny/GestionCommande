@@ -59,4 +59,8 @@
     <dimen name="digit_horizontal_padding">@dimen/margin_15</dimen>
     <dimen name="key_pad_min_height">300dp</dimen>
 
+    <!-- Stock -->
+    <dimen name="stock_bt_width">100dp</dimen>
+
+
 </resources>

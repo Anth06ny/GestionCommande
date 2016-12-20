@@ -51,4 +51,7 @@
 
     <!-- Login -->
     <dimen name="key_pad_min_height">450dp</dimen>
+
+    <!-- Stock -->
+    <dimen name="stock_bt_width">150dp</dimen>
 </resources>
