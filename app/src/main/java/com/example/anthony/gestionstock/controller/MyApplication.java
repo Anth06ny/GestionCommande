@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.anthony.gestionstock.model.bdd.CategorieBddManager;
 import com.example.anthony.gestionstock.model.bdd.MaBaseSQLite;
+import com.google.gson.Gson;
 
 import greendao.DaoMaster;
 import greendao.DaoSession;
@@ -20,12 +21,15 @@ public class MyApplication extends Application {
 
     private static DaoSession daoSession;
     private static MyApplication instance;
+    private static Gson gson;
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
         setupDatabase();
+
+        gson = new Gson();
 
         //TODO retirer l'ajout de données test
         if (MyApplication.DEBUG && CategorieBddManager.getCategories().size() == 0) {
@@ -47,5 +51,9 @@ public class MyApplication extends Application {
 
     public static DaoSession getDaoSession() {
         return daoSession;
+    }
+
+    public static Gson getGson() {
+        return gson;
     }
 }

@@ -187,6 +187,8 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
     // Callback ProductAdapter
     // -------------------------------- */
 
+
+
     @Override
     public void clicOnModifyOrInsertProduit(Produit produit) {
         //Non utilisée ici

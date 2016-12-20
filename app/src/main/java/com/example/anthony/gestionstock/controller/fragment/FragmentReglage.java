@@ -10,6 +10,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -20,6 +23,7 @@ import com.example.anthony.gestionstock.controller.dialog.DialogCategorie;
 import com.example.anthony.gestionstock.controller.dialog.DialogProduit;
 import com.example.anthony.gestionstock.model.bdd.CategorieBddManager;
 import com.example.anthony.gestionstock.model.bdd.ProduitBddManager;
+import com.example.anthony.gestionstock.model.webservice.WSUtils;
 import com.example.anthony.gestionstock.vue.AlertDialogutils;
 import com.example.anthony.gestionstock.vue.ProductAffichageEnum;
 import com.example.anthony.gestionstock.vue.adapter.CategoryAdapter;
@@ -30,14 +34,6 @@ import java.util.ArrayList;
 import greendao.Categorie;
 import greendao.Produit;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FragmentReglage.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FragmentReglage#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FragmentReglage extends Fragment implements View.OnClickListener, CategoryAdapter.CategoryAdapterCallBack, ProductAdapter.ProductAdapterCallBack {
 
     private AppCompatButton btnAddCategorie;
@@ -74,6 +70,9 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
 
     // initUI permet de recupere les elements graphique et faire des operations sur ces elements
     private void initUI(View v) {
+
+        //Sans cette ligne la méthode de création du menu n'est pas appelé
+        setHasOptionsMenu(true);
 
         //On recupere la liste des categories
         categorieList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
@@ -122,7 +121,29 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         getActivity().setTitle(R.string.reglage_title);
     }
 
-    /* ---------------------------------
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_reglamge_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_save:
+                WSUtils.saveData();
+                return true;
+            case R.id.menu_load:
+                Toast.makeText(getActivity(), "load", Toast.LENGTH_SHORT).show();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+   /* ---------------------------------
     // Clic
     // -------------------------------- */
 

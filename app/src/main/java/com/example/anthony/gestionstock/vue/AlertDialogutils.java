@@ -6,13 +6,11 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
-
-import in.arjsna.passcodeview.PassCodeView;
+import com.example.anthony.gestionstock.vue.login_dialog.PassCodeView;
 
 /**
  * Created by Anthony on 15/12/2016.
@@ -21,9 +19,20 @@ public class AlertDialogutils {
 
     public static void loginDialog(final Context context) {
 
-        View view = LayoutInflater.from(context).inflate(R.layout.dialog_login, null);
-        final PassCodeView passCodeView = (PassCodeView) view.findViewById(R.id.pass_code_view);
+        //On creer un alert dialog pour confirmer la suppression du produit
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        //On set tous les elements et on display la dialog box
+        alertDialogBuilder.setTitle(R.string.dialog_connexion_titre);
+        //alertDialogBuilder.setView(R.layout.dialog_login);
 
+        //alertDialogBuilder.setView(R);
+        Drawable drawable = context.getResources().getDrawable(R.drawable.ic_report_problem_white_48dp);
+        drawable.setColorFilter(context.getResources().getColor(R.color.colorPrimaryDark), PorterDuff.Mode.SRC_IN);
+        alertDialogBuilder.setIcon(drawable);
+        AlertDialog alertDialog = alertDialogBuilder.setCancelable(true).create();
+
+        View view = alertDialog.getLayoutInflater().inflate(R.layout.dialog_login, null);
+        final PassCodeView passCodeView = (PassCodeView) view.findViewById(R.id.pass_code_view);
         passCodeView.setOnTextChangeListener(new PassCodeView.TextChangeListener() {
             @Override
             public void onTextChanged(String text) {
@@ -38,19 +47,8 @@ public class AlertDialogutils {
                 }
             }
         });
-
-        //On creer un alert dialog pour confirmer la suppression du produit
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-
-        //On set tous les elements et on display la dialog box
-        alertDialogBuilder.setTitle(R.string.dialog_connexion_titre);
-        alertDialogBuilder.setView(R.layout.dialog_login);
-
-        //alertDialogBuilder.setView(R);
-        Drawable drawable = context.getResources().getDrawable(R.drawable.ic_report_problem_white_48dp);
-        drawable.setColorFilter(context.getResources().getColor(R.color.colorPrimaryDark), PorterDuff.Mode.SRC_IN);
-        alertDialogBuilder.setIcon(drawable);
-        alertDialogBuilder.setCancelable(true).create().show();
+        alertDialog.setView(view);
+        alertDialog.show();
     }
 
     /* ---------------------------------

@@ -52,4 +52,11 @@
     <dimen name="accueil_bt_categorie_width">130dp</dimen>
     <dimen name="accueil_bt_categorie_height">40dp</dimen>
 
+    <!-- Login -->
+    <dimen name="key_text_size">@dimen/font_30</dimen>
+    <dimen name="drawableDimen">@dimen/margin_30</dimen>
+    <dimen name="digit_vertical_padding">@dimen/margin_40</dimen>
+    <dimen name="digit_horizontal_padding">@dimen/margin_15</dimen>
+    <dimen name="key_pad_min_height">300dp</dimen>
+
 </resources>
