@@ -60,7 +60,10 @@
     <string name="reglage_title">Réglages</string>
     <string name="reglage_menu_save">Sauvegarder</string>
     <string name="reglage_menu_load">Charger</string>
-    <string name="reglage_load_message">Sauvgegarde des données en cours...</string>
+    <string name="reglage_save_message">Sauvgegarde des données en cours...</string>
+    <string name="reglage_load_message">Chargement des données en cours...</string>
+    <string name="reglage_toast_save">Données sauvegardées</string>
+    <string name="reglage_toast_load">Données chargées</string>
 
 
 </resources>

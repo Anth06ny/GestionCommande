@@ -137,7 +137,6 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                 return true;
             case R.id.menu_load:
                 new MonAT(CHOIX.LOAD).execute();
-                Toast.makeText(getActivity(), "load", Toast.LENGTH_SHORT).show();
                 return true;
         }
 
@@ -450,7 +449,14 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = ProgressDialog.show(getContext(), "", getContext().getString(R.string.reglage_load_message), true, false);
+            switch (choix) {
+                case SAVE:
+                    progressDialog = ProgressDialog.show(getContext(), "", getContext().getString(R.string.reglage_save_message), true, false);
+                    break;
+                case LOAD:
+                    progressDialog = ProgressDialog.show(getContext(), "", getContext().getString(R.string.reglage_load_message), true, false);
+                    break;
+            }
         }
 
         @Override
@@ -485,24 +491,28 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                 switch (choix) {
 
                     case SAVE:
-                        //TODO mettre message dans string xml
-                        Toast.makeText(getContext(), "Données sauvegardé", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.reglage_toast_save, Toast.LENGTH_SHORT).show();
                         break;
                     case LOAD:
                         for (Categorie categorie : categorieList) {
                             categorie.setSelected(false);
                         }
-                        //TODO reload data depuis la base (faire une method)(clear et addAll)
-                        //vide la liste des produits
-                        produitList.clear();
+                        //vide la liste des produits et on reset la liste des categories avec les nouvelles donnees de la base
+                        reloadData();
                         //on acutalise les adapter
                         categoryAdapter.notifyDataSetChanged();
                         productAdapter.notifyDataSetChanged();
-                        Toast.makeText(getContext(), "Données chargée", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.reglage_toast_load, Toast.LENGTH_SHORT).show();
 
                         break;
                 }
             }
         }
+    }
+
+    public void reloadData() {
+        produitList.clear();
+        categorieList.clear();
+        categorieList.addAll(CategorieBddManager.getCategories());
     }
 }
