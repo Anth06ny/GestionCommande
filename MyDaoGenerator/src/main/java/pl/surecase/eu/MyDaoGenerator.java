@@ -8,15 +8,17 @@ import de.greenrobot.daogenerator.Schema;
 public class MyDaoGenerator {
 
     public static void main(String args[]) throws Exception {
-
+        //Système de gestion de versions
         Schema schema = new Schema(11, "greendao");
 
+        //Création de l'entité catégorie
         Entity categorie = schema.addEntity("Categorie");
         categorie.addIdProperty().autoincrement();
         categorie.addStringProperty("nom");
         categorie.addStringProperty("couleur");
         categorie.setHasKeepSections(true);
 
+        //Création de l'entité produit
         Entity produit = schema.addEntity("Produit");
         produit.addIdProperty().autoincrement();
         produit.addStringProperty("nom");
@@ -27,11 +29,12 @@ public class MyDaoGenerator {
         produit.addBooleanProperty("favori");
         produit.setHasKeepSections(true);
 
+        //Création de l'entité commande
         Entity commande = schema.addEntity("Commande");
         commande.addIdProperty().autoincrement();
         commande.addDateProperty("date");
-        // ---------------------------- Ajout du code dans la nuit ------------------------------- //
-        //Création de l'entité
+
+        //Création de l'entité consomme
         Entity consomme = schema.addEntity("Consomme");
         consomme.addIdProperty().autoincrement();
         consomme.addLongProperty("quantite");
@@ -45,14 +48,12 @@ public class MyDaoGenerator {
         commande.addToMany(consomme, produitId).setName("commandeRef");
         produit.addToMany(consomme, commandeId).setName("produitRef");
 
-        // ------------------------------Fin Ajout du code dans la nuit -------------------------- //
-
         //Création des clés étrangère et ajout de leur contenu
         Property categorieID = produit.addLongProperty("CategorieID").notNull().getProperty();
         produit.addToOne(categorie, categorieID);
-
         categorie.addToMany(produit, categorieID);
 
+        //génération des tables
         new DaoGenerator().generateAll(schema, args[0]);
     }
 }
