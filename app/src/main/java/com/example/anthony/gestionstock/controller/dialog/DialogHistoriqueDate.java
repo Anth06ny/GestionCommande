@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
 import com.example.anthony.gestionstock.model.webservice.WSUtils;
@@ -64,6 +65,7 @@ public class DialogHistoriqueDate extends DialogFragment implements HistoriqueAd
                     new MonAT(date).execute();
                 }
                 catch (Exception e) {
+                    Toast.makeText(getActivity(), "Une erreur est survenue " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }
@@ -88,18 +90,24 @@ public class DialogHistoriqueDate extends DialogFragment implements HistoriqueAd
         protected Exception doInBackground(Void... params) {
             try {
                 WSUtils.loadData(date);
+                return null;
             }
             catch (Exception e) {
-                e.printStackTrace();
+                return e;
             }
-            return null;
         }
 
         @Override
         protected void onPostExecute(Exception e) {
             super.onPostExecute(e);
-            progressDialog.dismiss();
-            dialogHistoriqueDateCallBack.loadFinish();
+            if (e != null) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Une erreur est survenue " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+            else {
+                progressDialog.dismiss();
+                dialogHistoriqueDateCallBack.loadFinish();
+            }
         }
     }
 
