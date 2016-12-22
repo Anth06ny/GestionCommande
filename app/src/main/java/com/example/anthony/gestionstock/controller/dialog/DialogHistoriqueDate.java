@@ -47,12 +47,7 @@ public class DialogHistoriqueDate extends DialogFragment implements HistoriqueAd
 
         historiqueAdapter.notifyDataSetChanged();
 
-        builder.setView(alertDialogView).setNegativeButton(R.string.annuler, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
+        builder.setView(alertDialogView).setNegativeButton(R.string.annuler, null);
         return builder.create();
     }
 

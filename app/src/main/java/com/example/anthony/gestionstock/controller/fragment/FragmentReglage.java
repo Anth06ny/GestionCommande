@@ -140,7 +140,13 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                 new MonAT(CHOIX.SAVE).execute();
                 return true;
             case R.id.menu_load:
-                new MonAT(CHOIX.LOAD).execute();
+                AlertDialogutils.showOkCancelDialog(getContext(), R.string.confirmation, R.string.dialog_reglage_ask_confirm_load, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new MonAT(CHOIX.LOAD).execute();
+                    }
+                });
+
                 return true;
             case R.id.menu_load_date:
                 new MonAT(CHOIX.LOAD_DATE).execute();
@@ -479,12 +485,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                         WSUtils.saveData();
                         break;
                     case LOAD:
-                        /*AlertDialogutils.showOkCancelDialog(getContext(), R.string.confirmation, R.string.dialog_reglage_ask_confirm_load, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
 
-                            }
-                        });*/
                         WSUtils.loadData();
 
                         break;

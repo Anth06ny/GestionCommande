@@ -44,7 +44,7 @@ public class WSUtils {
 
     public static void loadData(Date date) throws Exception {
 
-        long dateLong = date.getTime();
+        long dateLong = date != null ? date.getTime() : 0;
 
         ArrayList<Categorie> catFromWeb = loadCategorie(dateLong);
         ArrayList<Produit> prodFromWeb = loadProduit(dateLong);
