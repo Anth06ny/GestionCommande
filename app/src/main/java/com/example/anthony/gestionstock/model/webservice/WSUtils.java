@@ -27,7 +27,7 @@ public class WSUtils {
     private static final String LOAD_URL = "http://192.168.10.204/WebServiceAndroid/getJson.php?";
     private static final String TYPE_WORD = "type=";
     private static final String DATE_WORD = "date=";
-    private static Date date;
+    private static Long date;
 
     private enum TYPE {
         CATEGORIE, CONSOMME, PRODUIT, COMMANDE
@@ -45,7 +45,7 @@ public class WSUtils {
     public static void loadData(Date dateChoisie) throws Exception {
 
         if (dateChoisie != null) {
-            date = dateChoisie;
+            date = dateChoisie.getTime();
             choix_load = CHOIX_LOAD.LOAD_BY_DATE;
         }
         else {
