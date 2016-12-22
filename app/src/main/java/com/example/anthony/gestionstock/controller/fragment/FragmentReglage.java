@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
+import com.example.anthony.gestionstock.controller.DateBean;
 import com.example.anthony.gestionstock.controller.MyApplication;
 import com.example.anthony.gestionstock.controller.dialog.DialogCategorie;
 import com.example.anthony.gestionstock.controller.dialog.DialogHistoriqueDate;
@@ -38,7 +39,7 @@ import java.util.Date;
 import greendao.Categorie;
 import greendao.Produit;
 
-public class FragmentReglage extends Fragment implements View.OnClickListener, CategoryAdapter.CategoryAdapterCallBack, ProductAdapter.ProductAdapterCallBack {
+public class FragmentReglage extends Fragment implements View.OnClickListener, CategoryAdapter.CategoryAdapterCallBack, ProductAdapter.ProductAdapterCallBack, DialogHistoriqueDate.DialogHistoriqueDateCallBack {
 
     private AppCompatButton btnAddCategorie;
     private AppCompatButton btnAddProduit;
@@ -51,6 +52,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     private ProductAdapter productAdapter;
     private RecyclerView recyclerViewProduits;
     private View v;
+    private DialogHistoriqueDate dialogHistoriqueDate = new DialogHistoriqueDate();
 
     public FragmentReglage() {
         // Required empty public constructor
@@ -446,7 +448,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         private Exception exception = null;
         private ProgressDialog progressDialog;
         private CHOIX choix;
-        private ArrayList<Date> dateArrayList = new ArrayList<>();
+        private ArrayList<DateBean> dateArrayListBean = new ArrayList<>();
 
         public MonAT(CHOIX choix) {
             this.choix = choix;
@@ -477,20 +479,17 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                         WSUtils.saveData();
                         break;
                     case LOAD:
-                        AlertDialogutils.showOkCancelDialog(getContext(), R.string.confirmation, R.string.dialog_reglage_ask_confirm_load, new DialogInterface.OnClickListener() {
+                        /*AlertDialogutils.showOkCancelDialog(getContext(), R.string.confirmation, R.string.dialog_reglage_ask_confirm_load, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    WSUtils.loadData();
-                                }
-                                catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+
                             }
-                        });
+                        });*/
+                        WSUtils.loadData();
+
                         break;
                     case LOAD_DATE:
-                        dateArrayList.addAll(WSUtils.loadHistoriqueDate());
+                        dateArrayListBean.addAll(WSUtils.loadHistoriqueDate());
                         break;
                 }
 
@@ -521,15 +520,21 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                         }
                         //vide la liste des produits et on reset la liste des categories avec les nouvelles donnees de la base
                         reloadData();
-                        //on acutalise les adapter
-                        categoryAdapter.notifyDataSetChanged();
-                        productAdapter.notifyDataSetChanged();
+
                         Toast.makeText(getContext(), R.string.reglage_toast_load, Toast.LENGTH_SHORT).show();
 
                         break;
                     case LOAD_DATE:
-                        DialogHistoriqueDate dialogHistoriqueDate = new DialogHistoriqueDate();
+                        ArrayList<Date> dateArrayList = new ArrayList<>();
+                        for (int i = 0; i < dateArrayListBean.size(); i++) {
+                            Date date = new Date();
+                            date.setTime(dateArrayListBean.get(i).getDateSave());
+                            dateArrayList.add(date);
+                        }
+
                         dialogHistoriqueDate.setDateArrayList(dateArrayList);
+                        dialogHistoriqueDate.setDialogHistoriqueDateCallBack(FragmentReglage.this);
+                        dialogHistoriqueDate.show(getActivity().getFragmentManager(), "");
                         break;
                 }
             }
@@ -540,5 +545,14 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         produitList.clear();
         categorieList.clear();
         categorieList.addAll(CategorieBddManager.getCategories());
+        //on acutalise les adapter
+        categoryAdapter.notifyDataSetChanged();
+        productAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void loadFinish() {
+        dialogHistoriqueDate.dismiss();
+        reloadData();
     }
 }

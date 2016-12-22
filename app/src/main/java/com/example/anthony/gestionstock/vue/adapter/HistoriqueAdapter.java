@@ -39,7 +39,7 @@ public class HistoriqueAdapter extends RecyclerView.Adapter<HistoriqueAdapter.Vi
     }
 
     @Override
-    public HistoriqueAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new HistoriqueAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.cellule_date_historique, parent, false));
     }
 
@@ -60,7 +60,7 @@ public class HistoriqueAdapter extends RecyclerView.Adapter<HistoriqueAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return 0;
+        return dateArrayList.size();
     }
 
     public interface HistoriqueAdapterCallBack {

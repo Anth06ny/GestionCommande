@@ -2,7 +2,9 @@ package com.example.anthony.gestionstock.controller.dialog;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -28,6 +30,7 @@ public class DialogHistoriqueDate extends DialogFragment implements HistoriqueAd
     private RecyclerView recyclerViewHistorique;
     private ArrayList<Date> dateArrayList;
     private HistoriqueAdapter historiqueAdapter;
+    DialogHistoriqueDateCallBack dialogHistoriqueDateCallBack;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -35,12 +38,14 @@ public class DialogHistoriqueDate extends DialogFragment implements HistoriqueAd
         final LayoutInflater inflater = getActivity().getLayoutInflater();
         final View alertDialogView = inflater.inflate(R.layout.dialog_historique_date, null);
 
+        historiqueAdapter = new HistoriqueAdapter(dateArrayList, this);
         recyclerViewHistorique = (RecyclerView) alertDialogView.findViewById(R.id.rv_dialog_historique);
 
-        historiqueAdapter = new HistoriqueAdapter(dateArrayList, this);
         recyclerViewHistorique.setAdapter(historiqueAdapter);
-        recyclerViewHistorique.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        recyclerViewHistorique.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerViewHistorique.setItemAnimator(new DefaultItemAnimator());
+
+        historiqueAdapter.notifyDataSetChanged();
 
         builder.setView(alertDialogView).setNegativeButton(R.string.annuler, new DialogInterface.OnClickListener() {
             @Override
@@ -61,12 +66,53 @@ public class DialogHistoriqueDate extends DialogFragment implements HistoriqueAd
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    WSUtils.loadData(date);
+                    new MonAT(date).execute();
                 }
                 catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    private class MonAT extends AsyncTask<Void, Void, Exception> {
+        private Date date;
+        private ProgressDialog progressDialog;
+
+        public MonAT(Date date) {
+            this.date = date;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(getContext(), "", getContext().getString(R.string.reglage_load_message), true, false);
+        }
+
+        @Override
+        protected Exception doInBackground(Void... params) {
+            try {
+                WSUtils.loadData(date);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Exception e) {
+            super.onPostExecute(e);
+            progressDialog.dismiss();
+            dialogHistoriqueDateCallBack.loadFinish();
+        }
+    }
+
+    public interface DialogHistoriqueDateCallBack {
+        void loadFinish();
+    }
+
+    public void setDialogHistoriqueDateCallBack(DialogHistoriqueDateCallBack dialogHistoriqueDateCallBack) {
+        this.dialogHistoriqueDateCallBack = dialogHistoriqueDateCallBack;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.anthony.gestionstock.model.webservice;
 
+import com.example.anthony.gestionstock.controller.DateBean;
 import com.example.anthony.gestionstock.controller.MyApplication;
 import com.example.anthony.gestionstock.model.bdd.CategorieBddManager;
 import com.example.anthony.gestionstock.model.bdd.CommandeBddManager;
@@ -43,10 +44,12 @@ public class WSUtils {
 
     public static void loadData(Date date) throws Exception {
 
-        ArrayList<Categorie> catFromWeb = loadCategorie(date);
-        ArrayList<Produit> prodFromWeb = loadProduit(date);
-        ArrayList<Commande> commandeFromWeb = loadCommande(date);
-        ArrayList<Consomme> consomeFromWeb = loadConsomme(date);
+        long dateLong = date.getTime();
+
+        ArrayList<Categorie> catFromWeb = loadCategorie(dateLong);
+        ArrayList<Produit> prodFromWeb = loadProduit(dateLong);
+        ArrayList<Commande> commandeFromWeb = loadCommande(dateLong);
+        ArrayList<Consomme> consomeFromWeb = loadConsomme(dateLong);
         MaBaseSQLite.clearAllTable();
 
         CategorieBddManager.insertCategorieList(catFromWeb);
@@ -55,7 +58,7 @@ public class WSUtils {
         ConsommeBddManager.insertConsommeList(consomeFromWeb);
     }
 
-    private static ArrayList<Categorie> loadCategorie(Date date) throws Exception {
+    private static ArrayList<Categorie> loadCategorie(Long date) throws Exception {
         String url;
 
         if (date == null) {
@@ -71,7 +74,7 @@ public class WSUtils {
                 }.getType());
     }
 
-    private static ArrayList<Produit> loadProduit(Date date) throws Exception {
+    private static ArrayList<Produit> loadProduit(Long date) throws Exception {
         String url;
 
         if (date == null) {
@@ -88,7 +91,7 @@ public class WSUtils {
                 }.getType());
     }
 
-    private static ArrayList<Commande> loadCommande(Date date) throws Exception {
+    private static ArrayList<Commande> loadCommande(Long date) throws Exception {
         String url;
         if (date == null) {
             url = URL + LOAD_URL + TYPE_WORD + TYPE.COMMANDE;
@@ -103,7 +106,7 @@ public class WSUtils {
                 }.getType());
     }
 
-    private static ArrayList<Consomme> loadConsomme(Date date) throws Exception {
+    private static ArrayList<Consomme> loadConsomme(Long date) throws Exception {
         String url;
         if (date == null) {
             url = URL + LOAD_URL + TYPE_WORD + TYPE.CONSOMME;
@@ -122,12 +125,13 @@ public class WSUtils {
      * Charge l'historique des dates
      */
 
-    public static ArrayList<Date> loadHistoriqueDate() throws Exception {
+    public static ArrayList<DateBean> loadHistoriqueDate() throws Exception {
         String url = URL + LOAD_DATE_URL;
         String jsonString = OkHttpUtils.sendGetOkHttpRequest(url);
         Gson gson = new Gson();
+
         return gson.fromJson(jsonString,
-                new TypeToken<ArrayList<Date>>() {
+                new TypeToken<ArrayList<DateBean>>() {
                 }.getType());
     }
 
