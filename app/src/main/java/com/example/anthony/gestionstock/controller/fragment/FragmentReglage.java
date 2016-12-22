@@ -485,9 +485,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                         WSUtils.saveData();
                         break;
                     case LOAD:
-
                         WSUtils.loadData();
-
                         break;
                     case LOAD_DATE:
                         dateArrayListBean.addAll(WSUtils.loadHistoriqueDate());

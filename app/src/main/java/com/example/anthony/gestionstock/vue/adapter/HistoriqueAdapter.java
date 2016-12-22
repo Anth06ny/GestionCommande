@@ -28,12 +28,14 @@ public class HistoriqueAdapter extends RecyclerView.Adapter<HistoriqueAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView displayDate;
+        public TextView displayHeure;
         public AppCompatButton buttonCharger;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             displayDate = (TextView) itemView.findViewById(R.id.display_date_historique);
+            displayHeure = (TextView) itemView.findViewById(R.id.display_heure_historique);
             buttonCharger = (AppCompatButton) itemView.findViewById(R.id.btn_charger_donnees);
         }
     }
@@ -49,6 +51,9 @@ public class HistoriqueAdapter extends RecyclerView.Adapter<HistoriqueAdapter.Vi
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
         holder.displayDate.setText(simpleDateFormat.format(datebean));
+
+        SimpleDateFormat simpleHeureFormat = new SimpleDateFormat("HH:MI:Sec");
+        holder.displayHeure.setText(simpleHeureFormat.format(datebean));
 
         holder.buttonCharger.setOnClickListener(new View.OnClickListener() {
             @Override

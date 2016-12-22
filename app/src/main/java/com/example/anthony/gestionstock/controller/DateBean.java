@@ -14,8 +14,4 @@ public class DateBean {
     public long getDateSave() {
         return dateSave;
     }
-
-    public void setDateSave(long dateSave) {
-        this.dateSave = dateSave;
-    }
 }

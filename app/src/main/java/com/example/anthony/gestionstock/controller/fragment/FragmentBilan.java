@@ -239,11 +239,12 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
 
             case 3:
                 //On recupere la liste des dates de la semaine en cour
-                ArrayList<Date> dateArrayListSemaine = getSemaine(date);
-                dateDebutSemaine = new Date();
-                dateDebutSemaine = dateArrayListSemaine.get(0);
-                dateFinSemaine = new Date();
-                dateFinSemaine = dateArrayListSemaine.get(dateArrayListSemaine.size() - 1);
+                dateDebutSemaine = getSemaine(date);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(dateDebutSemaine);
+                calendar.add(Calendar.DAY_OF_YEAR, 6);
+
+                dateFinSemaine = calendar.getTime();
 
                 //On appel la methode affichage bilan avec comme parametre la date de debut de semaine et la date de fin de semaine
                 affichageBilan(dateDebutSemaine, dateFinSemaine);
@@ -282,35 +283,17 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
         datePickerFragment.show(getFragmentManager(), "Date");
     }
 
-    //TODO faire ne sorte que la semaine commence tout le temps le LUNDI
-    public static ArrayList<Date> getSemaine(Date date) {
-        ArrayList<Date> dateArrayList = new ArrayList<>();
-        String annee = new SimpleDateFormat("yyyy").format(date);
-        String jour = new SimpleDateFormat("EEE").format(date);
+    /**
+     * Retourne le lundi de la semaine choisie
+     *
+     * @param date
+     * @return
+     */
+    public static Date getSemaine(Date date) {
         Calendar c = Calendar.getInstance();
-
         c.setTime(date);
-        int weekNo = c.get(Calendar.WEEK_OF_YEAR);
-        c.set(Calendar.WEEK_OF_YEAR, weekNo);
-
-        c.clear();
-
-        c.set(Calendar.WEEK_OF_YEAR, weekNo);
-        c.set(Calendar.YEAR, Integer.valueOf(annee));
-
-        SimpleDateFormat formatter = new SimpleDateFormat("EEE dd/MM/yyyy");
-        if ("lun.".equalsIgnoreCase(jour)) {
-            c.add(Calendar.DATE, -1);
-        }
-        else {
-            c.add(Calendar.DATE, 0);
-        }
-
-        for (int i = 0; i < 7; i++) {
-            c.add(Calendar.DATE, 1);
-            dateArrayList.add(c.getTime());
-        }
-        return dateArrayList;
+        c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek());
+        return c.getTime();
     }
 
     public static ArrayList<Date> getMois(Date date) {
