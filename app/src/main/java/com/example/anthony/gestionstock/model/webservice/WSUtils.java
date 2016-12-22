@@ -27,20 +27,35 @@ public class WSUtils {
     private static final String LOAD_URL = "http://192.168.10.204/WebServiceAndroid/getJson.php?";
     private static final String TYPE_WORD = "type=";
     private static final String DATE_WORD = "date=";
+    private static Date date;
 
     private enum TYPE {
         CATEGORIE, CONSOMME, PRODUIT, COMMANDE
     }
 
+    private enum CHOIX_LOAD {
+        LOAD_LAST, LOAD_BY_DATE
+    }
+
+    private static CHOIX_LOAD choix_load;
+
     /**
      * Charge le base de donnée sur le serveur
      */
-    public static void loadData() throws Exception {
+    public static void loadData(Date dateChoisie) throws Exception {
+
+        if (dateChoisie != null) {
+            date = dateChoisie;
+            choix_load = CHOIX_LOAD.LOAD_BY_DATE;
+        }
+        else {
+            choix_load = CHOIX_LOAD.LOAD_LAST;
+        }
+
         ArrayList<Categorie> catFromWeb = loadCategorie();
         ArrayList<Produit> prodFromWeb = loadProduit();
         ArrayList<Commande> commandeFromWeb = loadCommande();
         ArrayList<Consomme> consomeFromWeb = loadConsomme();
-
         MaBaseSQLite.clearAllTable();
 
         CategorieBddManager.insertCategorieList(catFromWeb);
@@ -50,7 +65,15 @@ public class WSUtils {
     }
 
     private static ArrayList<Categorie> loadCategorie() throws Exception {
-        String url = LOAD_URL + TYPE_WORD + TYPE.CATEGORIE;
+        String url = null;
+        switch (choix_load) {
+            case LOAD_LAST:
+                url = LOAD_URL + TYPE_WORD + TYPE.CATEGORIE;
+                break;
+            case LOAD_BY_DATE:
+                url = LOAD_URL + TYPE_WORD + TYPE.CATEGORIE + "&" + DATE_WORD + date;
+                break;
+        }
         String jsonString = OkHttpUtils.sendGetOkHttpRequest(url);
         Gson gson = new Gson();
         return gson.fromJson(jsonString,
@@ -59,7 +82,15 @@ public class WSUtils {
     }
 
     private static ArrayList<Produit> loadProduit() throws Exception {
-        String url = LOAD_URL + TYPE_WORD + TYPE.PRODUIT;
+        String url = null;
+        switch (choix_load) {
+            case LOAD_LAST:
+                url = LOAD_URL + TYPE_WORD + TYPE.PRODUIT;
+                break;
+            case LOAD_BY_DATE:
+                url = LOAD_URL + TYPE_WORD + TYPE.PRODUIT + "&" + DATE_WORD + date;
+                break;
+        }
         String jsonString = OkHttpUtils.sendGetOkHttpRequest(url);
         Gson gson = new Gson();
         return gson.fromJson(jsonString,
@@ -68,7 +99,15 @@ public class WSUtils {
     }
 
     private static ArrayList<Commande> loadCommande() throws Exception {
-        String url = LOAD_URL + TYPE_WORD + TYPE.COMMANDE;
+        String url = null;
+        switch (choix_load) {
+            case LOAD_LAST:
+                url = LOAD_URL + TYPE_WORD + TYPE.COMMANDE;
+                break;
+            case LOAD_BY_DATE:
+                url = LOAD_URL + TYPE_WORD + TYPE.COMMANDE + "&" + DATE_WORD + date;
+                break;
+        }
         String jsonString = OkHttpUtils.sendGetOkHttpRequest(url);
         Gson gson = new Gson();
         return gson.fromJson(jsonString,
@@ -77,7 +116,15 @@ public class WSUtils {
     }
 
     private static ArrayList<Consomme> loadConsomme() throws Exception {
-        String url = LOAD_URL + TYPE_WORD + TYPE.CONSOMME;
+        String url = null;
+        switch (choix_load) {
+            case LOAD_LAST:
+                url = LOAD_URL + TYPE_WORD + TYPE.CONSOMME;
+                break;
+            case LOAD_BY_DATE:
+                url = LOAD_URL + TYPE_WORD + TYPE.CONSOMME + "&" + DATE_WORD + date;
+                break;
+        }
         String jsonString = OkHttpUtils.sendGetOkHttpRequest(url);
         Gson gson = new Gson();
         return gson.fromJson(jsonString,

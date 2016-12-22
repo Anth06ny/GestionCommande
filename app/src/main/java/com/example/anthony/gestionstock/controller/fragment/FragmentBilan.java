@@ -106,6 +106,8 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
         produitArrayListSelected = new ArrayList<>();
         quantiteHashMap = new HashMap<>();
 
+        commandeArrayListSelected = new ArrayList<>();
+
         //On recupere le recycler view et on creer l'adapteur
         recyclerViewBilan = (RecyclerView) v.findViewById(R.id.rv_bilan);
         recyclerViewBilan.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -194,10 +196,6 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
         if (date == null) {
             date = Calendar.getInstance().getTime();
         }
-
-        quantiteHashMap = new HashMap<>();
-        commandeArrayListSelected = new ArrayList<>();
-        produitArrayListSelected = new ArrayList<>();
 
         switch (choixDatePicker) {
             case 0:
@@ -342,8 +340,11 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
     public void affichageBilan(Date dateDebut, Date dateFin) {
 
         //On recupere la liste des commande comprise entre les dates entrees en parametre
-        commandeArrayListSelected = new ArrayList<>();
-        commandeArrayListSelected = (ArrayList<Commande>) CommandeBddManager.getCommandeBetweenDate(dateDebut, dateFin);
+        commandeArrayListSelected.clear();
+        quantiteHashMap.clear();
+        produitArrayListSelected.clear();
+
+        commandeArrayListSelected.addAll(CommandeBddManager.getCommandeBetweenDate(dateDebut, dateFin));
 
         //On format les dates entrees en paramettre et on les affiche dans les champs date debut et date fin
         String fDateDebut = new SimpleDateFormat("dd/MM/yyyy").format(dateDebut);
