@@ -23,8 +23,7 @@ import greendao.Produit;
  * Created by Anthony on 20/12/2016.
  */
 public class WSUtils {
-
-    private static final String URL = "http://192.168.10.204/WebServiceAndroid/";
+    private static final String URL = "http://www.amonteiro.fr/gestionstock/";
     private static final String SAVE_URL = "postJson.php?";
     private static final String LOAD_URL = "getJson.php?";
     private static final String LOAD_DATE_URL = "getDate.php";

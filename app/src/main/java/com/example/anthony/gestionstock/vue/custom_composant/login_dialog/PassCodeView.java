@@ -1,4 +1,4 @@
-package com.example.anthony.gestionstock.vue.login_dialog;
+package com.example.anthony.gestionstock.vue.custom_composant.login_dialog;
 
 import android.annotation.TargetApi;
 import android.content.Context;

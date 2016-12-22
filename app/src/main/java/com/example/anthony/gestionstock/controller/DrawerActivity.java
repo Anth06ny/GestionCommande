@@ -159,6 +159,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
     }
 
     public void gotoReglage(boolean askPassword) {
+
         if (askPassword) {
             //on ne change que si ce n'est pas le même fragment
             if (currentFragment == null || !currentFragment.getTag().equalsIgnoreCase("" + R.id.Reglage)) {

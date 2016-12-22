@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 import greendao.Categorie;
 import com.example.anthony.gestionstock.model.bdd.CategorieBddManager;
-import com.example.anthony.gestionstock.vue.material_color_picker.ColorChooserDialog;
+import com.example.anthony.gestionstock.vue.custom_composant.material_color_picker.ColorChooserDialog;
 
 /**
  * Created by Allan on 23/11/2016.

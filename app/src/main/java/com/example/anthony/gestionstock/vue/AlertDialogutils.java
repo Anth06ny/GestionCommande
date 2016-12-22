@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
 import com.example.anthony.gestionstock.model.sharedPreference.SharedPreferenceUtils;
-import com.example.anthony.gestionstock.vue.login_dialog.PassCodeView;
+import com.example.anthony.gestionstock.vue.custom_composant.login_dialog.PassCodeView;
 
 import org.apache.commons.lang3.StringUtils;
 

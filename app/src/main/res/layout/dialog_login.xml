@@ -23,7 +23,7 @@
         android:text="Enter your passcode"
         android:textSize="@dimen/font_18"/>
 
-    <com.example.anthony.gestionstock.vue.login_dialog.PassCodeView
+    <com.example.anthony.gestionstock.vue.custom_composant.login_dialog.PassCodeView
         android:id="@+id/pass_code_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

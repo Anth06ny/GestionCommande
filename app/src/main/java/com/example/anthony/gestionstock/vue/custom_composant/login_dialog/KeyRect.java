@@ -1,4 +1,4 @@
-package com.example.anthony.gestionstock.vue.login_dialog;
+package com.example.anthony.gestionstock.vue.custom_composant.login_dialog;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
@@ -117,11 +117,7 @@ public class KeyRect {
         this.interpolatedValueListener = listener;
     }
 
-    /**
-     * Start Playing ripple animation and notify listener accordingly
-     * @param listener - {@link in.arjsna.passcodeview.KeyRect.RippleAnimListener} object to be
-     *                 notified
-     */
+
     public void playRippleAnim(RippleAnimListener listener) {
         this.rippleAnimListener = listener;
         setOnValueUpdateListener(new KeyRect.InterpolatedValueListener() {

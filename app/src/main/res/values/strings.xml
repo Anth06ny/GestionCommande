@@ -53,7 +53,7 @@
 
     <!-- Stock -->
     <string name="stock_title">Consommation</string>
-    <string name="stock_explication">Etat des consomations</string>
+    <string name="stock_explication">Consomations des produits</string>
 
 
     <!-- Bilan -->
