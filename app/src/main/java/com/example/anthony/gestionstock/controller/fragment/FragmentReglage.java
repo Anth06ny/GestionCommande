@@ -20,8 +20,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
+import com.example.anthony.gestionstock.controller.DateBean;
 import com.example.anthony.gestionstock.controller.MyApplication;
 import com.example.anthony.gestionstock.controller.dialog.DialogCategorie;
+import com.example.anthony.gestionstock.controller.dialog.DialogHistoriqueDate;
 import com.example.anthony.gestionstock.controller.dialog.DialogProduit;
 import com.example.anthony.gestionstock.model.bdd.CategorieBddManager;
 import com.example.anthony.gestionstock.model.bdd.ProduitBddManager;
@@ -32,11 +34,12 @@ import com.example.anthony.gestionstock.vue.adapter.CategoryAdapter;
 import com.example.anthony.gestionstock.vue.adapter.ProductAdapter;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import greendao.Categorie;
 import greendao.Produit;
 
-public class FragmentReglage extends Fragment implements View.OnClickListener, CategoryAdapter.CategoryAdapterCallBack, ProductAdapter.ProductAdapterCallBack {
+public class FragmentReglage extends Fragment implements View.OnClickListener, CategoryAdapter.CategoryAdapterCallBack, ProductAdapter.ProductAdapterCallBack, DialogHistoriqueDate.DialogHistoriqueDateCallBack {
 
     private AppCompatButton btnAddCategorie;
     private AppCompatButton btnAddProduit;
@@ -49,6 +52,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     private ProductAdapter productAdapter;
     private RecyclerView recyclerViewProduits;
     private View v;
+    private DialogHistoriqueDate dialogHistoriqueDate = new DialogHistoriqueDate();
 
     public FragmentReglage() {
         // Required empty public constructor
@@ -136,9 +140,17 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                 new MonAT(CHOIX.SAVE).execute();
                 return true;
             case R.id.menu_load:
-                new MonAT(CHOIX.LOAD).execute();
-                Toast.makeText(getActivity(), "load", Toast.LENGTH_SHORT).show();
+                AlertDialogutils.showOkCancelDialog(getContext(), R.string.confirmation, R.string.dialog_reglage_ask_confirm_load, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new MonAT(CHOIX.LOAD).execute();
+                    }
+                });
+
                 return true;
+            case R.id.menu_load_date:
+                new MonAT(CHOIX.LOAD_DATE).execute();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -435,13 +447,14 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     // AT
     // -------------------------------- */
 
-    private enum CHOIX {SAVE, LOAD}
+    private enum CHOIX {SAVE, LOAD, LOAD_DATE}
 
     private class MonAT extends AsyncTask<Void, Void, Exception> {
 
         private Exception exception = null;
         private ProgressDialog progressDialog;
         private CHOIX choix;
+        private ArrayList<DateBean> dateArrayListBean = new ArrayList<>();
 
         public MonAT(CHOIX choix) {
             this.choix = choix;
@@ -450,7 +463,17 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = ProgressDialog.show(getContext(), "", getContext().getString(R.string.reglage_load_message), true, false);
+            switch (choix) {
+                case SAVE:
+                    progressDialog = ProgressDialog.show(getContext(), "", getContext().getString(R.string.reglage_save_message), true, false);
+                    break;
+                case LOAD:
+                    progressDialog = ProgressDialog.show(getContext(), "", getContext().getString(R.string.reglage_load_message), true, false);
+                    break;
+                case LOAD_DATE:
+                    progressDialog = ProgressDialog.show(getContext(), "", getContext().getString(R.string.reglage_load_message), true, false);
+                    break;
+            }
         }
 
         @Override
@@ -463,6 +486,9 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                         break;
                     case LOAD:
                         WSUtils.loadData();
+                        break;
+                    case LOAD_DATE:
+                        dateArrayListBean.addAll(WSUtils.loadHistoriqueDate());
                         break;
                 }
 
@@ -485,24 +511,47 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                 switch (choix) {
 
                     case SAVE:
-                        //TODO mettre message dans string xml
-                        Toast.makeText(getContext(), "Données sauvegardé", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.reglage_toast_save, Toast.LENGTH_SHORT).show();
                         break;
                     case LOAD:
                         for (Categorie categorie : categorieList) {
                             categorie.setSelected(false);
                         }
-                        //TODO reload data depuis la base (faire une method)(clear et addAll)
-                        //vide la liste des produits
-                        produitList.clear();
-                        //on acutalise les adapter
-                        categoryAdapter.notifyDataSetChanged();
-                        productAdapter.notifyDataSetChanged();
-                        Toast.makeText(getContext(), "Données chargée", Toast.LENGTH_SHORT).show();
+                        //vide la liste des produits et on reset la liste des categories avec les nouvelles donnees de la base
+                        reloadData();
 
+                        Toast.makeText(getContext(), R.string.reglage_toast_load, Toast.LENGTH_SHORT).show();
+
+                        break;
+                    case LOAD_DATE:
+                        ArrayList<Date> dateArrayList = new ArrayList<>();
+                        for (int i = 0; i < dateArrayListBean.size(); i++) {
+                            Date date = new Date();
+                            date.setTime(dateArrayListBean.get(i).getDateSave());
+                            dateArrayList.add(date);
+                        }
+
+                        dialogHistoriqueDate.setDateArrayList(dateArrayList);
+                        dialogHistoriqueDate.setDialogHistoriqueDateCallBack(FragmentReglage.this);
+                        dialogHistoriqueDate.show(getActivity().getFragmentManager(), "");
                         break;
                 }
             }
         }
+    }
+
+    public void reloadData() {
+        produitList.clear();
+        categorieList.clear();
+        categorieList.addAll(CategorieBddManager.getCategories());
+        //on acutalise les adapter
+        categoryAdapter.notifyDataSetChanged();
+        productAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void loadFinish() {
+        dialogHistoriqueDate.dismiss();
+        reloadData();
     }
 }

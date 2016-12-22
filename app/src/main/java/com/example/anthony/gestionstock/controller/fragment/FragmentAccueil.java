@@ -343,6 +343,9 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
             //Si l'insertion a reussi on efface la note
             deleteNote();
 
+            //TODO lancer sailysave
+
+
             Toast.makeText(getContext(), R.string.accueil_tost_cmd_save, Toast.LENGTH_SHORT).show();
         }
         catch (Exception e) {

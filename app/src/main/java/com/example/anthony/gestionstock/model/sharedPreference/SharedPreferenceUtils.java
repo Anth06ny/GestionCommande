@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 
 import com.example.anthony.gestionstock.controller.MyApplication;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * Created by Axel legué on 13/12/2016.
  */
@@ -35,12 +33,24 @@ public class SharedPreferenceUtils {
 
     public static void savePassword(String password) {
 
-        if(StringUtils.isBlank(password)) {
-
-        }
-
         SharedPreferences.Editor editor = getEditor();
         editor.putString(PASSWORD_KEY, password);
+        editor.apply();
+    }
+
+    /* ---------------------------------
+   //  Gere date derniere sauvegarde
+   // -------------------------------- */
+    private static final String SAVE_DATE_KEY = "SAVE_DATE_KEY";
+
+    public static long getSaveDate() {
+        return getSharedPreferences().getLong(SAVE_DATE_KEY, 0);
+    }
+
+    public static void setSaveDate(long saveDate) {
+
+        SharedPreferences.Editor editor = getEditor();
+        editor.putLong(SAVE_DATE_KEY, saveDate);
         editor.apply();
     }
 }

@@ -48,16 +48,16 @@ public class MaBaseSQLite extends SQLiteOpenHelper {
         categorie.setNom("Alcool");
         CategorieBddManager.insertOrUpdate(categorie);
 
-        Produit produit = new Produit(null, "Téquila", 12.0f, 10, 0, null, true, categorie.getId());
+        Produit produit = new Produit(null, "Téquila", 12.0f, 10, 0, true, categorie.getId());
         ProduitBddManager.insertOrUpdate(produit);
 
-        produit = new Produit(null, "Vodka", 12.0f, 10, 0, null, true, categorie.getId());
+        produit = new Produit(null, "Vodka", 12.0f, 10, 0, true, categorie.getId());
         ProduitBddManager.insertOrUpdate(produit);
 
-        produit = new Produit(null, "Pastis", 10.0f, 8, 0, null, false, categorie.getId());
+        produit = new Produit(null, "Pastis", 10.0f, 8, 0, false, categorie.getId());
         ProduitBddManager.insertOrUpdate(produit);
 
-        produit = new Produit(null, "Vin", 13.0f, 16, 0, null, false, categorie.getId());
+        produit = new Produit(null, "Vin", 13.0f, 16, 0, false, categorie.getId());
         ProduitBddManager.insertOrUpdate(produit);
 
         //CATEGORIE 2
@@ -66,16 +66,16 @@ public class MaBaseSQLite extends SQLiteOpenHelper {
         categorie.setNom("Soft");
         CategorieBddManager.insertOrUpdate(categorie);
 
-        produit = new Produit(null, "Orange", 3.0f, 16, 0, null, true, categorie.getId());
+        produit = new Produit(null, "Orange", 3.0f, 16, 0, true, categorie.getId());
         ProduitBddManager.insertOrUpdate(produit);
 
-        produit = new Produit(null, "Coca", 4.0f, 16, 0, null, true, categorie.getId());
+        produit = new Produit(null, "Coca", 4.0f, 16, 0, true, categorie.getId());
         ProduitBddManager.insertOrUpdate(produit);
 
-        produit = new Produit(null, "Ice tea", 2.0f, 16, 0, null, false, categorie.getId());
+        produit = new Produit(null, "Ice tea", 2.0f, 16, 0, false, categorie.getId());
         ProduitBddManager.insertOrUpdate(produit);
 
-        produit = new Produit(null, "Jus de peche", 2.0f, 8, 0, null, false, categorie.getId());
+        produit = new Produit(null, "Jus de peche", 2.0f, 8, 0, false, categorie.getId());
         ProduitBddManager.insertOrUpdate(produit);
 
         //CATEGORIE 3
@@ -84,16 +84,16 @@ public class MaBaseSQLite extends SQLiteOpenHelper {
         categorie.setNom("Cafe");
         CategorieBddManager.insertOrUpdate(categorie);
 
-        produit = new Produit(null, "Cafe", 1f, 16, 0, null, true, categorie.getId());
+        produit = new Produit(null, "Cafe", 1f, 16, 0, true, categorie.getId());
         ProduitBddManager.insertOrUpdate(produit);
 
-        produit = new Produit(null, "Cafe court", 1.5f, 16, 0, null, true, categorie.getId());
+        produit = new Produit(null, "Cafe court", 1.5f, 16, 0, true, categorie.getId());
         ProduitBddManager.insertOrUpdate(produit);
 
-        produit = new Produit(null, "Cafe long", 2.0f, 8, 0, null, false, categorie.getId());
+        produit = new Produit(null, "Cafe long", 2.0f, 8, 0, false, categorie.getId());
         ProduitBddManager.insertOrUpdate(produit);
 
-        produit = new Produit(null, "Cafe américain", 2.5f, 8, 0, null, false, categorie.getId());
+        produit = new Produit(null, "Cafe américain", 2.5f, 8, 0, false, categorie.getId());
         ProduitBddManager.insertOrUpdate(produit);
     }
 

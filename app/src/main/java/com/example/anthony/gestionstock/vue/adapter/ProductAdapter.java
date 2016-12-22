@@ -132,9 +132,6 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             case Stock:
                 final ProductAdapter.ViewHolder holder3 = (ViewHolder) vh;
-                if (produitbean.getLotRecommande() == null) {
-                    produitbean.setLotRecommande(0);
-                }
 
                 holder3.displaylibelle.setText(produitbean.getNom());
                 if (produitbean.getConsommation() != null) {

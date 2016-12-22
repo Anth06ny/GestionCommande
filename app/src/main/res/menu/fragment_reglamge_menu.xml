@@ -10,5 +10,10 @@
         android:id="@+id/menu_load"
         android:title="@string/reglage_menu_load"
         app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_load_date"
+        android:title="@string/reglage_menu_load_date"
+        app:showAsAction="always"/>
+
 
 </menu>

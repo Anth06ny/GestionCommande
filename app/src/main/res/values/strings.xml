@@ -40,6 +40,8 @@
     <string name="dialog_connexion_ask_cancel">Les mots de passes ne sont pas identiques</string>
     <string name="dialog_save_password">7412</string>
 
+    <!-- Dialog confirmation charger donnees -->
+    <string name="dialog_reglage_ask_confirm_load">Voulez-vous charger les données</string>
 
     <!-- Accueil -->
     <string name="accueil_title">Accueil</string>
@@ -61,7 +63,11 @@
     <string name="reglage_title">Réglages</string>
     <string name="reglage_menu_save">Sauvegarder</string>
     <string name="reglage_menu_load">Charger</string>
-    <string name="reglage_load_message">Sauvgegarde des données en cours...</string>
+    <string name="reglage_menu_load_date">Historique</string>
+    <string name="reglage_save_message">Sauvgegarde des données en cours...</string>
+    <string name="reglage_load_message">Chargement des données en cours...</string>
+    <string name="reglage_toast_save">Données sauvegardées</string>
+    <string name="reglage_toast_load">Données chargées</string>
 
 
 </resources>

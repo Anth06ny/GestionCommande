@@ -1,5 +1,6 @@
 package com.example.anthony.gestionstock.model.webservice;
 
+import com.example.anthony.gestionstock.controller.DateBean;
 import com.example.anthony.gestionstock.controller.MyApplication;
 import com.example.anthony.gestionstock.model.bdd.CategorieBddManager;
 import com.example.anthony.gestionstock.model.bdd.CommandeBddManager;
@@ -23,8 +24,10 @@ import greendao.Produit;
  */
 public class WSUtils {
 
-    private static final String SAVE_URL = "http://192.168.10.204/WebServiceAndroid/postJson.php?";
-    private static final String LOAD_URL = "http://192.168.10.204/WebServiceAndroid/getJson.php?";
+    private static final String URL = "http://192.168.10.204/WebServiceAndroid/";
+    private static final String SAVE_URL = "postJson.php?";
+    private static final String LOAD_URL = "getJson.php?";
+    private static final String LOAD_DATE_URL = "getDate.php";
     private static final String TYPE_WORD = "type=";
     private static final String DATE_WORD = "date=";
 
@@ -36,11 +39,17 @@ public class WSUtils {
      * Charge le base de donnée sur le serveur
      */
     public static void loadData() throws Exception {
-        ArrayList<Categorie> catFromWeb = loadCategorie();
-        ArrayList<Produit> prodFromWeb = loadProduit();
-        ArrayList<Commande> commandeFromWeb = loadCommande();
-        ArrayList<Consomme> consomeFromWeb = loadConsomme();
+        loadData(null);
+    }
 
+    public static void loadData(Date date) throws Exception {
+
+        long dateLong = date != null ? date.getTime() : 0;
+
+        ArrayList<Categorie> catFromWeb = loadCategorie(dateLong);
+        ArrayList<Produit> prodFromWeb = loadProduit(dateLong);
+        ArrayList<Commande> commandeFromWeb = loadCommande(dateLong);
+        ArrayList<Consomme> consomeFromWeb = loadConsomme(dateLong);
         MaBaseSQLite.clearAllTable();
 
         CategorieBddManager.insertCategorieList(catFromWeb);
@@ -49,8 +58,15 @@ public class WSUtils {
         ConsommeBddManager.insertConsommeList(consomeFromWeb);
     }
 
-    private static ArrayList<Categorie> loadCategorie() throws Exception {
-        String url = LOAD_URL + TYPE_WORD + TYPE.CATEGORIE;
+    private static ArrayList<Categorie> loadCategorie(Long date) throws Exception {
+        String url;
+
+        if (date == null) {
+            url = URL + LOAD_URL + TYPE_WORD + TYPE.CATEGORIE;
+        }
+        else {
+            url = URL + LOAD_URL + TYPE_WORD + TYPE.CATEGORIE + "&" + DATE_WORD + date;
+        }
         String jsonString = OkHttpUtils.sendGetOkHttpRequest(url);
         Gson gson = new Gson();
         return gson.fromJson(jsonString,
@@ -58,8 +74,16 @@ public class WSUtils {
                 }.getType());
     }
 
-    private static ArrayList<Produit> loadProduit() throws Exception {
-        String url = LOAD_URL + TYPE_WORD + TYPE.PRODUIT;
+    private static ArrayList<Produit> loadProduit(Long date) throws Exception {
+        String url;
+
+        if (date == null) {
+
+            url = URL + LOAD_URL + TYPE_WORD + TYPE.PRODUIT;
+        }
+        else {
+            url = URL + LOAD_URL + TYPE_WORD + TYPE.PRODUIT + "&" + DATE_WORD + date;
+        }
         String jsonString = OkHttpUtils.sendGetOkHttpRequest(url);
         Gson gson = new Gson();
         return gson.fromJson(jsonString,
@@ -67,8 +91,14 @@ public class WSUtils {
                 }.getType());
     }
 
-    private static ArrayList<Commande> loadCommande() throws Exception {
-        String url = LOAD_URL + TYPE_WORD + TYPE.COMMANDE;
+    private static ArrayList<Commande> loadCommande(Long date) throws Exception {
+        String url;
+        if (date == null) {
+            url = URL + LOAD_URL + TYPE_WORD + TYPE.COMMANDE;
+        }
+        else {
+            url = URL + LOAD_URL + TYPE_WORD + TYPE.COMMANDE + "&" + DATE_WORD + date;
+        }
         String jsonString = OkHttpUtils.sendGetOkHttpRequest(url);
         Gson gson = new Gson();
         return gson.fromJson(jsonString,
@@ -76,12 +106,32 @@ public class WSUtils {
                 }.getType());
     }
 
-    private static ArrayList<Consomme> loadConsomme() throws Exception {
-        String url = LOAD_URL + TYPE_WORD + TYPE.CONSOMME;
+    private static ArrayList<Consomme> loadConsomme(Long date) throws Exception {
+        String url;
+        if (date == null) {
+            url = URL + LOAD_URL + TYPE_WORD + TYPE.CONSOMME;
+        }
+        else {
+            url = URL + LOAD_URL + TYPE_WORD + TYPE.CONSOMME + "&" + DATE_WORD + date;
+        }
         String jsonString = OkHttpUtils.sendGetOkHttpRequest(url);
         Gson gson = new Gson();
         return gson.fromJson(jsonString,
                 new TypeToken<ArrayList<Consomme>>() {
+                }.getType());
+    }
+
+    /**
+     * Charge l'historique des dates
+     */
+
+    public static ArrayList<DateBean> loadHistoriqueDate() throws Exception {
+        String url = URL + LOAD_DATE_URL;
+        String jsonString = OkHttpUtils.sendGetOkHttpRequest(url);
+        Gson gson = new Gson();
+
+        return gson.fromJson(jsonString,
+                new TypeToken<ArrayList<DateBean>>() {
                 }.getType());
     }
 
@@ -102,7 +152,7 @@ public class WSUtils {
      */
     public static void saveCategorie(long time) throws Exception {
         List<Categorie> list = CategorieBddManager.getCategories();
-        String url = SAVE_URL + TYPE_WORD + TYPE.CATEGORIE + "&" + DATE_WORD + time;
+        String url = URL + SAVE_URL + TYPE_WORD + TYPE.CATEGORIE + "&" + DATE_WORD + time;
 
         OkHttpUtils.sendPostOkHttpRequest(url, MyApplication.getGson().toJson(list));
     }
@@ -112,7 +162,7 @@ public class WSUtils {
      */
     public static void saveProduit(long time) throws Exception {
         List<Produit> list = ProduitBddManager.getProduit();
-        String url = SAVE_URL + TYPE_WORD + TYPE.PRODUIT + "&" + DATE_WORD + time;
+        String url = URL + SAVE_URL + TYPE_WORD + TYPE.PRODUIT + "&" + DATE_WORD + time;
 
         OkHttpUtils.sendPostOkHttpRequest(url, MyApplication.getGson().toJson(list));
     }
@@ -122,7 +172,7 @@ public class WSUtils {
      */
     public static void saveConsomme(long time) throws Exception {
         List<Consomme> list = ConsommeBddManager.getConsomme();
-        String url = SAVE_URL + TYPE_WORD + TYPE.CONSOMME + "&" + DATE_WORD + time;
+        String url = URL + SAVE_URL + TYPE_WORD + TYPE.CONSOMME + "&" + DATE_WORD + time;
 
         OkHttpUtils.sendPostOkHttpRequest(url, MyApplication.getGson().toJson(list));
     }
@@ -132,7 +182,7 @@ public class WSUtils {
      */
     public static void saveCommande(long time) throws Exception {
         List<Commande> list = CommandeBddManager.getCommande();
-        String url = SAVE_URL + TYPE_WORD + TYPE.COMMANDE + "&" + DATE_WORD + time;
+        String url = URL + SAVE_URL + TYPE_WORD + TYPE.COMMANDE + "&" + DATE_WORD + time;
 
         OkHttpUtils.sendPostOkHttpRequest(url, MyApplication.getGson().toJson(list));
     }

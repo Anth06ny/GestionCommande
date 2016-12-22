@@ -69,7 +69,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         }
         else {
             //On ne sort de l'application que si on est sur l'ecran d'accueil
-            if (currentFragment.getTag().equalsIgnoreCase(R.id.Accueil + "")) {
+            if (currentFragment == null || currentFragment.getTag().equalsIgnoreCase(R.id.Accueil + "")) {
                 super.onBackPressed();
             }
             //sinon on revient dessus
@@ -172,7 +172,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
     }
 
     /**
-     * Test si l'application est prette à utiliser c'est à dire s'il y a au oins 1 produit et le mot de passe admin
+     * Test si l'application est prette à utiliser c'est à dire s'il y a au moins 1 produit et le mot de passe admin
      */
     private boolean checkApplicationReadyToUse() {
         //On regarde s'il y a le mot de passe réglage

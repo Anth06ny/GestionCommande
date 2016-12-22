@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
+import com.example.anthony.gestionstock.controller.DateUtils;
 import com.example.anthony.gestionstock.model.bdd.CommandeBddManager;
 import com.example.anthony.gestionstock.model.bdd.ConsommeBddManager;
 import com.example.anthony.gestionstock.model.bdd.ProduitBddManager;
@@ -106,6 +107,8 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
         produitArrayListSelected = new ArrayList<>();
         quantiteHashMap = new HashMap<>();
 
+        commandeArrayListSelected = new ArrayList<>();
+
         //On recupere le recycler view et on creer l'adapteur
         recyclerViewBilan = (RecyclerView) v.findViewById(R.id.rv_bilan);
         recyclerViewBilan.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -195,10 +198,6 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
             date = Calendar.getInstance().getTime();
         }
 
-        quantiteHashMap = new HashMap<>();
-        commandeArrayListSelected = new ArrayList<>();
-        produitArrayListSelected = new ArrayList<>();
-
         switch (choixDatePicker) {
             case 0:
                 //On recupere la date dans le champ date fin et on la format
@@ -241,11 +240,12 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
 
             case 3:
                 //On recupere la liste des dates de la semaine en cour
-                ArrayList<Date> dateArrayListSemaine = getSemaine(date);
-                dateDebutSemaine = new Date();
-                dateDebutSemaine = dateArrayListSemaine.get(0);
-                dateFinSemaine = new Date();
-                dateFinSemaine = dateArrayListSemaine.get(dateArrayListSemaine.size() - 1);
+                dateDebutSemaine = DateUtils.getSemaine(date);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(dateDebutSemaine);
+                calendar.add(Calendar.DAY_OF_YEAR, 6);
+
+                dateFinSemaine = calendar.getTime();
 
                 //On appel la methode affichage bilan avec comme parametre la date de debut de semaine et la date de fin de semaine
                 affichageBilan(dateDebutSemaine, dateFinSemaine);
@@ -253,7 +253,7 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
                 break;
             case 4:
                 //On recupere la liste des dates du mois en cour
-                ArrayList<Date> dateArrayListMois = getMois(date);
+                ArrayList<Date> dateArrayListMois = DateUtils.getMois();
                 dateDebutMois = new Date();
                 dateDebutMois = dateArrayListMois.get(0);
                 dateFinMois = new Date();
@@ -265,7 +265,7 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
                 break;
             case 5:
                 //On recupere la liste des dates de l'annee en cour
-                ArrayList<Date> dateArrayListAnnee = getAnnee(date);
+                ArrayList<Date> dateArrayListAnnee = DateUtils.getAnnee();
                 dateDebutAnnee = new Date();
                 dateDebutAnnee = dateArrayListAnnee.get(0);
                 dateFinAnnee = new Date();
@@ -284,66 +284,14 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
         datePickerFragment.show(getFragmentManager(), "Date");
     }
 
-    //TODO faire ne sorte que la semaine commence tout le temps le LUNDI
-    public static ArrayList<Date> getSemaine(Date date) {
-        ArrayList<Date> dateArrayList = new ArrayList<>();
-        String annee = new SimpleDateFormat("yyyy").format(date);
-        String jour = new SimpleDateFormat("EEE").format(date);
-        Calendar c = Calendar.getInstance();
-
-        c.setTime(date);
-        int weekNo = c.get(Calendar.WEEK_OF_YEAR);
-        c.set(Calendar.WEEK_OF_YEAR, weekNo);
-
-        c.clear();
-
-        c.set(Calendar.WEEK_OF_YEAR, weekNo);
-        c.set(Calendar.YEAR, Integer.valueOf(annee));
-
-        SimpleDateFormat formatter = new SimpleDateFormat("EEE dd/MM/yyyy");
-        if ("lun.".equalsIgnoreCase(jour)) {
-            c.add(Calendar.DATE, -1);
-        }
-        else {
-            c.add(Calendar.DATE, 0);
-        }
-
-        for (int i = 0; i < 7; i++) {
-            c.add(Calendar.DATE, 1);
-            dateArrayList.add(c.getTime());
-        }
-        return dateArrayList;
-    }
-
-    public static ArrayList<Date> getMois(Date date) {
-        ArrayList<Date> dateArrayList = new ArrayList<>();
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.DAY_OF_MONTH, 0);
-
-        for (int i = 0; i < c.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
-            c.add(Calendar.DATE, 1);
-            dateArrayList.add(c.getTime());
-        }
-        return dateArrayList;
-    }
-
-    public static ArrayList<Date> getAnnee(Date date) {
-        ArrayList<Date> dateArrayList = new ArrayList<>();
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.DAY_OF_YEAR, 0);
-
-        for (int i = 0; i < c.getActualMaximum((Calendar.DAY_OF_YEAR)); i++) {
-            c.add(Calendar.DATE, 1);
-            dateArrayList.add(c.getTime());
-        }
-        return dateArrayList;
-    }
-
     public void affichageBilan(Date dateDebut, Date dateFin) {
 
         //On recupere la liste des commande comprise entre les dates entrees en parametre
-        commandeArrayListSelected = new ArrayList<>();
-        commandeArrayListSelected = (ArrayList<Commande>) CommandeBddManager.getCommandeBetweenDate(dateDebut, dateFin);
+        commandeArrayListSelected.clear();
+        quantiteHashMap.clear();
+        produitArrayListSelected.clear();
+
+        commandeArrayListSelected.addAll(CommandeBddManager.getCommandeBetweenDate(dateDebut, dateFin));
 
         //On format les dates entrees en paramettre et on les affiche dans les champs date debut et date fin
         String fDateDebut = new SimpleDateFormat("dd/MM/yyyy").format(dateDebut);
