@@ -23,39 +23,30 @@ import greendao.Produit;
  */
 public class WSUtils {
 
-    private static final String SAVE_URL = "http://192.168.10.204/WebServiceAndroid/postJson.php?";
-    private static final String LOAD_URL = "http://192.168.10.204/WebServiceAndroid/getJson.php?";
+    private static final String URL = "http://192.168.10.204/WebServiceAndroid/";
+    private static final String SAVE_URL = "postJson.php?";
+    private static final String LOAD_URL = "getJson.php?";
+    private static final String LOAD_DATE_URL = "getDate.php";
     private static final String TYPE_WORD = "type=";
     private static final String DATE_WORD = "date=";
-    private static Long date;
 
     private enum TYPE {
         CATEGORIE, CONSOMME, PRODUIT, COMMANDE
     }
 
-    private enum CHOIX_LOAD {
-        LOAD_LAST, LOAD_BY_DATE
-    }
-
-    private static CHOIX_LOAD choix_load;
-
     /**
      * Charge le base de donnée sur le serveur
      */
-    public static void loadData(Date dateChoisie) throws Exception {
+    public static void loadData() throws Exception {
+        loadData(null);
+    }
 
-        if (dateChoisie != null) {
-            date = dateChoisie.getTime();
-            choix_load = CHOIX_LOAD.LOAD_BY_DATE;
-        }
-        else {
-            choix_load = CHOIX_LOAD.LOAD_LAST;
-        }
+    public static void loadData(Date date) throws Exception {
 
-        ArrayList<Categorie> catFromWeb = loadCategorie();
-        ArrayList<Produit> prodFromWeb = loadProduit();
-        ArrayList<Commande> commandeFromWeb = loadCommande();
-        ArrayList<Consomme> consomeFromWeb = loadConsomme();
+        ArrayList<Categorie> catFromWeb = loadCategorie(date);
+        ArrayList<Produit> prodFromWeb = loadProduit(date);
+        ArrayList<Commande> commandeFromWeb = loadCommande(date);
+        ArrayList<Consomme> consomeFromWeb = loadConsomme(date);
         MaBaseSQLite.clearAllTable();
 
         CategorieBddManager.insertCategorieList(catFromWeb);
@@ -64,15 +55,14 @@ public class WSUtils {
         ConsommeBddManager.insertConsommeList(consomeFromWeb);
     }
 
-    private static ArrayList<Categorie> loadCategorie() throws Exception {
-        String url = null;
-        switch (choix_load) {
-            case LOAD_LAST:
-                url = LOAD_URL + TYPE_WORD + TYPE.CATEGORIE;
-                break;
-            case LOAD_BY_DATE:
-                url = LOAD_URL + TYPE_WORD + TYPE.CATEGORIE + "&" + DATE_WORD + date;
-                break;
+    private static ArrayList<Categorie> loadCategorie(Date date) throws Exception {
+        String url;
+
+        if (date == null) {
+            url = URL + LOAD_URL + TYPE_WORD + TYPE.CATEGORIE;
+        }
+        else {
+            url = URL + LOAD_URL + TYPE_WORD + TYPE.CATEGORIE + "&" + DATE_WORD + date;
         }
         String jsonString = OkHttpUtils.sendGetOkHttpRequest(url);
         Gson gson = new Gson();
@@ -81,15 +71,15 @@ public class WSUtils {
                 }.getType());
     }
 
-    private static ArrayList<Produit> loadProduit() throws Exception {
-        String url = null;
-        switch (choix_load) {
-            case LOAD_LAST:
-                url = LOAD_URL + TYPE_WORD + TYPE.PRODUIT;
-                break;
-            case LOAD_BY_DATE:
-                url = LOAD_URL + TYPE_WORD + TYPE.PRODUIT + "&" + DATE_WORD + date;
-                break;
+    private static ArrayList<Produit> loadProduit(Date date) throws Exception {
+        String url;
+
+        if (date == null) {
+
+            url = URL + LOAD_URL + TYPE_WORD + TYPE.PRODUIT;
+        }
+        else {
+            url = URL + LOAD_URL + TYPE_WORD + TYPE.PRODUIT + "&" + DATE_WORD + date;
         }
         String jsonString = OkHttpUtils.sendGetOkHttpRequest(url);
         Gson gson = new Gson();
@@ -98,15 +88,13 @@ public class WSUtils {
                 }.getType());
     }
 
-    private static ArrayList<Commande> loadCommande() throws Exception {
-        String url = null;
-        switch (choix_load) {
-            case LOAD_LAST:
-                url = LOAD_URL + TYPE_WORD + TYPE.COMMANDE;
-                break;
-            case LOAD_BY_DATE:
-                url = LOAD_URL + TYPE_WORD + TYPE.COMMANDE + "&" + DATE_WORD + date;
-                break;
+    private static ArrayList<Commande> loadCommande(Date date) throws Exception {
+        String url;
+        if (date == null) {
+            url = URL + LOAD_URL + TYPE_WORD + TYPE.COMMANDE;
+        }
+        else {
+            url = URL + LOAD_URL + TYPE_WORD + TYPE.COMMANDE + "&" + DATE_WORD + date;
         }
         String jsonString = OkHttpUtils.sendGetOkHttpRequest(url);
         Gson gson = new Gson();
@@ -115,20 +103,31 @@ public class WSUtils {
                 }.getType());
     }
 
-    private static ArrayList<Consomme> loadConsomme() throws Exception {
-        String url = null;
-        switch (choix_load) {
-            case LOAD_LAST:
-                url = LOAD_URL + TYPE_WORD + TYPE.CONSOMME;
-                break;
-            case LOAD_BY_DATE:
-                url = LOAD_URL + TYPE_WORD + TYPE.CONSOMME + "&" + DATE_WORD + date;
-                break;
+    private static ArrayList<Consomme> loadConsomme(Date date) throws Exception {
+        String url;
+        if (date == null) {
+            url = URL + LOAD_URL + TYPE_WORD + TYPE.CONSOMME;
+        }
+        else {
+            url = URL + LOAD_URL + TYPE_WORD + TYPE.CONSOMME + "&" + DATE_WORD + date;
         }
         String jsonString = OkHttpUtils.sendGetOkHttpRequest(url);
         Gson gson = new Gson();
         return gson.fromJson(jsonString,
                 new TypeToken<ArrayList<Consomme>>() {
+                }.getType());
+    }
+
+    /**
+     * Charge l'historique des dates
+     */
+
+    public static ArrayList<Date> loadHistoriqueDate() throws Exception {
+        String url = URL + LOAD_DATE_URL;
+        String jsonString = OkHttpUtils.sendGetOkHttpRequest(url);
+        Gson gson = new Gson();
+        return gson.fromJson(jsonString,
+                new TypeToken<ArrayList<Date>>() {
                 }.getType());
     }
 
@@ -149,7 +148,7 @@ public class WSUtils {
      */
     public static void saveCategorie(long time) throws Exception {
         List<Categorie> list = CategorieBddManager.getCategories();
-        String url = SAVE_URL + TYPE_WORD + TYPE.CATEGORIE + "&" + DATE_WORD + time;
+        String url = URL + SAVE_URL + TYPE_WORD + TYPE.CATEGORIE + "&" + DATE_WORD + time;
 
         OkHttpUtils.sendPostOkHttpRequest(url, MyApplication.getGson().toJson(list));
     }
@@ -159,7 +158,7 @@ public class WSUtils {
      */
     public static void saveProduit(long time) throws Exception {
         List<Produit> list = ProduitBddManager.getProduit();
-        String url = SAVE_URL + TYPE_WORD + TYPE.PRODUIT + "&" + DATE_WORD + time;
+        String url = URL + SAVE_URL + TYPE_WORD + TYPE.PRODUIT + "&" + DATE_WORD + time;
 
         OkHttpUtils.sendPostOkHttpRequest(url, MyApplication.getGson().toJson(list));
     }
@@ -169,7 +168,7 @@ public class WSUtils {
      */
     public static void saveConsomme(long time) throws Exception {
         List<Consomme> list = ConsommeBddManager.getConsomme();
-        String url = SAVE_URL + TYPE_WORD + TYPE.CONSOMME + "&" + DATE_WORD + time;
+        String url = URL + SAVE_URL + TYPE_WORD + TYPE.CONSOMME + "&" + DATE_WORD + time;
 
         OkHttpUtils.sendPostOkHttpRequest(url, MyApplication.getGson().toJson(list));
     }
@@ -179,7 +178,7 @@ public class WSUtils {
      */
     public static void saveCommande(long time) throws Exception {
         List<Commande> list = CommandeBddManager.getCommande();
-        String url = SAVE_URL + TYPE_WORD + TYPE.COMMANDE + "&" + DATE_WORD + time;
+        String url = URL + SAVE_URL + TYPE_WORD + TYPE.COMMANDE + "&" + DATE_WORD + time;
 
         OkHttpUtils.sendPostOkHttpRequest(url, MyApplication.getGson().toJson(list));
     }

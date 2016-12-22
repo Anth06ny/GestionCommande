@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.example.anthony.gestionstock.R;
 import com.example.anthony.gestionstock.controller.MyApplication;
 import com.example.anthony.gestionstock.controller.dialog.DialogCategorie;
+import com.example.anthony.gestionstock.controller.dialog.DialogHistoriqueDate;
 import com.example.anthony.gestionstock.controller.dialog.DialogProduit;
 import com.example.anthony.gestionstock.model.bdd.CategorieBddManager;
 import com.example.anthony.gestionstock.model.bdd.ProduitBddManager;
@@ -32,6 +33,7 @@ import com.example.anthony.gestionstock.vue.adapter.CategoryAdapter;
 import com.example.anthony.gestionstock.vue.adapter.ProductAdapter;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import greendao.Categorie;
 import greendao.Produit;
@@ -138,6 +140,9 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
             case R.id.menu_load:
                 new MonAT(CHOIX.LOAD).execute();
                 return true;
+            case R.id.menu_load_date:
+                new MonAT(CHOIX.LOAD_DATE).execute();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -434,13 +439,14 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     // AT
     // -------------------------------- */
 
-    private enum CHOIX {SAVE, LOAD}
+    private enum CHOIX {SAVE, LOAD, LOAD_DATE}
 
     private class MonAT extends AsyncTask<Void, Void, Exception> {
 
         private Exception exception = null;
         private ProgressDialog progressDialog;
         private CHOIX choix;
+        private ArrayList<Date> dateArrayList = new ArrayList<>();
 
         public MonAT(CHOIX choix) {
             this.choix = choix;
@@ -456,6 +462,9 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                 case LOAD:
                     progressDialog = ProgressDialog.show(getContext(), "", getContext().getString(R.string.reglage_load_message), true, false);
                     break;
+                case LOAD_DATE:
+                    progressDialog = ProgressDialog.show(getContext(), "", getContext().getString(R.string.reglage_load_message), true, false);
+                    break;
             }
         }
 
@@ -468,7 +477,20 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                         WSUtils.saveData();
                         break;
                     case LOAD:
-                        WSUtils.loadData(null);
+                        AlertDialogutils.showOkCancelDialog(getContext(), R.string.confirmation, R.string.dialog_reglage_ask_confirm_load, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    WSUtils.loadData();
+                                }
+                                catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        break;
+                    case LOAD_DATE:
+                        dateArrayList.addAll(WSUtils.loadHistoriqueDate());
                         break;
                 }
 
@@ -504,6 +526,10 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                         productAdapter.notifyDataSetChanged();
                         Toast.makeText(getContext(), R.string.reglage_toast_load, Toast.LENGTH_SHORT).show();
 
+                        break;
+                    case LOAD_DATE:
+                        DialogHistoriqueDate dialogHistoriqueDate = new DialogHistoriqueDate();
+                        dialogHistoriqueDate.setDateArrayList(dateArrayList);
                         break;
                 }
             }
