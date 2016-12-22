@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
+import com.example.anthony.gestionstock.controller.DateUtils;
 import com.example.anthony.gestionstock.model.bdd.CommandeBddManager;
 import com.example.anthony.gestionstock.model.bdd.ConsommeBddManager;
 import com.example.anthony.gestionstock.model.bdd.ProduitBddManager;
@@ -239,7 +240,7 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
 
             case 3:
                 //On recupere la liste des dates de la semaine en cour
-                dateDebutSemaine = getSemaine(date);
+                dateDebutSemaine = DateUtils.getSemaine(date);
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(dateDebutSemaine);
                 calendar.add(Calendar.DAY_OF_YEAR, 6);
@@ -252,7 +253,7 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
                 break;
             case 4:
                 //On recupere la liste des dates du mois en cour
-                ArrayList<Date> dateArrayListMois = getMois(date);
+                ArrayList<Date> dateArrayListMois = DateUtils.getMois();
                 dateDebutMois = new Date();
                 dateDebutMois = dateArrayListMois.get(0);
                 dateFinMois = new Date();
@@ -264,7 +265,7 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
                 break;
             case 5:
                 //On recupere la liste des dates de l'annee en cour
-                ArrayList<Date> dateArrayListAnnee = getAnnee(date);
+                ArrayList<Date> dateArrayListAnnee = DateUtils.getAnnee();
                 dateDebutAnnee = new Date();
                 dateDebutAnnee = dateArrayListAnnee.get(0);
                 dateFinAnnee = new Date();
@@ -281,43 +282,6 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
         DatePickerFragment datePickerFragment = new DatePickerFragment();
         datePickerFragment.setDatePickerFragmentCallBack(datePickerFragmentCallBack);
         datePickerFragment.show(getFragmentManager(), "Date");
-    }
-
-    /**
-     * Retourne le lundi de la semaine choisie
-     *
-     * @param date
-     * @return
-     */
-    public static Date getSemaine(Date date) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek());
-        return c.getTime();
-    }
-
-    public static ArrayList<Date> getMois(Date date) {
-        ArrayList<Date> dateArrayList = new ArrayList<>();
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.DAY_OF_MONTH, 0);
-
-        for (int i = 0; i < c.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
-            c.add(Calendar.DATE, 1);
-            dateArrayList.add(c.getTime());
-        }
-        return dateArrayList;
-    }
-
-    public static ArrayList<Date> getAnnee(Date date) {
-        ArrayList<Date> dateArrayList = new ArrayList<>();
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.DAY_OF_YEAR, 0);
-
-        for (int i = 0; i < c.getActualMaximum((Calendar.DAY_OF_YEAR)); i++) {
-            c.add(Calendar.DATE, 1);
-            dateArrayList.add(c.getTime());
-        }
-        return dateArrayList;
     }
 
     public void affichageBilan(Date dateDebut, Date dateFin) {
