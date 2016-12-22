@@ -52,7 +52,7 @@ public class HistoriqueAdapter extends RecyclerView.Adapter<HistoriqueAdapter.Vi
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
         holder.displayDate.setText(simpleDateFormat.format(datebean));
 
-        SimpleDateFormat simpleHeureFormat = new SimpleDateFormat("HH:MI:Sec");
+        SimpleDateFormat simpleHeureFormat = new SimpleDateFormat("HH:mm:ss");
         holder.displayHeure.setText(simpleHeureFormat.format(datebean));
 
         holder.buttonCharger.setOnClickListener(new View.OnClickListener() {
