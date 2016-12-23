@@ -1,6 +1,7 @@
 package com.example.anthony.gestionstock.controller.fragment;
 
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
@@ -19,6 +20,8 @@ import com.example.anthony.gestionstock.controller.MyApplication;
 import com.example.anthony.gestionstock.model.bdd.CategorieBddManager;
 import com.example.anthony.gestionstock.model.bdd.ConsommeBddManager;
 import com.example.anthony.gestionstock.model.bdd.ProduitBddManager;
+import com.example.anthony.gestionstock.model.sharedPreference.SharedPreferenceUtils;
+import com.example.anthony.gestionstock.model.webservice.WSUtils;
 import com.example.anthony.gestionstock.vue.AlertDialogutils;
 import com.example.anthony.gestionstock.vue.ProductAffichageEnum;
 import com.example.anthony.gestionstock.vue.adapter.CategoryAdapter;
@@ -27,6 +30,7 @@ import com.example.anthony.gestionstock.vue.adapter.GridAutofitLayoutManager;
 import com.example.anthony.gestionstock.vue.adapter.ProductAdapter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import greendao.Categorie;
 import greendao.Consomme;
@@ -342,11 +346,18 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
             ConsommeBddManager.insertConsommeList(consommeArrayListNote);
             //Si l'insertion a reussi on efface la note
             deleteNote();
-
-            //TODO lancer sailysave
-
-
             Toast.makeText(getContext(), R.string.accueil_tost_cmd_save, Toast.LENGTH_SHORT).show();
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+
+            if (calendar.getTime().getTime() != SharedPreferenceUtils.getSaveDate()) {
+                new MonAT().execute();
+                SharedPreferenceUtils.setSaveDate(calendar.getTime().getTime());
+            }
         }
         catch (Exception e) {
             showError(e);
@@ -357,4 +368,34 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         e.printStackTrace();
         AlertDialogutils.showOkDialog(getContext(), R.string.dialog_error_title, e.getMessage(), null);
     }
+
+    private class MonAT extends AsyncTask<Void, Void, Exception> {
+        public MonAT() {
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Exception doInBackground(Void... params) {
+            try {
+                WSUtils.saveData();
+                return null;
+            }
+            catch (Exception e) {
+                return e;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Exception e) {
+            super.onPostExecute(e);
+            if (e != null) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
+
