@@ -200,33 +200,6 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                     categoryAdapter.notifyItemInserted(categorieList.size() - 1);
                 }
             }
-
-            @Override
-            public void dialogCategorieClicOnValiderErreur(int tag) {
-
-                //On creer un alert dialog pour indiquer que les valeurs saisie par l'utilisateur sont incorrect
-                String erreur;
-                //On set tous les elements et on display la dialog box
-                switch (tag) {
-                    case 0:
-                        erreur = "Erreur lors de l'envoie des données saisie veuillez réessayer";
-                        break;
-                    case 1:
-                        erreur = "Catégorie déjà existante";
-                        break;
-                    case 2:
-                        erreur = "Couleur déjà utilisé";
-                        break;
-                    case 3:
-                        erreur = "Nombre maximal de catégorie atteint";
-                        break;
-                    default:
-                        erreur = "Case inconnu";
-                        break;
-                }
-
-                AlertDialogutils.showOkDialog(getContext(), R.string.dialog_error_title, erreur, null);
-            }
         });
         newFragment.show(getFragmentManager(), tag);
     }
@@ -352,31 +325,6 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                     }
                     categorieToInsertProduit.resetProduitList();
                 }
-            }
-
-            @Override
-            public void dialogProduitClicOnValiderErreur(int tag) {
-
-                //On creer un alert dialog pour indiquer que les valeurs saisie par l 'utilisateur sont incorrect
-
-                String erreur;
-                //On set tous les elements et on display la dialog box
-                switch (tag) {
-                    case 0:
-                        erreur = "Erreur lors de l'envoie des données saisie veuillez réessayer";
-                        break;
-                    case 1:
-                        erreur = "Produit déjà existant";
-                        break;
-                    case 2:
-                        erreur = "Nombre de produit favoris maximal atteint";
-                        break;
-                    default:
-                        erreur = "Case inconnu";
-                        break;
-                }
-
-                AlertDialogutils.showOkDialog(getContext(), R.string.dialog_error_title, erreur, null);
             }
         });
         newFragment.show(getFragmentManager(), tag);

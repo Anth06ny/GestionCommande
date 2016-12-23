@@ -15,8 +15,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
+import com.example.anthony.gestionstock.model.bdd.CategorieBddManager;
+import com.example.anthony.gestionstock.model.bdd.ProduitBddManager;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -25,8 +28,6 @@ import java.util.List;
 
 import greendao.Categorie;
 import greendao.Produit;
-import com.example.anthony.gestionstock.model.bdd.CategorieBddManager;
-import com.example.anthony.gestionstock.model.bdd.ProduitBddManager;
 
 /**
  * Created by Allan on 23/11/2016.
@@ -98,59 +99,39 @@ public class DialogProduit extends DialogFragment {
                 .setPositiveButton(R.string.valider, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
-                        int tag = 0;
-                        Boolean erreur = false;
-                        //On verifie que les edit text de la dialog produit ne sont pas vide
-                        if (StringUtils.isNotBlank(editNom.getText())) {
-                            produit.setNom(editNom.getText().toString());
-
-                            //On verifie que le nom du produit saisie dans l'edit ne correpond a aucun autre produit de la base de donnees
-                            //Et si il y a un produit qui porte le meme nom on verifie les id des deux produits
-                            //Si les id correpondent alors il n'y a pas d'erreur puisqu'on est en train de modifier un produit
-                            //Si les id ne correspondent pas alors on informe l'utilisateur que le produit qu'il a saisie existe deja dans la bdd
-                            for (int i = 0; i < produitArrayList.size(); i++) {
-                                if (StringUtils.equalsIgnoreCase(produit.getNom().toLowerCase(), produitArrayList.get(i).getNom().toLowerCase()) && produit.getId() !=
-                                        produitArrayList.get
-                                                (i).getId()) {
-                                    //Si le nom existe deja et que les id sont different alors on passe un boolean erreur a true
-                                    erreur = true;
-                                    tag = 1;
-                                }
-                            }
-                            int countFavori = 0;
-                            if (checkBoxFavori.isChecked()) {
-                                for (int j = 0; j < produitArrayList.size(); j++) {
-                                    if (produitArrayList.get(j).getFavori()) {
-                                        countFavori++;
-                                    }
-                                    if (countFavori == 6) {
-                                        erreur = true;
-                                        tag = 2;
-                                    }
-                                }
-                            }
-                            //Si le boolean erreur est a false alors on peut recupere les donnees saisie par l'utilisateur et les envoyer grace au callback a la
-                            // page fragment reglage qui va envoye en bdd le produit
-                            if (!erreur) {
-                                produit.setPrix(Float.valueOf(String.valueOf(editPrix.getText())));
-                                produit.setLot(Integer.valueOf(String.valueOf(editLot.getText())));
-                                produit.setCategorieID(categorieSelected.getId());
-                                produit.setFavori(checkBoxFavori.isChecked());
-                                dialogProduitCallBack.dialogProduitClicOnValider();
-                            }
-                            //Si le boolean erreur est vrai alors on envoie un callback d'erreur qui va indiquer a l'utilisateur qu'il y a une erreur
-                            else {
-                                dialogProduitCallBack.dialogProduitClicOnValiderErreur(tag);
-                            }
-                        }
-                        //Si le champ nom du produit n'est pas remplie on envoie un callback d'erreur qui va indiquer a l'utilisateur qu'il y a une erreur
-                        else {
-                            dialogProduitCallBack.dialogProduitClicOnValiderErreur(tag);
-                        }
                     }
                 })
                 .setNegativeButton(R.string.annuler, null);
 
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        //Overriding the handler immediately after show is probably a better approach than OnShowListener as described below
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (StringUtils.isBlank(editNom.getText())) {
+                    Toast.makeText(getContext(), R.string.dialog_produit_toast_erreur_nom, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else if (StringUtils.isBlank(editPrix.getText())) {
+                    Toast.makeText(getContext(), R.string.dialog_produit_toast_erreur_prix, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else if (StringUtils.isBlank(editLot.getText())) {
+                    Toast.makeText(getContext(), R.string.dialog_produit_toast_erreur_lot, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else {
+                    produit.setNom(editNom.getText().toString());
+                    produit.setPrix(Float.valueOf(String.valueOf(editPrix.getText())));
+                    produit.setLot(Integer.valueOf(String.valueOf(editLot.getText())));
+                    produit.setCategorieID(categorieSelected.getId());
+                    produit.setFavori(checkBoxFavori.isChecked());
+                    dialogProduitCallBack.dialogProduitClicOnValider();
+                    dialog.dismiss();
+                }
+            }
+        });
         //recupère l'élément graphique de l'adapteur et le switch entre celui du layout du dialogue.
         editCategorie = (Spinner) alertDialogView.findViewById(R.id.editCategorieProduit);
         editCategorie.setAdapter(spinnerTest);
@@ -166,7 +147,7 @@ public class DialogProduit extends DialogFragment {
             }
         });
 
-        return builder.create();
+        return dialog;
     }
 
     @Override
@@ -177,8 +158,6 @@ public class DialogProduit extends DialogFragment {
 
     public interface DialogProduitCallBack {
         void dialogProduitClicOnValider();
-
-        void dialogProduitClicOnValiderErreur(int tag);
     }
 
     public void setDialogProduitCallBack(DialogProduitCallBack dialogProduitCallBack) {

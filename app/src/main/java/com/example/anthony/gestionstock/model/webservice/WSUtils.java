@@ -49,6 +49,7 @@ public class WSUtils {
         ArrayList<Produit> prodFromWeb = loadProduit(dateLong);
         ArrayList<Commande> commandeFromWeb = loadCommande(dateLong);
         ArrayList<Consomme> consomeFromWeb = loadConsomme(dateLong);
+
         MaBaseSQLite.clearAllTable();
 
         CategorieBddManager.insertCategorieList(catFromWeb);
@@ -147,7 +148,7 @@ public class WSUtils {
     }
 
     /**
-     * Sauvegarde l'état des catégories    sur le serveur
+     * Sauvegarde l'état des catégories sur le serveur
      */
     public static void saveCategorie(long time) throws Exception {
         List<Categorie> list = CategorieBddManager.getCategories();
