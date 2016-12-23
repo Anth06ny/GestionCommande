@@ -225,7 +225,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                         break;
                 }
 
-                AlertDialogutils.showOkCancelDialog(getContext(), R.string.dialog_error_title, erreur, null);
+                AlertDialogutils.showOkDialog(getContext(), R.string.dialog_error_title, erreur, null);
             }
         });
         newFragment.show(getFragmentManager(), tag);
@@ -233,7 +233,6 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
 
     @Override
     public void clicOnCategory(Categorie categorie) {
-        //TODO Impossible de mettre a jour la liste de produit a afficher si on est sur une autre que categorie que celle ou l'on insert le produit
 
         //Au clic sur une categorie on recupere la liste de produit qui lui est associer
 
@@ -359,32 +358,25 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
             public void dialogProduitClicOnValiderErreur(int tag) {
 
                 //On creer un alert dialog pour indiquer que les valeurs saisie par l 'utilisateur sont incorrect
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        getContext());
 
+                String erreur;
                 //On set tous les elements et on display la dialog box
-                alertDialogBuilder.setTitle("Erreur");
                 switch (tag) {
                     case 0:
-                        alertDialogBuilder
-                                .setMessage("Erreur lors de l'envoie des données saisie veuillez réessayer");
+                        erreur = "Erreur lors de l'envoie des données saisie veuillez réessayer";
                         break;
                     case 1:
-                        alertDialogBuilder
-                                .setMessage("Produit déjà existant");
+                        erreur = "Produit déjà existant";
                         break;
                     case 2:
-                        alertDialogBuilder.setMessage("Nombre de produit favoris maximal atteint");
+                        erreur = "Nombre de produit favoris maximal atteint";
+                        break;
+                    default:
+                        erreur = "Case inconnu";
+                        break;
                 }
 
-                alertDialogBuilder.setCancelable(false)
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
+                AlertDialogutils.showOkDialog(getContext(), R.string.dialog_error_title, erreur, null);
             }
         });
         newFragment.show(getFragmentManager(), tag);
