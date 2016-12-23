@@ -20,10 +20,18 @@
     <string name="dialog_categorie_name_libelle">Nom </string>
     <string name="dialog_categorie_name_hint">Nom de la catégorie</string>
     <string name="dialog_categorie_color_libelle">Couleur</string>
+    <string name="dialog_categorie_toast_erreur_nom">Il faut mettre un nom à la catégorie</string>
+    <string name="dialog_categorie_toast_erreur_couleur">La couleur choisie est déjà utilisée</string>
+    <string name="dialog_categorie_toast_erreur_nb_max">Nombre de catégorie maximale atteinte</string>
+    <string name="dialog_categorie_toast_erreur_nom_double">Le nom choisie est déjà utilisé</string>
+
 
     <!-- Dialog Produit -->
     <string name="dialog_produit_title_new">Nouveau produit</string>
     <string name="dialog_produit_title_edit">Modifier le produit</string>
+    <string name="dialog_produit_toast_erreur_nom">Il faut mettre un nom au produit</string>
+    <string name="dialog_produit_toast_erreur_prix">Il faut mettre un prix au produit</string>
+    <string name="dialog_produit_toast_erreur_lot">Il faut mettre un lot au produit</string>
 
     <!-- Dialog ColorPicker -->
     <string name="dialog_colorpicker_title">Séléctionnez une couleur</string>

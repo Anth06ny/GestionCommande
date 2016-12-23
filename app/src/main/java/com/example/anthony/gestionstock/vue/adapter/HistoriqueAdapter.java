@@ -49,7 +49,7 @@ public class HistoriqueAdapter extends RecyclerView.Adapter<HistoriqueAdapter.Vi
     public void onBindViewHolder(HistoriqueAdapter.ViewHolder holder, int position) {
         final Date datebean = dateArrayList.get(position);
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         holder.displayDate.setText(simpleDateFormat.format(datebean));
 
         SimpleDateFormat simpleHeureFormat = new SimpleDateFormat("HH:mm:ss");
