@@ -75,15 +75,11 @@ public class DialogCategorie extends DialogFragment {
                             public void onClick(DialogInterface dialog, int id) {
 
                             }
-                        }
+                        }).setNegativeButton(R.string.annuler, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
 
-                                  ).setNegativeButton(R.string.annuler, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //Ensemble des taches a realiser quand l'utilisateur cliq sur annuler
-                    }
-                }
-
-                                                     );
+            }
+        });
 
         //Au cliq du bouton on ouvre une nouvelle dialog box qui affiche le color picker
         btnChoisirCouleur.setOnClickListener(
