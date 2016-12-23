@@ -56,6 +56,7 @@ public class DialogCategorie extends DialogFragment {
 
         if (categorie.getCouleur() != null) {
             btnChoisirCouleur.setColorFilter(Integer.parseInt(categorie.getCouleur()), PorterDuff.Mode.SRC_IN);
+            couleurChoisi = Integer.parseInt(categorie.getCouleur());
         }
 
         //Je récupère l'icon des ressources et je la change de couleur
