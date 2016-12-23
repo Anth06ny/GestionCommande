@@ -120,30 +120,46 @@ public class DialogCategorie extends DialogFragment {
                 ArrayList<Categorie> categorieArrayList;
                 categorieArrayList = (ArrayList<Categorie>) CategorieBddManager.getCategories();
 
-                if (StringUtils.isBlank(edit_nomCategorie.getText())) {
-                    Toast.makeText(getContext(), R.string.dialog_categorie_toast_erreur_nom, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                categorie.setCouleur(String.valueOf(couleurChoisi));
+                if (categorieArrayList.size() < NB_MAX_CATEGORIE) {
+                    if (StringUtils.isBlank(edit_nomCategorie.getText())) {
+                        Toast.makeText(getContext(), R.string.dialog_categorie_toast_erreur_nom, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    categorie.setNom(String.valueOf(edit_nomCategorie.getText()));
+                    for (int i = 0; i < categorieArrayList.size(); i++) {
+                        if (StringUtils.equalsIgnoreCase(categorie.getNom(), categorieArrayList.get(i).getNom()) && categorie.getId() !=
+                                categorieArrayList.get(i).getId()) {
 
-                //On verifie que la couleur choisie ne correpond pas a une couleur d'une autre categorie dans la bdd
-                //Si il y a deux couleur iddentique on verifie les id des deux categorie
-                //Si les id correpondent alors il n'y a pas d'erreur puisqu'on est en train de modifier une categorie
-                //Si les id ne correspondent pas alors on informe l'utilisateur que la couleur qu'il a choisie est deja utiliser pour une
-                // autre categorie dans la bdd
-                for (int i = 0; i < categorieArrayList.size(); i++) {
-                    if (StringUtils.equalsIgnoreCase(categorie.getCouleur(), categorieArrayList.get(i).getCouleur()) && categorie.getId() !=
-                            categorieArrayList.get(i).getId()) {
+                            //Si la couleur est deja utiliser et que les id sont different alors on passe un boolean canClose a false
+                            canCloseDialog = false;
+                            Toast.makeText(getContext(), R.string.dialog_categorie_toast_erreur_nom_double, Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
-                        //Si la couleur est deja utiliser et que les id sont different alors on passe un boolean canClose a false
-                        canCloseDialog = false;
-                        Toast.makeText(getContext(), R.string.dialog_categorie_toast_erreur_couleur, Toast.LENGTH_SHORT).show();
+                    categorie.setCouleur(String.valueOf(couleurChoisi));
+
+                    //On verifie que la couleur choisie ne correpond pas a une couleur d'une autre categorie dans la bdd
+                    //Si il y a deux couleur iddentique on verifie les id des deux categorie
+                    //Si les id correpondent alors il n'y a pas d'erreur puisqu'on est en train de modifier une categorie
+                    //Si les id ne correspondent pas alors on informe l'utilisateur que la couleur qu'il a choisie est deja utiliser pour une
+                    // autre categorie dans la bdd
+                    for (int i = 0; i < categorieArrayList.size(); i++) {
+                        if (StringUtils.equalsIgnoreCase(categorie.getCouleur(), categorieArrayList.get(i).getCouleur()) && categorie.getId() !=
+                                categorieArrayList.get(i).getId()) {
+
+                            //Si la couleur est deja utiliser et que les id sont different alors on passe un boolean canClose a false
+                            canCloseDialog = false;
+                            Toast.makeText(getContext(), R.string.dialog_categorie_toast_erreur_couleur, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    if (canCloseDialog) {
+
+                        dialogCategorieCallBack.dialogCategorieClicOnValider();
+                        dialog.dismiss();
                     }
                 }
-                if (canCloseDialog) {
-                    categorie.setNom(String.valueOf(edit_nomCategorie.getText()));
-                    dialogCategorieCallBack.dialogCategorieClicOnValider();
-                    dialog.dismiss();
+                else {
+                    Toast.makeText(getContext(), R.string.dialog_categorie_toast_erreur_nb_max, Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -108,20 +108,33 @@ public class DialogProduit extends DialogFragment {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Boolean canCloseDialog = true;
+                ArrayList<Produit> produitArrayList;
+                produitArrayList = (ArrayList<Produit>) ProduitBddManager.getProduit();
                 if (StringUtils.isBlank(editNom.getText())) {
                     Toast.makeText(getContext(), R.string.dialog_produit_toast_erreur_nom, Toast.LENGTH_SHORT).show();
                     return;
                 }
-                else if (StringUtils.isBlank(editPrix.getText())) {
+                if (StringUtils.isBlank(editPrix.getText())) {
                     Toast.makeText(getContext(), R.string.dialog_produit_toast_erreur_prix, Toast.LENGTH_SHORT).show();
                     return;
                 }
-                else if (StringUtils.isBlank(editLot.getText())) {
+                if (StringUtils.isBlank(editLot.getText())) {
                     Toast.makeText(getContext(), R.string.dialog_produit_toast_erreur_lot, Toast.LENGTH_SHORT).show();
                     return;
                 }
-                else {
-                    produit.setNom(editNom.getText().toString());
+                produit.setNom(editNom.getText().toString());
+
+                for (int i = 0; i < produitArrayList.size(); i++) {
+                    if (StringUtils.equalsIgnoreCase(produit.getNom(), produitArrayList.get(i).getNom()) && produit.getId() !=
+                            produitArrayList.get(i).getId()) {
+
+                        canCloseDialog = false;
+                        Toast.makeText(getContext(), R.string.dialog_categorie_toast_erreur_nom_double, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                if (canCloseDialog) {
                     produit.setPrix(Float.valueOf(String.valueOf(editPrix.getText())));
                     produit.setLot(Integer.valueOf(String.valueOf(editLot.getText())));
                     produit.setCategorieID(categorieSelected.getId());
