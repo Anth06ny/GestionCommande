@@ -113,7 +113,6 @@ public class DialogCategorie extends DialogFragment {
 
         final AlertDialog dialog = builder.create();
         dialog.show();
-        //Overriding the handler immediately after show is probably a better approach than OnShowListener as described below
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
