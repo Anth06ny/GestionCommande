@@ -53,6 +53,10 @@
     <!-- Stock -->
     <string name="stock_title">Consommation</string>
     <string name="stock_explication">Consomations des produits</string>
+    <string name="stock_no_lot">Aucun lot à commander</string>
+    <string name="stock_1lot">(1 lot = %1$s unités)</string>
+    <string name="stock_valider_ok">La commande a été retirée du stock</string>
+    <string name="stock_valider_nok">Rien à commander</string>
 
 
     <!-- Bilan -->
@@ -67,6 +71,7 @@
     <string name="reglage_load_message">Chargement des données en cours...</string>
     <string name="reglage_toast_save">Données sauvegardées</string>
     <string name="reglage_toast_load">Données chargées</string>
+    <string name="reglage_produit_cellule_lot"> %1$s unité(s)</string>
 
 
 </resources>

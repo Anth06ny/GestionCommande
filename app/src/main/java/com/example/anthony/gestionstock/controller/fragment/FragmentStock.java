@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
 import com.example.anthony.gestionstock.model.bdd.ProduitBddManager;
@@ -67,6 +68,22 @@ public class FragmentStock extends Fragment implements View.OnClickListener {
         recyclerViewStock.setItemAnimator(new DefaultItemAnimator());
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //on affiche un toast si aucun lot n'est à recommander
+        int nbLotARecommande = 0;
+        for (Produit produit : produitArrayListStock) {
+            if (produit.getConsommation() != null && produit.getLot() != null) {
+                nbLotARecommande += produit.getConsommation() / produit.getLot();
+            }
+        }
+        if (nbLotARecommande == 0) {
+            Toast.makeText(getContext(), R.string.stock_no_lot, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     /* ---------------------------------
     // clic
     // -------------------------------- */
@@ -98,29 +115,38 @@ public class FragmentStock extends Fragment implements View.OnClickListener {
 
     private void valider() {
 
+        boolean isRecommande = false; //est ce qu'il y a eu une modification
         for (int i = 0; i < produitArrayListStock.size(); i++) {
             Produit produit = produitArrayListStock.get(i);
             if (produit.getLotRecommande() > 0) {
                 //On met a jour la consommation, en recuperant l'ancienne valeur et en lui retirant la valeur du lot recommande multiplier par la taille
                 // d'un lot
                 produit.setConsommation(produit.getConsommation() - (produit.getLotRecommande() * produit.getLot()));
+                produit.setLotRecommande(0);
+                //On sauvegarde en bdd
+                ProduitBddManager.insertOrUpdate(produit);
 
-                //Si la consommation une fois mise a jour est toujours superieur a 0 alors on remet par defaut le lot recommande a 0 et on envoie le
-                // produit en bdd
+                //Si la consommation une fois mise a jour est toujours superieur a 0 on envoie le produit en bdd
                 if (produit.getConsommation() != 0) {
-                    produit.setLotRecommande(0);
                     productAdapter.notifyItemChanged(i);
                     ProduitBddManager.insertOrUpdate(produit);
                 }
-                //Si la consommation une fois mise a jour est égal a 0 alors on remet on remet par defaut le lot recommande a 0, on envoie le
-                // produit en bdd et on le retire de la liste des produits
+                //Si la consommation une fois mise a jour est égal a 0 on le retire de la liste
                 else {
-                    produit.setLotRecommande(0);
-                    ProduitBddManager.insertOrUpdate(produit);
                     produitArrayListStock.remove(produit);
                     productAdapter.notifyItemRemoved(i);
                 }
+
+                isRecommande = true;
             }
+        }
+
+        //Message indiquant ce qui se passe
+        if (isRecommande) {
+            Toast.makeText(getContext(), R.string.stock_valider_ok, Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(getContext(), R.string.stock_valider_nok, Toast.LENGTH_LONG).show();
         }
     }
 }

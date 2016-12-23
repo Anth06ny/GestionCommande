@@ -1,7 +1,6 @@
 package com.example.anthony.gestionstock.vue.adapter;
 
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -9,14 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.NumberPicker;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.anthony.gestionstock.Constante;
 import com.example.anthony.gestionstock.R;
 import com.example.anthony.gestionstock.Utils;
 import com.example.anthony.gestionstock.vue.ProductAffichageEnum;
-import com.example.anthony.gestionstock.vue.custom_composant.MyNumberPicker;
+import com.shawnlin.numberpicker.NumberPicker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,7 +88,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ProductAdapter.ViewHolder holderReglage = (ViewHolder) vh;
                 holderReglage.txt_produit.setText(produitbean.getNom());
                 holderReglage.txt_tarif.setText(Utils.formatToMoney(produitbean.getPrix()) + SYMBOLE_EURO);
-                holderReglage.txt_lot.setText(String.valueOf(produitbean.getLot()));
+                holderReglage.txt_lot.setText(holderReglage.txt_lot.getContext().getString(R.string.reglage_produit_cellule_lot, produitbean.getLot()));
 
                 if (produitbean.isSelected()) {
                     holderReglage.btn_modifiy_prod.setVisibility(View.VISIBLE);
@@ -142,28 +141,41 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 //quantite
                 int quantite = produitbean.getConsommation() == null ? 0 : produitbean.getConsommation();
 
-                int lot = 0;
+                int nbLot = 0;
                 if (produitbean.getLot() != null || produitbean.getLot() != 0) {
-                    lot = quantite / produitbean.getLot();
+                    nbLot = quantite / produitbean.getLot();
                 }
                 //S'appelle tarif mais affiche la quantité
                 holder3.txt_tarif.setText("" + quantite);
-                holder3.txt_lot.setText("" + lot);
+                holder3.txt_lot.setText("" + nbLot);
+
+                //Si pas assez de quantite pour fair un lot on n'affiche pas le picker
+                if (nbLot == 0) {
+                    holder3.np.setVisibility(View.INVISIBLE);
+                    holder3.tv_recommande.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    holder3.np.setVisibility(View.VISIBLE);
+                    holder3.tv_recommande.setVisibility(View.VISIBLE);
+                }
 
                 //Valeur min du picker
                 holder3.np.setMinValue(0);
                 //Nombre de valeur + faire des précommande
-                holder3.np.setMaxValue(lot + Constante.NB_LOT_EN_AVANCE);
+                holder3.np.setMaxValue(nbLot + Constante.NB_LOT_EN_AVANCE);
                 holder3.np.setValue(produitbean.getLotRecommande());
+                //On affiche combien d'untié représente 1 lot
+                holder3.tv_lot.setText(holder3.tv_lot.getContext().getString(R.string.stock_1lot, produitbean.getLot()));
 
-                holder3.np.setColor(Color.BLACK, Color.YELLOW);
-                holder3.np.setOverValue(lot);
+                holder3.np.setOrientation(LinearLayout.HORIZONTAL);
+                //                holder3.np.setColor(Color.BLACK, Color.YELLOW);
+                //                holder3.np.setOverValue(lot);
 
                 holder3.np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                     @Override
                     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                        produitbean.setConsommation(newVal);
-                        notifyItemChanged(position);
+                        //On met à jour la recomande
+                        produitbean.setLotRecommande(newVal);
                     }
                 });
 
@@ -194,10 +206,12 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public TextView displayMontant;
         public AppCompatButton btn_modifiy_prod;
         public TextView displayQuantite;
+        public TextView tv_recommande;
+        public TextView tv_lot;
         public ImageView img_prod;
         public View root;
         public CardView cv_bg;
-        public MyNumberPicker np;
+        public NumberPicker np;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -227,8 +241,10 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     txt_produit = (TextView) itemView.findViewById(R.id.txt_produit);
                     txt_lot = (TextView) itemView.findViewById(R.id.txt_lot);
                     txt_tarif = (TextView) itemView.findViewById(R.id.txt_tarif);
+                    tv_lot = (TextView) itemView.findViewById(R.id.tv_lot);
+                    tv_recommande = (TextView) itemView.findViewById(R.id.tv_recommande);
                     cv_bg = (CardView) itemView.findViewById(R.id.cv_bg);
-                    np = (MyNumberPicker) itemView.findViewById(R.id.np);
+                    np = (NumberPicker) itemView.findViewById(R.id.np);
                     break;
             }
         }
