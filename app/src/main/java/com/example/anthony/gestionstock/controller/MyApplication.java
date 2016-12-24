@@ -3,12 +3,14 @@ package com.example.anthony.gestionstock.controller;
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.crashlytics.android.Crashlytics;
 import com.example.anthony.gestionstock.model.bdd.CategorieBddManager;
 import com.example.anthony.gestionstock.model.bdd.MaBaseSQLite;
 import com.google.gson.Gson;
 
 import greendao.DaoMaster;
 import greendao.DaoSession;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Allan on 29/11/2016.
@@ -17,7 +19,7 @@ import greendao.DaoSession;
 public class MyApplication extends Application {
 
     private static String BASE_NAME = "appli.db";
-    public final static boolean DEBUG = true;
+    public final static boolean DEBUG = false;
 
     private static DaoSession daoSession;
     private static MyApplication instance;
@@ -27,11 +29,11 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        Fabric.with(this, new Crashlytics());
         setupDatabase();
 
         gson = new Gson();
 
-        //TODO retirer l'ajout de données test
         if (MyApplication.DEBUG && CategorieBddManager.getCategories().size() == 0) {
             MaBaseSQLite.fillBase(this);
         }
