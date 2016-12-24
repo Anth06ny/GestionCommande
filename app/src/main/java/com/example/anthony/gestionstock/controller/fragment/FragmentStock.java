@@ -62,7 +62,7 @@ public class FragmentStock extends Fragment implements View.OnClickListener {
         //Bouton qui permet de mettre a jour la consommation du produit et d'envoyer les nouvelles valeurs en bdd
         btnValiderStock.setOnClickListener(this);
 
-        productAdapter = new ProductAdapter(ProductAffichageEnum.Stock, produitArrayListStock, null, null);
+        productAdapter = new ProductAdapter(ProductAffichageEnum.Stock, produitArrayListStock, null);
         recyclerViewStock.setAdapter(productAdapter);
         recyclerViewStock.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerViewStock.setItemAnimator(new DefaultItemAnimator());

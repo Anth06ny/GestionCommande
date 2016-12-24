@@ -1,6 +1,5 @@
 package com.example.anthony.gestionstock.controller;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -11,39 +10,45 @@ import java.util.Date;
 public class DateUtils {
 
     /**
-     * Retourne le lundi de la semaine choisie
+     * Retourne la date de debut du mois en cours
      *
-     * @param date
      * @return
      */
-    public static Date getSemaine(Date date) {
+    public static Date get1erJourMoisEnCours() {
         Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek());
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+
         return c.getTime();
     }
 
-    public static ArrayList<Date> getMois() {
-        ArrayList<Date> dateArrayList = new ArrayList<>();
+    /**
+     * Retourne le 1er jours de la semaine en cours à 0h0
+     *
+     * @return
+     */
+    public static Date get1erJourSemaineEnCours() {
         Calendar c = Calendar.getInstance();
-        c.set(Calendar.DAY_OF_MONTH, 0);
+        c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek());
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
 
-        for (int i = 0; i < c.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
-            c.add(Calendar.DATE, 1);
-            dateArrayList.add(c.getTime());
-        }
-        return dateArrayList;
+        return c.getTime();
     }
 
-    public static ArrayList<Date> getAnnee() {
-        ArrayList<Date> dateArrayList = new ArrayList<>();
+    /**
+     * Retourne le 1er jour de l'anéee en cours
+     *
+     * @return
+     */
+    public static Date get1erJourAnneeEnCours() {
         Calendar c = Calendar.getInstance();
-        c.set(Calendar.DAY_OF_YEAR, 0);
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        c.set(Calendar.MONTH, 0);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
 
-        for (int i = 0; i < c.getActualMaximum((Calendar.DAY_OF_YEAR)); i++) {
-            c.add(Calendar.DATE, 1);
-            dateArrayList.add(c.getTime());
-        }
-        return dateArrayList;
+        return c.getTime();
     }
 }

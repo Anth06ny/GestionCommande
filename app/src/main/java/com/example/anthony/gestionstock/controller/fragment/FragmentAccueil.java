@@ -31,6 +31,7 @@ import com.example.anthony.gestionstock.vue.adapter.ProductAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import greendao.Categorie;
 import greendao.Consomme;
@@ -101,7 +102,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
 
         //RecycleView produit par defaut à vide
         arraylistProduits = new ArrayList<>();
-        productAdapter = new ProductAdapter(ProductAffichageEnum.Accueil, arraylistProduits, this, null);
+        productAdapter = new ProductAdapter(ProductAffichageEnum.Accueil, arraylistProduits, this);
         recyclerViewProduits = (RecyclerView) v.findViewById(R.id.rv_accueilProduit);//on reucpere le recycler view
         int bt_width = getResources().getDimensionPixelSize(R.dimen.accueil_bt_product_width);
         //Permet un calcul auto du nombre de colonne
@@ -111,7 +112,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
 
         //RecycleView produit Favoris
         produitArrayListFavoris = (ArrayList<Produit>) ProduitBddManager.getProduitFavoris(); // remplissage de la liste de produits
-        productAdapterFavoris = new ProductAdapter(ProductAffichageEnum.Accueil, produitArrayListFavoris, this, null);
+        productAdapterFavoris = new ProductAdapter(ProductAffichageEnum.Accueil, produitArrayListFavoris, this);
         rv_accueilProduitFavoris = (RecyclerView) v.findViewById(R.id.rv_accueilProduitFavoris);//on reucpere le recycler view
         rv_accueilProduitFavoris.setLayoutManager(new GridAutofitLayoutManager(getContext(), bt_width));
         rv_accueilProduitFavoris.setItemAnimator(new DefaultItemAnimator());
@@ -349,21 +350,10 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
             ConsommeBddManager.insertConsommeList(consommeArrayListNote);
             //Si l'insertion a reussi on efface la note
             deleteNote();
-
-            //TODO lancer sailysave
-
             Toast.makeText(getContext(), R.string.accueil_tost_cmd_save, Toast.LENGTH_SHORT).show();
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-
-            if (calendar.getTime().getTime() != SharedPreferenceUtils.getSaveDate()) {
-                new MonAT().execute();
-                SharedPreferenceUtils.setSaveDate(calendar.getTime().getTime());
-            }
+            //lancer sailysave
+            new SaveAT().execute();
         }
         catch (Exception e) {
             showError(e);
@@ -375,32 +365,35 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         AlertDialogutils.showOkDialog(getContext(), R.string.dialog_error_title, e.getMessage(), null);
     }
 
-    private class MonAT extends AsyncTask<Void, Void, Exception> {
-        public MonAT() {
-        }
+    /* ---------------------------------
+    // AsyncTask
+    // -------------------------------- */
+
+    /**
+     * Sauvegarde sur le serveur les infos
+     */
+    private class SaveAT extends AsyncTask<Void, Void, Void> {
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
+        protected Void doInBackground(Void... params) {
 
-        @Override
-        protected Exception doInBackground(Void... params) {
+            //Si ce n'est pas le même jour que la derniere sauvegarde on lance une sauvegarde
             try {
-                WSUtils.saveData();
-                return null;
-            }
-            catch (Exception e) {
-                return e;
-            }
-        }
+                long lastSave = SharedPreferenceUtils.getSaveDate();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(lastSave);
 
-        @Override
-        protected void onPostExecute(Exception e) {
-            super.onPostExecute(e);
-            if (e != null) {
+                if (!org.apache.commons.lang3.time.DateUtils.isSameDay(new Date(), calendar.getTime())) {
+                    WSUtils.saveData();
+                    //Si la sauvegarde à reussi au enregistre que dans le SharedPreference
+                    SharedPreferenceUtils.setSaveDate(new Date().getTime());
+                }
+            }
+            catch (Throwable e) {
+                //L'erreur ne doit pas perturber
                 e.printStackTrace();
             }
+            return null;
         }
     }
 }

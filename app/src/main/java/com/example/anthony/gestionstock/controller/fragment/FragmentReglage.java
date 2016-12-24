@@ -94,7 +94,7 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
 
         //On creer l'adapteur et on set le recycler view des produits avec la liste de produits qui correpondent a la categorie choisie quand on clic sur une
         // categorie
-        productAdapter = new ProductAdapter(ProductAffichageEnum.Reglage, produitList, this, null);
+        productAdapter = new ProductAdapter(ProductAffichageEnum.Reglage, produitList, this);
         recyclerViewProduits = (RecyclerView) v.findViewById(R.id.rv_produit);
         recyclerViewProduits.setAdapter(productAdapter);
         recyclerViewProduits.setLayoutManager(new GridLayoutManager(this.getContext(), 2));

@@ -17,7 +17,6 @@ import com.example.anthony.gestionstock.vue.ProductAffichageEnum;
 import com.shawnlin.numberpicker.NumberPicker;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import greendao.Produit;
 
@@ -29,15 +28,13 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private ProductAffichageEnum choixAffichage;
     private ArrayList<Produit> getProduitArrayList;
     private ProductAdapterCallBack productAdapterCallBack;
-    private HashMap<Produit, Long> quantiteHashMap;
     private final String SYMBOLE_EURO = "€";
 
     // -------------------------------- CONSTRUCTOR -------------------------------------------------- //
-    public ProductAdapter(ProductAffichageEnum choixAffichage, ArrayList<Produit> getProduitArrayList, ProductAdapterCallBack productAdapterCallBack, HashMap<Produit, Long> quantiteHashMap) {
+    public ProductAdapter(ProductAffichageEnum choixAffichage, ArrayList<Produit> getProduitArrayList, ProductAdapterCallBack productAdapterCallBack) {
         this.choixAffichage = choixAffichage;
         this.getProduitArrayList = getProduitArrayList;
         this.productAdapterCallBack = productAdapterCallBack;
-        this.quantiteHashMap = quantiteHashMap;
     }
 
     // --------------------------------  END CONSTRUCTOR -------------------------------------------------- //
@@ -125,10 +122,8 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ProductAdapter.ViewHolder holder2 = (ViewHolder) vh;
                 holder2.txt_produit.setText(produitbean.getNom());
                 holder2.txt_tarif.setText(Utils.formatToMoney(produitbean.getPrix()) + SYMBOLE_EURO);
-                if (quantiteHashMap != null) {
-                    holder2.displayQuantite.setText(String.valueOf(quantiteHashMap.get(produitbean)));
-                    holder2.displayMontant.setText(String.valueOf((quantiteHashMap.get(produitbean) * produitbean.getPrix())) + SYMBOLE_EURO);
-                }
+                holder2.displayQuantite.setText("" + produitbean.getConsommation());
+                holder2.displayMontant.setText("" + (produitbean.getConsommation() * produitbean.getPrix()));
 
                 break;
 
