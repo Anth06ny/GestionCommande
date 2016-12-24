@@ -151,6 +151,10 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
             });
         }
         else if (v == btn_off_client) {
+            if (consommeArrayListNote.isEmpty()) {
+                Toast.makeText(getContext(), "Note vide", Toast.LENGTH_SHORT).show();
+                return;
+            }
             AlertDialogutils.showOkCancelDialog(getContext(), R.string.confirmation, R.string.accueil_confirm_message, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -160,7 +164,6 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         }
         else if (v == btn_note) {
             Toast.makeText(getContext(), "Non implémenté", Toast.LENGTH_SHORT).show();
-            AlertDialogutils.loginDialog(getContext(), this);
         }
     }
 
@@ -344,7 +347,6 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
             deleteNote();
 
             //TODO lancer sailysave
-
 
             Toast.makeText(getContext(), R.string.accueil_tost_cmd_save, Toast.LENGTH_SHORT).show();
         }

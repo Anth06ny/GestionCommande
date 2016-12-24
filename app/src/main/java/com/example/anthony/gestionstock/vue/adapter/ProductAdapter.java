@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.anthony.gestionstock.Constante;
@@ -125,7 +124,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case Bilan:
                 ProductAdapter.ViewHolder holder2 = (ViewHolder) vh;
                 holder2.txt_produit.setText(produitbean.getNom());
-                holder2.txt_tarif.setText(String.valueOf(produitbean.getPrix()) + SYMBOLE_EURO);
+                holder2.txt_tarif.setText(Utils.formatToMoney(produitbean.getPrix()) + SYMBOLE_EURO);
                 if (quantiteHashMap != null) {
                     holder2.displayQuantite.setText(String.valueOf(quantiteHashMap.get(produitbean)));
                     holder2.displayMontant.setText(String.valueOf((quantiteHashMap.get(produitbean) * produitbean.getPrix())) + SYMBOLE_EURO);
@@ -166,8 +165,6 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 holder3.np.setValue(produitbean.getLotRecommande());
                 //On affiche combien d'untié représente 1 lot
                 holder3.tv_lot.setText(holder3.tv_lot.getContext().getString(R.string.stock_1lot, produitbean.getLot()));
-
-                holder3.np.setOrientation(LinearLayout.HORIZONTAL);
                 //                holder3.np.setColor(Color.BLACK, Color.YELLOW);
                 //                holder3.np.setOverValue(lot);
 

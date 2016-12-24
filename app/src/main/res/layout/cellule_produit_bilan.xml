@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="10dp"
+              android:layout_height="@dimen/margin_30"
               android:orientation="horizontal">
 
     <TextView
         android:id="@+id/libelle_bilan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="5dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:gravity="center"
         android:text="baby jack"
-        android:textAllCaps="true"/>
+        android:textAlignment="gravity"
+        android:textSize="@dimen/font_14"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/quantite_bilan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:gravity="center"
         android:text="200"
-        android:textAlignment="center"
-        android:textAllCaps="true"/>
+        android:textAlignment="gravity"
+        android:textSize="@dimen/font_12"/>
 
     <TextView
         android:id="@+id/prix_u_bilan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:gravity="center"
         android:text="10.00€"
-        android:textAlignment="center"
-        android:textAllCaps="true"/>
+        android:textAlignment="gravity"
+        android:textSize="@dimen/font_12"/>
 
     <TextView
         android:id="@+id/prix_total_ligne_bilan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:gravity="center"
         android:text="156.36€"
-        android:textAlignment="center"
-        android:textAllCaps="true"/>
+        android:textAlignment="gravity"
+        android:textSize="@dimen/font_12"/>
 
 </LinearLayout>

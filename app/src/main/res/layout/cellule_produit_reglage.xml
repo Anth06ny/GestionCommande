@@ -4,7 +4,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_5">
+    app:cardCornerRadius="@dimen/margin_5"
+    android:layout_margin="@dimen/margin_5"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:id="@+id/root_produit"

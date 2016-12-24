@@ -1,154 +1,257 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".controller.fragment.FragmentBilan">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/margin_10">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="@dimen/margin_80"
+            android:layout_height="@dimen/margin_50"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/date_debut"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="Début"/>
-
-            <TextView
-                android:id="@+id/champ_date_debut"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-            </TextView>
+                android:gravity="center"
+                android:text="Début"
+                android:textColor="@color/product_color"
+                android:textSize="@dimen/font_14"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/date_fin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="Fin"/>
+                android:gravity="center"
+                android:text="Fin"
+                android:textColor="@color/product_color"
+                android:textSize="@dimen/font_14"
+                android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/champ_date_fin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-            </TextView>
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_jour"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Jour"/>
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_semaine"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Semaine"/>
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_mois"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Mois"/>
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_annee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Année"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:layout_width="@dimen/margin_80"
+            android:layout_height="@dimen/margin_50"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/margin_2"
                 android:layout_weight="1"
-                android:text="libellé"
-                android:textAllCaps="true"/>
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="@dimen/margin_5">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                <TextView
+                    android:id="@+id/champ_date_debut"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="22/12/2016"
+                    android:textSize="@dimen/font_12"/>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/margin_2"
                 android:layout_weight="1"
-                android:text="quantité"
-                android:textAlignment="center"
-                android:textAllCaps="true"/>
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="@dimen/margin_5">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="prix unitaire"
-                android:textAlignment="center"
-                android:textAllCaps="true"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="prix total"
-                android:textAlignment="center"
-                android:textAllCaps="true"/>
-
-
+                <TextView
+                    android:id="@+id/champ_date_fin"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="22/12/2016"
+                    />
+            </android.support.v7.widget.CardView>
         </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_bilan"
-            android:layout_width="match_parent"
-            android:layout_height="150dp">
-        </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_jour"
+            android:layout_width="@dimen/margin_80"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:text="Jour"
+            android:textColor="@android:color/white"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_semaine"
+            android:layout_width="@dimen/margin_80"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="Semaine"
+            android:textColor="@android:color/white"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_mois"
+            android:layout_width="@dimen/margin_80"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="Mois"
+            android:textColor="@android:color/white"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_annee"
+            android:layout_width="@dimen/margin_80"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="Année"
+            android:textColor="@android:color/white"/>
+    </LinearLayout>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_10"
+        android:layout_weight="1"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="@dimen/margin_5">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/total"
-                android:layout_width="wrap_content"
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="TOTAL"/>
+
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@color/selected_cellule_bg"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_2"
+                    android:text="Produit"
+                    android:textColor="@color/product_color"
+                    android:textSize="@dimen/font_14"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@color/selected_cellule_bg"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_2"
+                    android:text="Prix Unitaire"
+                    android:textColor="@color/product_color"
+                    android:textSize="@dimen/font_14"
+                    android:textStyle="bold"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@color/selected_cellule_bg"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_2"
+                    android:text="Quantité vendu"
+                    android:textColor="@color/product_color"
+                    android:textSize="@dimen/font_14"
+                    android:textStyle="bold"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@color/selected_cellule_bg"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_2"
+                    android:text="Prix total"
+                    android:textColor="@color/product_color"
+                    android:textSize="@dimen/font_14"
+                    android:textStyle="bold"
+                    />
+
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_bilan"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_weight="1"
+                tools:listitem="@layout/cellule_produit_bilan">
+            </android.support.v7.widget.RecyclerView>
+
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/margin_40"
+        android:layout_gravity="right|center_vertical"
+        android:layout_marginBottom="@dimen/margin_5"
+        android:layout_marginRight="@dimen/margin_5"
+        android:layout_marginTop="@dimen/margin_5"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/total"
+            android:layout_width="@dimen/margin_80"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Total : "
+            android:textColor="@color/product_color"
+            android:textSize="@dimen/font_20"
+            android:textStyle="bold"/>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="@dimen/margin_80"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin_2"
+            app:cardBackgroundColor="@color/yellow"
+            app:cardCornerRadius="@dimen/margin_5">
+
 
             <TextView
                 android:id="@+id/total_valeur"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="50.00€"
-                android:textAlignment="textStart"/>
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/font_16"
+                android:textStyle="bold"/>
+        </android.support.v7.widget.CardView>
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_imprimer_bilan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Imprimer"/>
-
-        </LinearLayout>
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_imprimer_bilan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Imprimer"
+            android:textColor="@android:color/white"
+            android:visibility="gone"/>
 
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>
