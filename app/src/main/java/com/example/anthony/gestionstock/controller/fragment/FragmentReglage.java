@@ -208,7 +208,6 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
     public void clicOnCategory(Categorie categorie) {
 
         //Au clic sur une categorie on recupere la liste de produit qui lui est associer
-
         produitList.clear();
 
         categorie.resetProduitList();

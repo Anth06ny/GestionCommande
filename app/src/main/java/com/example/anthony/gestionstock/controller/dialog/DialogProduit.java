@@ -1,7 +1,6 @@
 package com.example.anthony.gestionstock.controller.dialog;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -43,7 +42,6 @@ public class DialogProduit extends DialogFragment {
     private Produit produit;
     private List<Categorie> listCategories;
     private SpinnerAdapter spinnerTest;
-    private ArrayList<Produit> produitArrayList;
     private CheckBox checkBoxFavori;
 
     DialogProduitCallBack dialogProduitCallBack;
@@ -63,11 +61,7 @@ public class DialogProduit extends DialogFragment {
         builder.setTitle(produit.getId() == null ? R.string.dialog_categorie_title_new : R.string.dialog_categorie_title_edit);
 
         //Initialisation de la liste de catégories
-        listCategories = new ArrayList<>();
         listCategories = CategorieBddManager.getCategories();
-
-        produitArrayList = new ArrayList<>();
-        produitArrayList = (ArrayList<Produit>) ProduitBddManager.getProduit();
 
         // instancie l'adapteur pour la liste déroulante
         spinnerTest = new com.example.anthony.gestionstock.vue.SpinnerAdapter(this.getActivity(), listCategories);
@@ -88,21 +82,16 @@ public class DialogProduit extends DialogFragment {
         if (produit.getLot() != null) {
             editLot.setText(String.valueOf(produit.getLot()));
         }
-        if (produit.getCategorieID() >= 0) {
-            editCategorie.setSelection(0);
-        }
+
         if (produit.getFavori() != null) {
             checkBoxFavori.setChecked(produit.getFavori());
         }
         //On build la dialog box avec la vue personaliser + l'ajout des boutons positifs et négatif
         builder.setView(alertDialogView)
-                .setPositiveButton(R.string.valider, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                    }
-                })
+                .setPositiveButton(R.string.valider, null)
                 .setNegativeButton(R.string.annuler, null);
 
+        //ON surchagre le clic sur le bouton valider
         final AlertDialog dialog = builder.create();
         dialog.show();
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
@@ -144,9 +133,19 @@ public class DialogProduit extends DialogFragment {
                 }
             }
         });
+
         //recupère l'élément graphique de l'adapteur et le switch entre celui du layout du dialogue.
-        editCategorie = (Spinner) alertDialogView.findViewById(R.id.editCategorieProduit);
         editCategorie.setAdapter(spinnerTest);
+        //On définit la catégorie séléctionne
+        int positionCategorySelected = 0;
+        for (int i = 0; i < listCategories.size(); i++) {
+            Categorie categorie = listCategories.get(i);
+            if (categorie.getId() == produit.getCategorieID()) {
+                positionCategorySelected = i;
+            }
+        }
+        editCategorie.setSelection(positionCategorySelected);
+
         editCategorie.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

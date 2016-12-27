@@ -14,6 +14,8 @@
     <string name="annuler">Annuler</string>
     <string name="confirmation">Confirmation</string>
 
+    <string name="menu_securiser_title">Sécuriser le menu</string>
+
     <!-- Dialog Categorie -->
     <string name="dialog_categorie_title_new">Nouvelle catégorie</string>
     <string name="dialog_categorie_title_edit">Modifier la catégorie</string>
@@ -52,11 +54,12 @@
 
     <!-- Accueil -->
     <string name="accueil_title">Accueil</string>
-    <string name="accueil_bt_effacer">Tout effacer</string>
+    <string name="accueil_bt_effacer">Annuler saisie</string>
     <string name="accueil_tost_cmd_save">Note enregistrée</string>
     <string name="accueil_tost_cmd_del">Note supprimée</string>
     <string name="accueil_confirm_message">Valider la commande ?</string>
     <string name="accueil_solde">Solde : </string>
+    <string name="accueil_bt_total">Total Esp</string>
 
     <!-- Stock -->
     <string name="stock_title">Consommation</string>

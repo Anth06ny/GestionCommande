@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.anthony.gestionstock.R;
@@ -23,12 +24,13 @@ import com.example.anthony.gestionstock.vue.AlertDialogutils;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AlertDialogutils.LoginDialogResponse {
+public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AlertDialogutils.LoginDialogResponse, View.OnClickListener {
 
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView navigationView;
     private Fragment currentFragment; //fragment en cours
+    private boolean securiseMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,23 +41,29 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
 
+        securiseMenu = true;
         setSupportActionBar(toolbar);
 
         ////////////////////////////////////////////////////////////////////////////////////////////
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        //toggle.setToolbarNavigationClickListener(this);
         mDrawer.setDrawerListener(toggle);
         toggle.syncState();
-
         navigationView.setNavigationItemSelectedListener(this);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //toggle.setToolbarNavigationClickListener(this);
+        toolbar.setNavigationOnClickListener(this);
 
         //Changement des couleurs des icones du menu
         navigationView.setItemIconTintList(null);
-        navigationView.getMenu().findItem(R.id.Accueil).getIcon().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_IN);
+        navigationView.getMenu().findItem(R.id.Accueil).getIcon().setColorFilter(getResources().getColor(R.color.purple), PorterDuff.Mode.SRC_IN);
         navigationView.getMenu().findItem(R.id.Stock).getIcon().setColorFilter(getResources().getColor(R.color.orange), PorterDuff.Mode.SRC_IN);
         navigationView.getMenu().findItem(R.id.Bilan).getIcon().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_IN);
         navigationView.getMenu().findItem(R.id.Reglage).getIcon().setColorFilter(getResources().getColor(R.color.grey), PorterDuff.Mode.SRC_IN);
+        navigationView.getMenu().findItem(R.id.SecuriserMenu).getIcon().setColorFilter(getResources().getColor(R.color.light_blue), PorterDuff.Mode.SRC_IN);
 
         //On lance la page d'acceuil par defaut (un controle est fait dans la méthode)
         gotoAccueil();
@@ -101,9 +109,26 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             case R.id.Stock:
                 gotoStock();
                 break;
+
+            case R.id.SecuriserMenu:
+                securiseMenu = true;
+                onOptionsItemSelected(navigationView.getMenu().findItem(R.id.Accueil));
+                break;
         }
 
         return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        //Est ce qu'on a le droit ?
+        if (securiseMenu) {
+            //On demande le mot de passe
+            AlertDialogutils.loginDialog(this, this);
+        }
+        else {
+            mDrawer.openDrawer(GravityCompat.START);
+        }
     }
 
     private void changeFragment(int fragmentId) {
@@ -127,16 +152,22 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             // Insert the fragment by replacing any existing fragment
             //Je mets en tag l'item id pour pouvoir facilement identifier le fragment courant
             getSupportFragmentManager().beginTransaction().replace(R.id.flContent, currentFragment, "" + item.getItemId()).commit();
-
-            // Highlight the selected item has been done by NavigationView
-            item.setChecked(true);
-            // Set action bar title
-            setTitle(item.getTitle());
         }
+
+        // Highlight the selected item has been done by NavigationView
+        item.setChecked(true);
+        // Set action bar title
+        setTitle(item.getTitle());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        securiseMenu = true;
     }
 
 
-      /* ---------------------------------
+    /* ---------------------------------
     // Redirection
     // -------------------------------- */
 
@@ -159,17 +190,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
     }
 
     public void gotoReglage(boolean askPassword) {
-
-        if (askPassword) {
-            //on ne change que si ce n'est pas le même fragment
-            if (currentFragment == null || !currentFragment.getTag().equalsIgnoreCase("" + R.id.Reglage)) {
-                //On fait une demande de mot de passe pour aller dans la page de réglage
-                AlertDialogutils.loginDialog(this, this);
-            }
-        }
-        else {
-            changeFragment(R.id.Reglage);
-        }
+        changeFragment(R.id.Reglage);
     }
 
     /**
@@ -198,7 +219,8 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
     @Override
     public void loginDialogSuccess() {
-        //On redirige sur l'écran de réglage
-        gotoReglage(false);
+        securiseMenu = false;
+        //on ouvre le menu
+        mDrawer.openDrawer(GravityCompat.START);
     }
 }

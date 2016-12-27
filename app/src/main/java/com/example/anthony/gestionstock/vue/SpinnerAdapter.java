@@ -26,6 +26,7 @@ public class SpinnerAdapter extends BaseAdapter implements android.widget.Spinne
     public SpinnerAdapter(Activity activity, List<Categorie> listCategories) {
         this.activity = activity;
         this.listCategories = listCategories;
+
     }
 
     @Override

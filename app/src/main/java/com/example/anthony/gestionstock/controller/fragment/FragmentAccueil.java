@@ -1,6 +1,5 @@
 package com.example.anthony.gestionstock.controller.fragment;
 
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -37,7 +36,7 @@ import greendao.Categorie;
 import greendao.Consomme;
 import greendao.Produit;
 
-public class FragmentAccueil extends Fragment implements View.OnClickListener, ProductAdapter.ProductAdapterCallBack, ConsommeAdapter.ConsommeAdapterCallBack, CategoryAdapter.CategoryAdapterCallBack, View.OnLongClickListener, AlertDialogutils.LoginDialogResponse {
+public class FragmentAccueil extends Fragment implements View.OnClickListener, ProductAdapter.ProductAdapterCallBack, ConsommeAdapter.ConsommeAdapterCallBack, CategoryAdapter.CategoryAdapterCallBack, AlertDialogutils.LoginDialogResponse {
 
     //bouton
     private AppCompatButton btn_cancel;
@@ -127,9 +126,6 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         btn_note.setOnClickListener(this);
         btn_cancel.setOnClickListener(this);
         btn_off_client.setOnClickListener(this);
-
-        btn_cancel.setOnLongClickListener(this);
-        btn_off_client.setOnLongClickListener(this);
     }
 
     @Override
@@ -148,49 +144,25 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
         Utils.vibration(getContext());
 
         if (v == btn_cancel) {
-            AlertDialogutils.showOkCancelDialog(getContext(), "Confirmation", "Supprimer la note ?", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    deleteNote();
-                    Toast.makeText(getContext(), R.string.accueil_tost_cmd_del, Toast.LENGTH_SHORT).show();
-                }
-            });
+            if (consommeArrayListNote.isEmpty()) {
+                Toast.makeText(getContext(), "Note vide", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            deleteNote();
+            Toast.makeText(getContext(), R.string.accueil_tost_cmd_del, Toast.LENGTH_SHORT).show();
         }
         else if (v == btn_off_client) {
             if (consommeArrayListNote.isEmpty()) {
                 Toast.makeText(getContext(), "Note vide", Toast.LENGTH_SHORT).show();
                 return;
             }
-            AlertDialogutils.showOkCancelDialog(getContext(), R.string.confirmation, R.string.accueil_confirm_message, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    saveCommande();
-                }
-            });
+            saveCommande();
         }
         else if (v == btn_note) {
             Toast.makeText(getContext(), "Non implémenté", Toast.LENGTH_SHORT).show();
         }
     }
 
-    @Override
-    public boolean onLongClick(View v) {
-        //Vibration au clic
-        Utils.vibration(getContext());
-        if (v == btn_cancel) {
-            //le long clic efface la note sans confirmation
-            deleteNote();
-            Toast.makeText(getContext(), R.string.accueil_tost_cmd_del, Toast.LENGTH_SHORT).show();
-            //True pour dire qu'on a traiter le long clic, sinon il va considerer que c'est aussi un clic classique
-            return true;
-        }
-        else if (v == btn_off_client) {
-            //le long clic valide sans confirmation
-            saveCommande();
-            //True pour dire qu'on a traiter le long clic, sinon il va considerer que c'est aussi un clic classique
-            return true;
-        }
-        return false;
-    }
     /* ---------------------------------
     // Callback ProductAdapter
     // -------------------------------- */

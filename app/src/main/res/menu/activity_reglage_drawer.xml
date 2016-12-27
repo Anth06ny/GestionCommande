@@ -20,5 +20,10 @@
             android:icon="@drawable/ic_settings_black_48dp"
             android:title="@string/reglage_title"/>
 
+        <item
+            android:id="@+id/SecuriserMenu"
+            android:icon="@drawable/ic_security_black_48dp"
+            android:title="@string/menu_securiser_title"/>
+
     </group>
 </menu>
