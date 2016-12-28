@@ -122,7 +122,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
     @Override
     public void onClick(View v) {
         //Est ce qu'on a le droit ?
-        if (securiseMenu) {
+        if (!MyApplication.DEBUG && securiseMenu) {
             //On demande le mot de passe
             AlertDialogutils.loginDialog(this, this);
         }

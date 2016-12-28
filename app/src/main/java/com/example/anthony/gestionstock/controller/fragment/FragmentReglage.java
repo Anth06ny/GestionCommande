@@ -320,8 +320,18 @@ public class FragmentReglage extends Fragment implements View.OnClickListener, C
                         }
                         finalProduit.setLotRecommande(0);
                         ProduitBddManager.insertOrUpdate(finalProduit);
-                        productAdapter.notifyItemChanged(produitList.indexOf(finalProduit));
+
+                        //On regarde le produit à changé de catégorie
+                        if (categorieSelected.getId() == categorieToInsertProduit.getId()) {
+                            productAdapter.notifyItemChanged(produitList.indexOf(finalProduit));
+                        }
+                        else {
+                            int index = produitList.indexOf(produit);
+                            produitList.remove(index);
+                            productAdapter.notifyItemRemoved(index);
+                        }
                     }
+                    categorieSelected.resetProduitList();
                     categorieToInsertProduit.resetProduitList();
                 }
             }

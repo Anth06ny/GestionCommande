@@ -19,7 +19,7 @@ import io.fabric.sdk.android.Fabric;
 public class MyApplication extends Application {
 
     private static String BASE_NAME = "appli.db";
-    public final static boolean DEBUG = false;
+    public final static boolean DEBUG = true;
 
     private static DaoSession daoSession;
     private static MyApplication instance;
