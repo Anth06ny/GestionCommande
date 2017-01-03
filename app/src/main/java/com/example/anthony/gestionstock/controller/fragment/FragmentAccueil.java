@@ -288,6 +288,7 @@ public class FragmentAccueil extends Fragment implements View.OnClickListener, P
                 else {
                     consommeAdapter.notifyItemChanged(i);
                 }
+                refreshSold();
                 return;
             }
         }
