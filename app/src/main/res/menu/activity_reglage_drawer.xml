@@ -8,6 +8,10 @@
             android:icon="@drawable/ic_home_black_48dp"
             android:title="@string/accueil_title"/>
         <item
+            android:id="@+id/Planning"
+            android:icon="@drawable/ic_local_grocery_store_black_48dp"
+            android:title="@string/planning_title"/>
+        <item
             android:id="@+id/Stock"
             android:icon="@drawable/ic_local_grocery_store_black_48dp"
             android:title="@string/stock_title"/>

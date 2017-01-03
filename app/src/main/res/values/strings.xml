@@ -69,6 +69,13 @@
     <string name="stock_valider_ok">La commande a été retirée du stock</string>
     <string name="stock_valider_nok">Rien à commander</string>
 
+    <!-- Planning -->
+    <string name="planning_title">Planning</string>
+    <string name="planning_menu_param">Paramètres</string>
+    <string name="planning_param_start_day">Début journée : </string>
+    <string name="planning_param_end_day">Fin journée : </string>
+    <string name="planning_param_plage">Plage %1$s</string>
+
 
     <!-- Bilan -->
     <string name="bilan_title">Bilan</string>

@@ -63,10 +63,7 @@ public class DatePickerFragment extends DialogFragment implements DatePicker.OnD
     public void onDateChanged(DatePicker view, int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day, 0, 0);
-        if (datePickerFragmentCallBack != null) {
-            datePickerFragmentCallBack.onSelectDate(reqCode, calendar.getTime());
-        }
-        dismiss();
+        date = calendar.getTime();
     }
 
 

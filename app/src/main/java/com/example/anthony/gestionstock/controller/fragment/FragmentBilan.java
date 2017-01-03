@@ -181,6 +181,13 @@ public class FragmentBilan extends Fragment implements DatePickerFragment.DatePi
         DatePickerFragment datePickerFragment = new DatePickerFragment();
         datePickerFragment.setDatePickerFragmentCallBack(this);
         datePickerFragment.setReqCode(reqCode);
+        if (reqCode == REQ_CODE_DATE_DEBUT) {
+            datePickerFragment.setDate(dateDebut);
+        }
+        else if (reqCode == REQ_CODE_DATE_FIN) {
+            datePickerFragment.setDate(dateFin);
+        }
+
         datePickerFragment.show(getFragmentManager(), "Date");
     }
 

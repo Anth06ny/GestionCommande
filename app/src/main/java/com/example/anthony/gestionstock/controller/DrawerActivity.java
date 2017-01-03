@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.anthony.gestionstock.R;
 import com.example.anthony.gestionstock.controller.fragment.FragmentAccueil;
 import com.example.anthony.gestionstock.controller.fragment.FragmentBilan;
+import com.example.anthony.gestionstock.controller.fragment.FragmentPlanning;
 import com.example.anthony.gestionstock.controller.fragment.FragmentReglage;
 import com.example.anthony.gestionstock.controller.fragment.FragmentStock;
 import com.example.anthony.gestionstock.model.bdd.ProduitBddManager;
@@ -110,6 +111,10 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
                 gotoStock();
                 break;
 
+            case R.id.Planning:
+                gotoPlanning();
+                break;
+
             case R.id.SecuriserMenu:
                 securiseMenu = true;
                 onOptionsItemSelected(navigationView.getMenu().findItem(R.id.Accueil));
@@ -149,6 +154,9 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             else if (fragmentId == R.id.Reglage) {
                 currentFragment = new FragmentReglage();
             }
+            else if (fragmentId == R.id.Planning) {
+                currentFragment = new FragmentPlanning();
+            }
             // Insert the fragment by replacing any existing fragment
             //Je mets en tag l'item id pour pouvoir facilement identifier le fragment courant
             getSupportFragmentManager().beginTransaction().replace(R.id.flContent, currentFragment, "" + item.getItemId()).commit();
@@ -186,6 +194,12 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
     public void gotoBilan() {
         if (checkApplicationReadyToUse()) {
             changeFragment(R.id.Bilan);
+        }
+    }
+
+    public void gotoPlanning() {
+        if (checkApplicationReadyToUse()) {
+            changeFragment(R.id.Planning);
         }
     }
 
